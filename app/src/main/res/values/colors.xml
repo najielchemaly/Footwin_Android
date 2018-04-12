@@ -2,6 +2,11 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#0e30dd</color>
     <color name="white">#FFFFFF</color>
+    <color name="appBlue">#0e30dd</color>
+    <color name="darkBlue">#071a7b</color>
+    <color name="red">#d80e3f</color>
+    <color name="darkText">#616b9a</color>
+    <color name="lightText">#adb3d3</color>
 </resources>

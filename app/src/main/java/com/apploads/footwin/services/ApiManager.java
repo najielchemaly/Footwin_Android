@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public final class ApiManager {
 
-    private static final String API_URL = "";
+    private static final String API_URL = "http://config.foot-win.com";
 
     private static Retrofit retrofit = null;
     private static final ServiceInterface serviceInterface = getClient().create(ServiceInterface.class);
@@ -31,4 +31,5 @@ public final class ApiManager {
     public static String getApiUrl() {
         return API_URL;
     }
+
 }
