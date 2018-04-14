@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.apploads.footwin.BaseActivity;
 import com.apploads.footwin.R;
+import com.apploads.footwin.signup.SignupStepOne;
 import com.apploads.footwin.utils.AppUtils;
 import com.apploads.footwin.utils.StringUtils;
 
@@ -69,7 +70,9 @@ public class LoginActivity extends BaseActivity {
         txtCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(LoginActivity.this, "Signup", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), SignupStepOne.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
             }
         });
     }
@@ -89,5 +92,10 @@ public class LoginActivity extends BaseActivity {
                 return true;
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        finishAffinity();
     }
 }

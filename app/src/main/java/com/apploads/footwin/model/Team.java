@@ -21,6 +21,16 @@ public class Team {
     @Expose
     private String group;
 
+    private boolean isSelected;
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
     public String getId() {
         return id;
     }
@@ -60,5 +70,4 @@ public class Team {
     public void setGroup(String group) {
         this.group = group;
     }
-
 }

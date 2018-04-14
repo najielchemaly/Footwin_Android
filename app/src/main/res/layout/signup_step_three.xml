@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_blue">
+
+    <TextView
+        android:id="@+id/lblStep3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Step 3"
+        android:textSize="@dimen/large_text"
+        android:textColor="@color/white"
+        android:layout_marginTop="@dimen/app_margin"
+        android:layout_marginLeft="@dimen/app_margin"
+        />
+
+    <TextView
+        android:id="@+id/lblSetYourPic"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:text="Set your profile picture"
+        android:textAllCaps="true"
+        android:layout_below="@+id/lblStep3"
+        android:textSize="@dimen/xlarge_text"
+        android:textColor="@color/white"
+        android:layout_marginLeft="@dimen/app_margin"
+        android:textStyle="bold"
+        />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imgAddImage"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:scaleType="centerCrop"
+        android:layout_centerInParent="true"
+        android:src="@drawable/add_image"
+        />
+
+    <Button
+        android:id="@+id/btnConfirm"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginLeft="@dimen/app_margin"
+        android:layout_marginRight="@dimen/app_margin"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="60dp"
+        android:background="@color/white"
+        android:text="confirm picture"
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:textSize="26sp"
+        android:textColor="@color/appBlue"
+        />
+
+    <TextView
+        android:id="@+id/lblSkip"
+        android:padding="5dp"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/app_margin"
+        android:textColor="@color/white"
+        android:text="skip for now"
+        android:textAllCaps="true"
+
+        />
+
+</RelativeLayout>
