@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.apploads.footwin.BaseActivity;
+import com.apploads.footwin.MainPageActivity;
 import com.apploads.footwin.R;
 import com.apploads.footwin.signup.SignupStepOne;
 import com.apploads.footwin.utils.AppUtils;
@@ -53,7 +54,9 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 if(validateFields()){
-                    Toast.makeText(LoginActivity.this, "Login", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(), MainPageActivity.class);
+                    startActivity(intent);
+                    finish();
                 }
             }
         });

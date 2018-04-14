@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.apploads.footwin.BaseActivity;
+import com.apploads.footwin.MainPageActivity;
 import com.apploads.footwin.R;
 import com.apploads.footwin.Utility;
 
@@ -76,7 +77,9 @@ public class SignupStepThree extends BaseActivity {
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(SignupStepThree.this, "confirm", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), MainPageActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 

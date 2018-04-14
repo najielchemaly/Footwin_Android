@@ -1,6 +1,7 @@
 package com.apploads.footwin.signup;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,17 +20,18 @@ import com.apploads.footwin.model.Team;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TeamsAdapter extends BaseAdapter{
+public class TeamsAdapter extends BaseAdapter {
 
     Context context;
     List<Team> teams;
-    private static LayoutInflater inflater=null;
+    private static LayoutInflater inflater = null;
+    private ImageView selectedLayout;
 
     public TeamsAdapter(Context context, List<Team> teams) {
 
-        this.teams=teams;
-        this.context=context;
-        inflater = ( LayoutInflater )context.
+        this.teams = teams;
+        this.context = context;
+        inflater = (LayoutInflater) context.
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
     }
@@ -53,7 +56,7 @@ public class TeamsAdapter extends BaseAdapter{
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        final Holder holder=new Holder();
+        final Holder holder = new Holder();
         View rowView;
 
         rowView = inflater.inflate(R.layout.team_row_item, null);
@@ -65,22 +68,28 @@ public class TeamsAdapter extends BaseAdapter{
         holder.imgCheck.setVisibility(View.GONE);
 
         rowView.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-                //TODO remove highlight from other teams
-                holder.imgTeam.setImageResource(R.drawable.selected_team_background);
-                holder.imgCheck.setVisibility(View.VISIBLE);
-                teams.get(position).setSelected(true);
+                if (selectedLayout != null) {
+                    selectedLayout.setBackgroundResource(0);
+                }
+                selectedLayout = holder.imgTeam;
+                selectedLayout = selectView(holder);
             }
         });
 
         return rowView;
     }
 
-    public class Holder{
+    public class Holder {
         TextView txtTeam;
         ImageView imgTeam, imgCheck;
+    }
+
+    private ImageView selectView(Holder holder) {
+
+        holder.imgTeam.setImageResource(R.drawable.selected_team_background);
+        return holder.imgTeam;
     }
 
 }
