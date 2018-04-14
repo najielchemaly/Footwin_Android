@@ -51,14 +51,8 @@ public class TeamsAdapter extends BaseAdapter{
         return position;
     }
 
-    public class Holder
-    {
-        TextView txtTeam;
-        ImageView imgTeam, imgCheck;
-    }
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        // TODO Auto-generated method stub
         final Holder holder=new Holder();
         View rowView;
 
@@ -74,7 +68,7 @@ public class TeamsAdapter extends BaseAdapter{
 
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
+                //TODO remove highlight from other teams
                 holder.imgTeam.setImageResource(R.drawable.selected_team_background);
                 holder.imgCheck.setVisibility(View.VISIBLE);
                 teams.get(position).setSelected(true);
@@ -82,6 +76,11 @@ public class TeamsAdapter extends BaseAdapter{
         });
 
         return rowView;
+    }
+
+    public class Holder{
+        TextView txtTeam;
+        ImageView imgTeam, imgCheck;
     }
 
 }
