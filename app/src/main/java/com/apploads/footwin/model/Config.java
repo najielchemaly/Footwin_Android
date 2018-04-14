@@ -10,21 +10,27 @@ public class Config {
     @SerializedName("teams")
     @Expose
     private List<Team> teams = null;
+
+    @SerializedName("active_round")
+    @Expose
+    private ActiveRound activeRound;
+
     @SerializedName("base_url")
     @Expose
     private String baseUrl;
+
     @SerializedName("media_url")
     @Expose
     private String mediaUrl;
-    @SerializedName("active_round")
-    @Expose
-    private Integer activeRound;
+
     @SerializedName("is_review")
     @Expose
     private Boolean isReview;
+
     @SerializedName("status")
     @Expose
     private Integer status;
+
     @SerializedName("message")
     @Expose
     private String message;
@@ -35,6 +41,14 @@ public class Config {
 
     public void setTeams(List<Team> teams) {
         this.teams = teams;
+    }
+
+    public ActiveRound getActiveRound() {
+        return activeRound;
+    }
+
+    public void setActiveRound(ActiveRound activeRound) {
+        this.activeRound = activeRound;
     }
 
     public String getBaseUrl() {
@@ -51,14 +65,6 @@ public class Config {
 
     public void setMediaUrl(String mediaUrl) {
         this.mediaUrl = mediaUrl;
-    }
-
-    public Integer getActiveRound() {
-        return activeRound;
-    }
-
-    public void setActiveRound(Integer activeRound) {
-        this.activeRound = activeRound;
     }
 
     public Boolean getIsReview() {
@@ -84,5 +90,4 @@ public class Config {
     public void setMessage(String message) {
         this.message = message;
     }
-
 }
