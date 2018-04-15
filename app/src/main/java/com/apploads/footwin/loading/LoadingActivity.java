@@ -6,9 +6,8 @@ import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.Toast;
 
-import com.apploads.footwin.BaseActivity;
+import com.apploads.footwin.helpers.BaseActivity;
 import com.apploads.footwin.login.LoginActivity;
 import com.apploads.footwin.R;
 import com.apploads.footwin.model.Config;
@@ -17,7 +16,7 @@ import com.apploads.footwin.services.ApiManager;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import static com.apploads.footwin.StaticData.config;
+import static com.apploads.footwin.helpers.StaticData.config;
 
 public class LoadingActivity extends BaseActivity {
     ImageView imgBall;

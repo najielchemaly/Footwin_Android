@@ -3,7 +3,7 @@ package com.apploads.footwin.login;
 import android.view.View;
 import android.widget.Button;
 
-import com.apploads.footwin.BaseActivity;
+import com.apploads.footwin.helpers.BaseActivity;
 import com.apploads.footwin.R;
 
 public class RetrievePasswordActivity extends BaseActivity {

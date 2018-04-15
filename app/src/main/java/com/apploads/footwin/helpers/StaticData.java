@@ -1,4 +1,4 @@
-package com.apploads.footwin;
+package com.apploads.footwin.helpers;
 
 import com.apploads.footwin.model.Config;
 import com.apploads.footwin.model.Team;
