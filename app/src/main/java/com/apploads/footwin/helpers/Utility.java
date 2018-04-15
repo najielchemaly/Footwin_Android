@@ -1,4 +1,4 @@
-package com.apploads.footwin;
+package com.apploads.footwin.helpers;
 
 import android.Manifest;
 import android.annotation.TargetApi;

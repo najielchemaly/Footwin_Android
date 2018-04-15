@@ -2,15 +2,12 @@ package com.apploads.footwin.signup;
 
 import android.content.Intent;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.GridView;
 
-import com.apploads.footwin.BaseActivity;
+import com.apploads.footwin.helpers.BaseActivity;
 import com.apploads.footwin.R;
-import com.apploads.footwin.StaticData;
-import com.apploads.footwin.model.Config;
+import com.apploads.footwin.helpers.StaticData;
 
 public class SignupStepOne extends BaseActivity {
     GridView gridTeams;

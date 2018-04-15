@@ -1,4 +1,4 @@
-package com.apploads.footwin.utils;
+package com.apploads.footwin.helpers.utils;
 
 import android.app.AlertDialog;
 import android.content.Context;

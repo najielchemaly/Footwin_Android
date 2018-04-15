@@ -5,9 +5,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.apploads.footwin.BaseActivity;
+import com.apploads.footwin.helpers.BaseActivity;
 import com.apploads.footwin.R;
 import com.apploads.footwin.login.LoginActivity;
 import com.ybs.countrypicker.CountryPicker;

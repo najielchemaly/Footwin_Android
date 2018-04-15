@@ -11,6 +11,12 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.apploads.footwin.helpers.BaseActivity;
+import com.apploads.footwin.leaderboard.LeaderboardFragment;
+import com.apploads.footwin.news.NewsFragment;
+import com.apploads.footwin.predict.PredictFragment;
+import com.apploads.footwin.profile.ProfileFragment;
+
 public class MainPageActivity extends BaseActivity {
 
     Fragment selectedFragment;

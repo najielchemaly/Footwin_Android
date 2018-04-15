@@ -1,4 +1,4 @@
-package com.apploads.footwin.utils;
+package com.apploads.footwin.helpers.utils;
 
 public final class StringUtils {
 

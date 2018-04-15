@@ -59,22 +59,26 @@ public class TeamsAdapter extends BaseAdapter {
         final Holder holder = new Holder();
         View rowView;
 
+        final Team team = teams.get(position);
         rowView = inflater.inflate(R.layout.team_row_item, null);
         holder.txtTeam = rowView.findViewById(R.id.txtTeam);
         holder.imgTeam = rowView.findViewById(R.id.imgTeam);
         holder.imgCheck = rowView.findViewById(R.id.imgCheck);
 
-        holder.txtTeam.setText(teams.get(position).getName());
+        holder.txtTeam.setText(team.getName());
         holder.imgCheck.setVisibility(View.GONE);
+        holder.imgTeam.setImageResource(0);
+
+        if(team.isSelected()){
+          holder.imgTeam.setImageResource(R.drawable.selected_team_background);
+          holder.imgCheck.setVisibility(View.VISIBLE);
+        }
 
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (selectedLayout != null) {
-                    selectedLayout.setBackgroundResource(0);
-                }
-                selectedLayout = holder.imgTeam;
-                selectedLayout = selectView(holder);
+                team.setSelected(true);
+                notifyDataSetChanged();
             }
         });
 
@@ -84,12 +88,6 @@ public class TeamsAdapter extends BaseAdapter {
     public class Holder {
         TextView txtTeam;
         ImageView imgTeam, imgCheck;
-    }
-
-    private ImageView selectView(Holder holder) {
-
-        holder.imgTeam.setImageResource(R.drawable.selected_team_background);
-        return holder.imgTeam;
     }
 
 }

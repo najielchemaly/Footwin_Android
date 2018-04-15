@@ -1,4 +1,4 @@
-package com.apploads.footwin;
+package com.apploads.footwin.news;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -6,10 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class PredictFragment extends Fragment {
+import com.apploads.footwin.R;
 
-    public static PredictFragment newInstance() {
-        PredictFragment fragment = new PredictFragment();
+public class NewsFragment extends Fragment {
+
+    public static NewsFragment newInstance() {
+        NewsFragment fragment = new NewsFragment();
         return fragment;
     }
 
@@ -21,6 +23,6 @@ public class PredictFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.predict_fragment, container, false);
+        return inflater.inflate(R.layout.news_fragment, container, false);
     }
 }

@@ -1,12 +1,177 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/forgot_password_background">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imgProfile"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:clickable="true"
+        android:layout_marginStart="@dimen/app_margin"
+        android:layout_marginTop="@dimen/app_margin"
+        android:src="@drawable/tab_profile"
+        app:civ_border_color="@color/white"
+        app:civ_border_overlay="true"
+        app:civ_border_width="1dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="9dp"
+        android:background="@drawable/circle_shape_red"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/txtNotificationTag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:maxLength="2"
+            android:text="2"
+            android:textColor="@color/white"
+            android:textSize="@dimen/small_text"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/imgCoins"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="@dimen/app_margin"
+        android:padding="2dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/coin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/lblCoinsTotal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="predict"
-        />
+        android:layout_marginEnd="8dp"
+        android:gravity="center"
+        android:text="Total"
+        android:textSize="@dimen/small_text"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toStartOf="@+id/imgCoins"
+        app:layout_constraintTop_toTopOf="@+id/imgCoins" />
+
+    <TextView
+        android:id="@+id/txtCoinsTotal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="124"
+        android:textColor="@color/white"
+        android:textSize="@dimen/medium_text"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/lblCoinsTotal"
+        app:layout_constraintTop_toBottomOf="@+id/lblCoinsTotal" />
+
+    <ImageView
+        android:id="@+id/imgWinningCoins"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginEnd="@dimen/app_margin"
+        android:padding="2dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/winning_coin"
+        app:layout_constraintEnd_toStartOf="@+id/txtCoinsTotal"
+        app:layout_constraintTop_toTopOf="@+id/imgCoins" />
+
+    <TextView
+        android:id="@+id/lblWinningCoins"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="Winning"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="@dimen/small_text"
+        app:layout_constraintEnd_toStartOf="@+id/imgWinningCoins"
+        app:layout_constraintTop_toTopOf="@+id/imgWinningCoins" />
+
+
+    <TextView
+        android:id="@+id/txtWinningCoinsTotal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="250"
+        android:textColor="@color/white"
+        android:textSize="@dimen/medium_text"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/lblWinningCoins"
+        app:layout_constraintTop_toBottomOf="@+id/lblWinningCoins" />
+
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginEnd="@dimen/app_margin"
+        android:layout_marginStart="@dimen/app_margin"
+        android:layout_marginTop="@dimen/app_margin"
+        android:alpha="0.2"
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgWinningCoins" />
+
+    <TextView
+        android:id="@+id/txtRound"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="@dimen/app_margin"
+        android:layout_marginTop="20dp"
+        android:text="Round 1"
+        android:gravity="center"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/btnRules"
+        app:layout_constraintHorizontal_bias="0.005"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view" />
+
+    <Button
+        android:id="@+id/btnRules"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginEnd="@dimen/app_margin"
+        android:background="@android:color/transparent"
+        android:text="view rules"
+        android:textAllCaps="true"
+        android:gravity="right|center"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/txtRound" />
+
+    <ListView
+        android:id="@+id/listMatches"
+        android:layout_width="match_parent"
+        android:layout_height="450dp"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnRules" />
 
 </android.support.constraint.ConstraintLayout>

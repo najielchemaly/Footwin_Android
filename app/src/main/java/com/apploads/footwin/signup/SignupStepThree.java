@@ -14,14 +14,12 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.apploads.footwin.BaseActivity;
+import com.apploads.footwin.helpers.BaseActivity;
 import com.apploads.footwin.MainPageActivity;
 import com.apploads.footwin.R;
-import com.apploads.footwin.Utility;
+import com.apploads.footwin.helpers.Utility;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
