@@ -1,31 +1,50 @@
 package com.apploads.footwin.predict;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.apploads.footwin.R;
 import com.apploads.footwin.helpers.StaticData;
+import com.apploads.footwin.login.LoginActivity;
 import com.apploads.footwin.model.Match;
+import com.apploads.footwin.model.Notification;
+import com.apploads.footwin.model.Profile;
+import com.apploads.footwin.notifications.NotificationsActivity;
+import com.apploads.footwin.services.ApiManager;
+import com.github.ybq.android.spinkit.style.DoubleBounce;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PredictFragment extends Fragment {
 
     ListView listMatches;
-    Button btnRules;
-    TextView txtRound, txtWinningCoinsTotal, txtCoinsTotal, txtNotificationTag;
-    CircleImageView imgProfile;
+    Button btnRules, btnConfirm, btnCancel;
+    TextView txtRound, txtWinningCoinsTotal, txtCoinsTotal, txtNotificationTag, txtHomeTeam, txtAwayTeam;
+    CircleImageView imgProfile, imgHomeTeam, imgAwayTeam;
     private View parentView;
     MatchesAdapter matchesAdapter;
+    RelativeLayout viewExactScore;
+    ProgressBar progressBar;
+    Animation bottom_to_top, top_to_bottom;
 
 
     public static PredictFragment newInstance() {
@@ -44,6 +63,13 @@ public class PredictFragment extends Fragment {
                              Bundle savedInstanceState) {
         parentView = inflater.inflate(R.layout.predict_fragment, container, false);
 
+        initView();
+        initListeners();
+
+        return parentView;
+    }
+
+    private void initView(){
         listMatches = parentView.findViewById(R.id.listMatches);
         btnRules = parentView.findViewById(R.id.btnRules);
         txtRound = parentView.findViewById(R.id.txtRound);
@@ -51,45 +77,84 @@ public class PredictFragment extends Fragment {
         txtCoinsTotal = parentView.findViewById(R.id.txtCoinsTotal);
         txtNotificationTag = parentView.findViewById(R.id.txtNotificationTag);
         imgProfile = parentView.findViewById(R.id.imgProfile);
+        progressBar = parentView.findViewById(R.id.spin_kit);
+        viewExactScore = parentView.findViewById(R.id.viewExactScore);
+        btnCancel = parentView.findViewById(R.id.btnCancel);
+        btnConfirm = parentView.findViewById(R.id.btnConfirm);
+        txtHomeTeam = parentView.findViewById(R.id.txtHomeTeam);
+        txtAwayTeam = parentView.findViewById(R.id.txtAwayTeam);
+        imgHomeTeam = parentView.findViewById(R.id.imgHomeTeam);
+        imgAwayTeam = parentView.findViewById(R.id.imgAwayTeam);
+        DoubleBounce doubleBounce = new DoubleBounce();
+        progressBar.setIndeterminateDrawable(doubleBounce);
+
+        viewExactScore.setVisibility(View.GONE);
 
         txtRound.setText(StaticData.config.getActiveRound().getTitle());
         txtWinningCoinsTotal.setText(StaticData.config.getActiveRound().getWinningCoins());
         txtCoinsTotal.setText(StaticData.config.getActiveRound().getAllInCoins());
 
-        MatchesAdapter matchesAdapter = new MatchesAdapter(getMatches(), getContext());
-        listMatches.setAdapter(matchesAdapter);
+        bottom_to_top = AnimationUtils.loadAnimation(getContext(), R.anim.bottom_to_top_wt);
+        top_to_bottom = AnimationUtils.loadAnimation(getContext(), R.anim.top_to_bottom_wt);
 
-        return parentView;
+        callMatchesService();
     }
 
-    private List<Match> getMatches(){
-        List<Match> matchesList = new ArrayList<>();
+    public void showExactScore(Match match){
+        viewExactScore.setVisibility(View.VISIBLE);
+        viewExactScore.startAnimation(bottom_to_top);
 
-        Match match = new Match();
-        match.setHomeTeam("Brazil");
-        match.setAwayTeam("Germany");
-        matchesList.add(match);
+        txtHomeTeam.setText(match.getHomeName());
+        txtAwayTeam.setText(match.getAwayName());
+    }
 
-        match = new Match();
-        match.setHomeTeam("Lebanon");
-        match.setAwayTeam("Portugual");
-        matchesList.add(match);
+    private void initListeners(){
+        imgProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), NotificationsActivity.class);
+                startActivity(intent);
+            }
+        });
 
-        match = new Match();
-        match.setHomeTeam("England");
-        match.setAwayTeam("Spain");
-        matchesList.add(match);
+        btnConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewExactScore.startAnimation(top_to_bottom);
+                viewExactScore.setVisibility(View.GONE);
+            }
+        });
 
-        match = new Match();
-        match.setHomeTeam("Argentina");
-        match.setAwayTeam("Holland");
-        matchesList.add(match);
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewExactScore.startAnimation(top_to_bottom);
+                viewExactScore.setVisibility(View.GONE);
+            }
+        });
+    }
 
-        match = new Match();
-        match.setHomeTeam("Italy");
-        match.setAwayTeam("France");
-        matchesList.add(match);
+    private void callMatchesService(){
+        ApiManager.getService().getMatches().enqueue(new Callback<Profile>() {
+            @Override
+            public void onResponse(Call<Profile> call, Response<Profile> response) {
+                final Profile match = response.body();
 
-        return matchesList;
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        MatchesAdapter matchesAdapter = new MatchesAdapter(match.getMatches(), getContext(),PredictFragment.this);
+                        listMatches.setAdapter(matchesAdapter);
+                        progressBar.setVisibility(View.GONE);
+                    }
+                }, 2000);
+            }
+
+            @Override
+            public void onFailure(Call<Profile> call, Throwable t) {
+                Toast.makeText(getActivity(), "dasdasd", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
