@@ -10,24 +10,21 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.apploads.footwin.coins.CoinsActivity;
 import com.apploads.footwin.R;
 import com.apploads.footwin.helpers.StaticData;
-import com.apploads.footwin.login.LoginActivity;
 import com.apploads.footwin.model.Match;
-import com.apploads.footwin.model.Notification;
 import com.apploads.footwin.model.Profile;
 import com.apploads.footwin.notifications.NotificationsActivity;
 import com.apploads.footwin.services.ApiManager;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -43,6 +40,7 @@ public class PredictFragment extends Fragment {
     private View parentView;
     MatchesAdapter matchesAdapter;
     RelativeLayout viewExactScore;
+    ImageView imgCoins;
     ProgressBar progressBar;
     Animation bottom_to_top, top_to_bottom;
 
@@ -72,6 +70,7 @@ public class PredictFragment extends Fragment {
     private void initView(){
         listMatches = parentView.findViewById(R.id.listMatches);
         btnRules = parentView.findViewById(R.id.btnRules);
+        imgCoins = parentView.findViewById(R.id.imgCoins);
         txtRound = parentView.findViewById(R.id.txtRound);
         txtWinningCoinsTotal = parentView.findViewById(R.id.txtWinningCoinsTotal);
         txtCoinsTotal = parentView.findViewById(R.id.txtCoinsTotal);
@@ -130,6 +129,14 @@ public class PredictFragment extends Fragment {
             public void onClick(View view) {
                 viewExactScore.startAnimation(top_to_bottom);
                 viewExactScore.setVisibility(View.GONE);
+            }
+        });
+
+        imgCoins.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), CoinsActivity.class);
+                startActivity(intent);
             }
         });
     }

@@ -11,4 +11,6 @@
     <color name="red">#d80e3f</color>
     <color name="darkText">#616b9a</color>
     <color name="lightText">#adb3d3</color>
+
+    <color name="blackOpacityNew">#b7000000</color>
 </resources>
