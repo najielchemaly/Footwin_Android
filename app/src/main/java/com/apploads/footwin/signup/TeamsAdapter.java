@@ -85,6 +85,34 @@ public class TeamsAdapter extends BaseAdapter {
         return rowView;
     }
 
+//    private LinearLayout selectView(String type,BillMenu item , BillsViewHolder holder){
+//        switch (type) {
+//            case "add":
+//                Intent intent = new Intent(context, AddBillerActivity.class);
+//                context.startActivity(intent);
+//                break;
+//            case "electricity":
+//                selectedMenu = item;
+//                holder.viewSelected.setBackgroundResource(R.drawable.selected_bill);
+//                break;
+//            case "phone":
+//                selectedMenu = item;
+//                holder.viewSelected.setBackgroundResource(R.drawable.selected_bill);
+//                break;
+//            case "landline":
+//                selectedMenu = item;
+//                holder.viewSelected.setBackgroundResource(R.drawable.selected_bill);
+//                break;
+//            case "water":
+//                selectedMenu = item;
+//                holder.viewSelected.setBackgroundResource(R.drawable.selected_bill);
+//                break;
+//            default:
+//        }
+//
+//        return holder.viewSelected;
+//    }
+
     public class Holder {
         TextView txtTeam;
         ImageView imgTeam, imgCheck;

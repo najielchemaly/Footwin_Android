@@ -51,12 +51,6 @@ public class PredictFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         parentView = inflater.inflate(R.layout.predict_fragment, container, false);
@@ -67,7 +61,7 @@ public class PredictFragment extends Fragment {
         return parentView;
     }
 
-    private void initView(){
+    private void initView() {
         listMatches = parentView.findViewById(R.id.listMatches);
         btnRules = parentView.findViewById(R.id.btnRules);
         imgCoins = parentView.findViewById(R.id.imgCoins);
@@ -99,7 +93,7 @@ public class PredictFragment extends Fragment {
         callMatchesService();
     }
 
-    public void showExactScore(Match match){
+    public void showExactScore(Match match) {
         viewExactScore.setVisibility(View.VISIBLE);
         viewExactScore.startAnimation(bottom_to_top);
 
@@ -107,7 +101,7 @@ public class PredictFragment extends Fragment {
         txtAwayTeam.setText(match.getAwayName());
     }
 
-    private void initListeners(){
+    private void initListeners() {
         imgProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -141,7 +135,7 @@ public class PredictFragment extends Fragment {
         });
     }
 
-    private void callMatchesService(){
+    private void callMatchesService() {
         ApiManager.getService().getMatches().enqueue(new Callback<Profile>() {
             @Override
             public void onResponse(Call<Profile> call, Response<Profile> response) {
@@ -151,9 +145,10 @@ public class PredictFragment extends Fragment {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        MatchesAdapter matchesAdapter = new MatchesAdapter(match.getMatches(), getContext(),PredictFragment.this);
+                        MatchesAdapter matchesAdapter = new MatchesAdapter(match.getMatches(), getContext(), PredictFragment.this);
                         listMatches.setAdapter(matchesAdapter);
                         progressBar.setVisibility(View.GONE);
+
                     }
                 }, 2000);
             }

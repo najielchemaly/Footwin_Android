@@ -32,6 +32,7 @@
         <activity android:name=".signup.SignupStepOne" />
         <activity android:name=".signup.SignupStepTwo" />
         <activity android:name=".signup.SignupStepThree" />
+        <activity android:name=".news.NewsDetailsActivity" />
 
     </application>
 

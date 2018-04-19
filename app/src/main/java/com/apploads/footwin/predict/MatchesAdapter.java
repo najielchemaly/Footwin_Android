@@ -29,14 +29,16 @@ public class MatchesAdapter extends BaseAdapter {
 
     private List<Match> root;
     private Context context;
-    private LayoutInflater mInflater;
+    LayoutInflater mInflater;
     private PredictFragment predictFragment;
 
     public MatchesAdapter(List<Match> root, Context context, PredictFragment predictFragment){
         this.root        = root;
         this.context     = context;
         this.predictFragment     = predictFragment;
-        mInflater = LayoutInflater.from(context);
+        if(context != null){
+            mInflater = LayoutInflater.from(context);
+        }
     }
 
     @Override
@@ -67,7 +69,7 @@ public class MatchesAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final Match match = (Match) getItem(position);
-       final Holder holder = new Holder();
+        final Holder holder = new Holder();
 
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.match_row_item, null);

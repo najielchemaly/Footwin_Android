@@ -30,6 +30,7 @@ public class NotificationsActivity extends BaseActivity {
     @Override
     public void doOnCreate(){
         initView();
+        initListeners();
     }
 
     private void initView(){
@@ -49,8 +50,15 @@ public class NotificationsActivity extends BaseActivity {
                 progressBar.setVisibility(View.GONE);
             }
         }, 2000);
+    }
 
-
+    private void initListeners() {
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     private List<Notification> getNotifications() {
