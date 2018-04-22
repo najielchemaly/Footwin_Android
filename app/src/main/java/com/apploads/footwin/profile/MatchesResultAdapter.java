@@ -26,12 +26,10 @@ public class MatchesResultAdapter extends BaseAdapter {
     private List<Match> root;
     private Context context;
     LayoutInflater mInflater;
-    private PredictFragment predictFragment;
 
-    public MatchesResultAdapter(List<Match> root, Context context, PredictFragment predictFragment){
+    public MatchesResultAdapter(List<Match> root, Context context){
         this.root        = root;
         this.context     = context;
-        this.predictFragment     = predictFragment;
         if(context != null){
             mInflater = LayoutInflater.from(context);
         }
@@ -139,19 +137,6 @@ public class MatchesResultAdapter extends BaseAdapter {
         }
 
         return convertView;
-    }
-
-    public void scaleView(View v, float startScale, float endScale) {
-        Animation anim = new ScaleAnimation(
-                1f, 1f, // Start and end values for the X axis scaling
-                startScale, endScale, // Start and end values for the Y axis scaling
-                Animation.RELATIVE_TO_SELF, 0.5f, // Pivot point of X scaling
-                Animation.RELATIVE_TO_SELF, 0.5f); // Pivot point of Y scaling
-        anim.setFillAfter(true); // Needed to keep the result of the animation
-        anim.setDuration(1000);
-        anim.setFillEnabled(true);
-        anim.setFillAfter(true);
-        v.startAnimation(anim);
     }
 
     public class Holder {

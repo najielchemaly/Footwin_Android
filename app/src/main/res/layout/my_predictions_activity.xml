@@ -19,7 +19,7 @@
         />
     
     <ListView
-        android:id="@+id/listMatches"
+        android:id="@+id/listPredictions"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@null"
@@ -29,6 +29,7 @@
         android:layout_marginBottom="45dp"/>
     
     <Button
+        android:id="@+id/btnClose"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_alignParentBottom="true"

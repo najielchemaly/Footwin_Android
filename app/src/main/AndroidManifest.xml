@@ -33,6 +33,8 @@
         <activity android:name=".signup.SignupStepTwo" />
         <activity android:name=".signup.SignupStepThree" />
         <activity android:name=".news.NewsDetailsActivity" />
+        <activity android:name=".profile.MyPredictionsActivity" />
+        <activity android:name=".profile.ChangePasswordActivity" />
 
     </application>
 
