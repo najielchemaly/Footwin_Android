@@ -6,9 +6,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.apploads.footwin.R;
 import com.apploads.footwin.helpers.BaseActivity;
+import com.apploads.footwin.helpers.CustomDialogClass;
 import com.apploads.footwin.login.LoginActivity;
 import com.apploads.footwin.model.Notification;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
@@ -50,6 +52,24 @@ public class NotificationsActivity extends BaseActivity {
                 progressBar.setVisibility(View.GONE);
             }
         }, 2000);
+
+//        CustomDialogClass dialogClass = new CustomDialogClass(this, new CustomDialogClass.AbstractCustomDialogListener() {
+//            @Override
+//            public void onConfirm(CustomDialogClass.DialogResponse response) {
+//                Toast.makeText(NotificationsActivity.this, "yes", Toast.LENGTH_SHORT).show();
+//                response.getDialog().dismiss();
+//            }
+//
+//            @Override
+//            public void onCancel(CustomDialogClass.DialogResponse dialogResponse) {
+//                Toast.makeText(NotificationsActivity.this, "no", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//
+//        dialogClass.setTitle("notification title");
+//        dialogClass.setMessage("notification message");
+//        dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+//        dialogClass.show();
     }
 
     private void initListeners() {

@@ -4,6 +4,7 @@ package com.apploads.footwin.predict;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +24,9 @@ import android.widget.Toast;
 import com.apploads.footwin.R;
 import com.apploads.footwin.model.Match;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class MatchesAdapter extends BaseAdapter {
@@ -31,6 +35,9 @@ public class MatchesAdapter extends BaseAdapter {
     private Context context;
     LayoutInflater mInflater;
     private PredictFragment predictFragment;
+    Date endDate;
+    long startTime, milliseconds, diff;
+    CountDownTimer mCountDownTimer;
 
     public MatchesAdapter(List<Match> root, Context context, PredictFragment predictFragment){
         this.root        = root;
@@ -83,6 +90,7 @@ public class MatchesAdapter extends BaseAdapter {
             holder.imgAwayTeam = convertView.findViewById(R.id.imgAwayTeam);
             holder.viewConfirm = convertView.findViewById(R.id.viewConfirm);
             holder.viewExactScore = convertView.findViewById(R.id.viewExactScore);
+            holder.txtDate = convertView.findViewById(R.id.txtDate);
             holder.btnDraw = convertView.findViewById(R.id.btnDraw);
             holder.viewConfirm.setClickable(false);
 
@@ -93,6 +101,45 @@ public class MatchesAdapter extends BaseAdapter {
             final Animation scale_up_normal = AnimationUtils.loadAnimation(context, R.anim.scale_up_normal);
             final Animation scale_down = AnimationUtils.loadAnimation(context, R.anim.scale_down);
             final Animation scale_down_normal = AnimationUtils.loadAnimation(context, R.anim.scale_down_normal);
+
+            SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy, HH:mm:ss");
+            formatter.setLenient(false);
+
+            String endTime = "27.04.2018, 15:05:36";
+
+            try {
+                endDate = formatter.parse(endTime);
+                milliseconds = endDate.getTime();
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            startTime = System.currentTimeMillis();
+
+            diff = milliseconds - startTime;
+
+            mCountDownTimer = new CountDownTimer(milliseconds, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+
+                    startTime=startTime-1;
+                    Long serverUptimeSeconds = (millisUntilFinished - startTime) / 1000;
+
+                    String daysLeft = String.format("%d", serverUptimeSeconds / 86400);
+                    String hoursLeft = String.format("%d", (serverUptimeSeconds % 86400) / 3600);
+                    String minutesLeft = String.format("%d", ((serverUptimeSeconds % 86400) % 3600) / 60);
+                    String secondsLeft = String.format("%d", ((serverUptimeSeconds % 86400) % 3600) % 60);
+
+                    holder.txtDate.setText(daysLeft+ " Days " + hoursLeft+ " Hours " + minutesLeft + " Mins " + secondsLeft+" Sec");
+                }
+
+                @Override
+                public void onFinish() {
+
+                }
+            }.start();
+
 
             holder.viewHomeTeam.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -200,21 +247,9 @@ public class MatchesAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void scaleView(View v, float startScale, float endScale) {
-        Animation anim = new ScaleAnimation(
-                1f, 1f, // Start and end values for the X axis scaling
-                startScale, endScale, // Start and end values for the Y axis scaling
-                Animation.RELATIVE_TO_SELF, 0.5f, // Pivot point of X scaling
-                Animation.RELATIVE_TO_SELF, 0.5f); // Pivot point of Y scaling
-        anim.setFillAfter(true); // Needed to keep the result of the animation
-        anim.setDuration(1000);
-        anim.setFillEnabled(true);
-        anim.setFillAfter(true);
-        v.startAnimation(anim);
-    }
 
     public class Holder {
-        TextView txtHomeTeam, txtAwayTeam;
+        TextView txtHomeTeam, txtAwayTeam, txtDate;
         LinearLayout viewHomeTeam, viewAwayTeam, viewConfirm, viewExactScore;
         ImageView imgAwayTeam, imgHomeTeam;
         Button btnDraw;

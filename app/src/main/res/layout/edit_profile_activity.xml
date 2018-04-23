@@ -6,21 +6,11 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/lblStep2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Step 2"
-        android:textSize="@dimen/large_text"
-        android:textColor="@color/white"
-        android:layout_marginTop="@dimen/app_margin"
-        android:layout_marginLeft="@dimen/app_margin"
-        />
-
-    <TextView
         android:id="@+id/lblTellUsMore"
         android:layout_width="220dp"
+        android:layout_marginTop="@dimen/app_margin"
         android:layout_height="wrap_content"
-        android:text="Tell us more about you"
+        android:text="edit profile"
         android:textAllCaps="true"
         android:layout_below="@+id/lblStep2"
         android:textSize="@dimen/xlarge_text"
@@ -29,30 +19,42 @@
         android:textStyle="bold"
         />
 
-    <Button
-        android:id="@+id/btnCancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imgProfile"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/app_margin"
-        android:layout_marginRight="@dimen/app_margin"
-        android:background="@android:color/transparent"
-        android:textColor="@color/white"
-        android:text="cancel"
+        android:layout_below="@+id/lblTellUsMore"
+        android:src="@drawable/brazil"
         />
-    
+
+    <ImageButton
+        android:id="@+id/btnCamera"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_below="@+id/imgProfile"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="-30dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/camera"
+        android:scaleType="centerCrop"
+        android:padding="3dp"
+        />
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/app_margin"
         android:layout_marginRight="@dimen/app_margin"
         android:layout_marginTop="@dimen/app_margin"
-        android:layout_below="@+id/lblTellUsMore"
+        android:layout_below="@+id/imgProfile"
         android:layout_marginBottom="80dp"
         android:orientation="vertical"
         >
+
         <EditText
-            android:id="@+id/txtFullname"
+            android:id="@+id/txtName"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:padding="@dimen/app_margin"
@@ -64,19 +66,7 @@
             android:inputType="textCapWords"
             android:background="@drawable/retangle_white_border"
             />
-        <EditText
-            android:id="@+id/txtUsername"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:padding="@dimen/app_margin"
-            android:textColor="@color/white"
-            android:hint="USER NAME"
-            android:textAllCaps="true"
-            android:textColorHint="@color/white"
-            android:imeOptions="actionNext"
-            android:inputType="textCapWords"
-            android:background="@drawable/retangle_white_border"
-            />
+
         <EditText
             android:id="@+id/txtEmail"
             android:layout_width="match_parent"
@@ -90,19 +80,7 @@
             android:inputType="textEmailAddress"
             android:background="@drawable/retangle_white_border"
             />
-        <EditText
-            android:id="@+id/txtPassword"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:padding="@dimen/app_margin"
-            android:textColor="@color/white"
-            android:hint="PASSWORD"
-            android:textAllCaps="true"
-            android:textColorHint="@color/white"
-            android:imeOptions="actionDone"
-            android:inputType="textPassword"
-            android:background="@drawable/retangle_white_border"
-            />
+
         <TextView
             android:id="@+id/txtCountry"
             android:layout_width="match_parent"
@@ -132,6 +110,7 @@
             android:inputType="number"
             android:background="@drawable/retangle_white_border"
             />
+
         <TextView
             android:id="@+id/txtGender"
             android:layout_width="match_parent"
@@ -159,7 +138,7 @@
         android:layout_marginLeft="130dp"
         android:layout_marginBottom="@dimen/app_margin"
         android:layout_marginRight="@dimen/app_margin"
-        android:text="Continue"
+        android:text="save changes"
         android:gravity="center|left"
         android:paddingLeft="@dimen/app_margin"
         android:textSize="@dimen/xlarge_text"

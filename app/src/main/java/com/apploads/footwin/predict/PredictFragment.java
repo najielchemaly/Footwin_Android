@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.apploads.footwin.ViewRulesActivity;
 import com.apploads.footwin.coins.CoinsActivity;
 import com.apploads.footwin.R;
 import com.apploads.footwin.helpers.StaticData;
@@ -130,6 +131,14 @@ public class PredictFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), CoinsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnRules.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), ViewRulesActivity.class);
                 startActivity(intent);
             }
         });

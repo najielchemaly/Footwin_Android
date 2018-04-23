@@ -4,17 +4,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.apploads.footwin.R;
 import com.apploads.footwin.helpers.BaseActivity;
+import com.apploads.footwin.model.Article;
 import com.apploads.footwin.model.News;
+import com.squareup.picasso.Picasso;
 
 public class NewsDetailsActivity extends BaseActivity {
 
-    News news;
+    Article article;
     TextView txtDesc, txtTitle, txtDate;
     Button btnClose;
+    ImageView imgNews;
 
     @Override
     public int getContentViewId() {
@@ -32,16 +36,21 @@ public class NewsDetailsActivity extends BaseActivity {
         txtDate = _findViewById(R.id.txtDate);
         txtTitle = _findViewById(R.id.txtTitle);
         btnClose = _findViewById(R.id.btnClose);
+        imgNews = _findViewById(R.id.imgNews);
 
         Intent intent = getIntent();
         Bundle b = intent.getExtras();
 
         if (b != null) {
-            news = (News) b.getSerializable("news");
+            article = (Article) b.getSerializable("news");
 
-            txtDate.setText(news.getDate());
-            txtTitle.setText(news.getTitle());
-            txtDesc.setText(news.getDesc());
+            txtDate.setText(article.getPublishedAt());
+            txtTitle.setText(article.getTitle());
+            txtDesc.setText(article.getDescription());
+
+            Picasso.with(this)
+                    .load(article.getUrlToImage())
+                    .into(imgNews);
         }
     }
 

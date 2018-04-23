@@ -35,6 +35,8 @@
         <activity android:name=".news.NewsDetailsActivity" />
         <activity android:name=".profile.MyPredictionsActivity" />
         <activity android:name=".profile.ChangePasswordActivity" />
+        <activity android:name=".profile.EditProfileActivity" />
+        <activity android:name=".ViewRulesActivity" android:theme="@style/Theme.Transparent"/>
 
     </application>
 

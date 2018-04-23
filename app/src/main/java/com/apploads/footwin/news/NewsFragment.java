@@ -6,12 +6,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.apploads.footwin.R;
 import com.apploads.footwin.model.News;
+import com.apploads.footwin.services.ApiManager;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class NewsFragment extends Fragment {
 
@@ -36,48 +42,23 @@ public class NewsFragment extends Fragment {
 
     private void initView(){
         listNews = parentView.findViewById(R.id.listNews);
-        newsAdapter = new NewsAdapter(getNews(), getContext());
-        listNews.setAdapter(newsAdapter);
-    }
+//
 
-    private List<News> getNews(){
-        List<News> newsList = new ArrayList<>();
+        ApiManager.getService().getNews("http://newsapi.org//v2//everything?sources=bbc-sport&apiKey=bf84323b4c7244aca799c4ff1dda7e1e&q=world%20cup%20").enqueue(new Callback<News>() {
+            @Override
+            public void onResponse(Call<News> call, Response<News> response) {
+                News news = response.body();
+                if(news != null && response.isSuccessful()){
+                    newsAdapter = new NewsAdapter(news.getArticles(), getContext());
+                    listNews.setAdapter(newsAdapter);
+                }
+            }
 
-        News news = new News();
-        news.setDate("11 April 2018");
-        news.setTitle("Messi is back to his old habbits of scoring 3 goals every game");
-        newsList.add(news);
+            @Override
+            public void onFailure(Call<News> call, Throwable t) {
+                Toast.makeText(getActivity(), "asdasd", Toast.LENGTH_SHORT).show();
+            }
+        });
 
-        news = new News();
-        news.setDate("25 July 2018");
-        news.setTitle("Mirana hoping his time would come");
-        newsList.add(news);
-
-        news = new News();
-        news.setDate("11 April 2018");
-        news.setTitle("Messi is back to his old habbits of scoring 3 goals every game");
-        newsList.add(news);
-
-        news = new News();
-        news.setDate("11 April 2018");
-        news.setTitle("Messi is back to his old habbits of scoring 3 goals every game");
-        newsList.add(news);
-
-        news = new News();
-        news.setDate("11 April 2018");
-        news.setTitle("Messi is back to his old habbits of scoring 3 goals every game");
-        newsList.add(news);
-
-        news = new News();
-        news.setDate("11 April 2018");
-        news.setTitle("Messi is back to his old habbits of scoring 3 goals every game");
-        newsList.add(news);
-
-        news = new News();
-        news.setDate("11 April 2018");
-        news.setTitle("Messi is back to his old habbits of scoring 3 goals every game");
-        newsList.add(news);
-
-        return newsList;
     }
 }

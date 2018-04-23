@@ -1,43 +1,45 @@
 package com.apploads.footwin.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
+import java.util.List;
 
-public class News implements Serializable{
+public class News implements Serializable {
 
-   private String date;
-   private String title;
-   private String desc;
-   private int image;
+    @SerializedName("status")
+    @Expose
+    private String status;
+    @SerializedName("totalResults")
+    @Expose
+    private Integer totalResults;
+    @SerializedName("articles")
+    @Expose
+    private List<Article> articles = null;
 
-    public String getDate() {
-        return date;
+    public String getStatus() {
+        return status;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public String getDesc() {
-        return desc;
+    public Integer getTotalResults() {
+        return totalResults;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setTotalResults(Integer totalResults) {
+        this.totalResults = totalResults;
     }
 
-    public String getTitle() {
-        return title;
+    public List<Article> getArticles() {
+        return articles;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setArticles(List<Article> articles) {
+        this.articles = articles;
     }
 
-    public int getImage() {
-        return image;
-    }
-
-    public void setImage(int image) {
-        this.image = image;
-    }
 }
