@@ -148,32 +148,37 @@ public class LoginActivity extends BaseActivity {
         ApiManager.getService(true).login(txtEmail.getText().toString(), txtPassword.getText().toString()).enqueue(new Callback<UserResponse>() {
             @Override
             public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
-                if(response.body().getStatus() == 1){
-                    UserResponse userResponse = response.body();
-                    StaticData.user = userResponse.getUser();
-                    Intent intent = new Intent(getApplicationContext(), MainPageActivity.class);
-                    startActivity(intent);
-                    finish();
-                    progressBar.setVisibility(View.GONE);
-                }else if(response.body().getStatus() == 0){
-                    progressBar.setVisibility(View.GONE);
-                    CustomDialogClass dialogClass = new CustomDialogClass(LoginActivity.this, new CustomDialogClass.AbstractCustomDialogListener() {
-                        @Override
-                        public void onConfirm(CustomDialogClass.DialogResponse response) {
-                            response.getDialog().dismiss();
-                            txtEmail.setText("");
-                            txtPassword.setText("");
-                        }
+                if(response.isSuccessful()){
+                    if(response.body().getStatus() == 1){
+                        UserResponse userResponse = response.body();
+                        StaticData.user = userResponse.getUser();
+                        Intent intent = new Intent(getApplicationContext(), MainPageActivity.class);
+                        startActivity(intent);
+                        finish();
+                        progressBar.setVisibility(View.GONE);
+                    }else if(response.body().getStatus() == 0){
+                        progressBar.setVisibility(View.GONE);
+                        CustomDialogClass dialogClass = new CustomDialogClass(LoginActivity.this, new CustomDialogClass.AbstractCustomDialogListener() {
+                            @Override
+                            public void onConfirm(CustomDialogClass.DialogResponse response) {
+                                response.getDialog().dismiss();
+                                txtEmail.setText("");
+                                txtPassword.setText("");
+                            }
 
-                        @Override
-                        public void onCancel(CustomDialogClass.DialogResponse dialogResponse) {
-                        }
-                    }, true);
+                            @Override
+                            public void onCancel(CustomDialogClass.DialogResponse dialogResponse) {
+                            }
+                        }, true);
 
-                    dialogClass.setTitle("Oops");
-                    dialogClass.setMessage("Incorrect Username or password");
-                    dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-                    dialogClass.show();
+                        dialogClass.setTitle("Oops");
+                        dialogClass.setMessage("Incorrect Username or password");
+                        dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                        dialogClass.show();
+                    }
+                }else {
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(LoginActivity.this, "Check your internet connection and try again later", Toast.LENGTH_SHORT).show();
                 }
             }
 

@@ -22,7 +22,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.apploads.footwin.R;
+import com.apploads.footwin.helpers.StaticData;
 import com.apploads.footwin.model.Match;
+import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -97,15 +99,24 @@ public class MatchesAdapter extends BaseAdapter {
             holder.txtHomeTeam.setText(match.getHomeName());
             holder.txtAwayTeam.setText(match.getAwayName());
 
+            Picasso.with(context)
+                    .load(StaticData.config.getMediaUrl()+match.getHomeFlag())
+                    .into(holder.imgHomeTeam);
+
+            Picasso.with(context)
+                    .load(StaticData.config.getMediaUrl()+match.getAwayFlag())
+                    .into(holder.imgAwayTeam);
+
             final Animation scale_up = AnimationUtils.loadAnimation(context, R.anim.scale_up);
             final Animation scale_up_normal = AnimationUtils.loadAnimation(context, R.anim.scale_up_normal);
             final Animation scale_down = AnimationUtils.loadAnimation(context, R.anim.scale_down);
             final Animation scale_down_normal = AnimationUtils.loadAnimation(context, R.anim.scale_down_normal);
 
-            SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy, HH:mm:ss");
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             formatter.setLenient(false);
 
-            String endTime = "27.04.2018, 15:05:36";
+            String endTime = match.getDate();
+//            String endTime = "27.04.2018, 15:05:36";
 
             try {
                 endDate = formatter.parse(endTime);
@@ -147,9 +158,9 @@ public class MatchesAdapter extends BaseAdapter {
                     if(match.isHomeToWin()){
                         holder.imgHomeTeam.setBackgroundResource(0);
                         holder.imgHomeTeam.startAnimation(scale_down_normal);
-                        holder.imgAwayTeam.animate().alpha(1f).setDuration(1000);
-                        holder.txtAwayTeam.animate().alpha(1f).setDuration(1000);
-                        holder.viewConfirm.animate().alpha(0f).setDuration(1000);
+                        holder.imgAwayTeam.animate().alpha(1f).setDuration(600);
+                        holder.txtAwayTeam.animate().alpha(1f).setDuration(600);
+                        holder.viewConfirm.animate().alpha(0f).setDuration(600);
                         holder.viewConfirm.setClickable(false);
                         holder.imgAwayTeam.startAnimation(scale_up_normal);
                         match.setHomeToWin(false);
@@ -157,14 +168,14 @@ public class MatchesAdapter extends BaseAdapter {
                     }else {
                         holder.imgHomeTeam.setBackgroundResource(R.drawable.selected_team_background);
                         holder.imgHomeTeam.startAnimation(scale_up);
-                        holder.imgHomeTeam.animate().alpha(1f).setDuration(1000);
-                        holder.txtHomeTeam.animate().alpha(1f).setDuration(1000);
+                        holder.imgHomeTeam.animate().alpha(1f).setDuration(600);
+                        holder.txtHomeTeam.animate().alpha(1f).setDuration(600);
 
                         holder.imgAwayTeam.setBackgroundResource(0);
-                        holder.imgAwayTeam.animate().alpha(0.5f).setDuration(1000);
-                        holder.txtAwayTeam.animate().alpha(0.5f).setDuration(1000);
+                        holder.imgAwayTeam.animate().alpha(0.5f).setDuration(600);
+                        holder.txtAwayTeam.animate().alpha(0.5f).setDuration(600);
                         holder.imgAwayTeam.startAnimation(scale_down);
-                        holder.viewConfirm.animate().alpha(1f).setDuration(1000);
+                        holder.viewConfirm.animate().alpha(1f).setDuration(600);
                         holder.viewConfirm.setClickable(true);
                         match.setHomeToWin(true);
                         match.setAwayToWin(false);
@@ -179,25 +190,27 @@ public class MatchesAdapter extends BaseAdapter {
                     if(match.isAwayToWin()){
                         holder.imgAwayTeam.setBackgroundResource(0);
                         holder.imgAwayTeam.startAnimation(scale_down_normal);
-                        holder.imgHomeTeam.animate().alpha(1f).setDuration(1000);
-                        holder.txtHomeTeam.animate().alpha(1f).setDuration(1000);
+                        holder.imgHomeTeam.animate().alpha(1f).setDuration(600);
+                        holder.txtHomeTeam.animate().alpha(1f).setDuration(600);
                         holder.imgHomeTeam.startAnimation(scale_up_normal);
-                        holder.viewConfirm.animate().alpha(0f).setDuration(1000);
+                        holder.viewConfirm.animate().alpha(0f).setDuration(600);
                         holder.viewConfirm.setClickable(false);
+                        holder.btnDraw.setBackgroundResource(R.drawable.retangle_white_border);
                         match.setAwayToWin(false);
                         match.setHomeToWin(false);
                     }else {
                         holder.imgAwayTeam.setBackgroundResource(R.drawable.selected_team_background);
                         holder.imgAwayTeam.startAnimation(scale_up);
-                        holder.imgAwayTeam.animate().alpha(1f).setDuration(1000);
-                        holder.txtAwayTeam.animate().alpha(1f).setDuration(1000);
+                        holder.imgAwayTeam.animate().alpha(1f).setDuration(600);
+                        holder.txtAwayTeam.animate().alpha(1f).setDuration(600);
 
                         holder.imgHomeTeam.setBackgroundResource(0);
-                        holder.imgHomeTeam.animate().alpha(0.5f).setDuration(1000);
-                        holder.txtHomeTeam.animate().alpha(0.5f).setDuration(1000);
+                        holder.imgHomeTeam.animate().alpha(0.5f).setDuration(600);
+                        holder.txtHomeTeam.animate().alpha(0.5f).setDuration(600);
                         holder.imgHomeTeam.startAnimation(scale_down);
-                        holder.viewConfirm.animate().alpha(1f).setDuration(1000);
+                        holder.viewConfirm.animate().alpha(1f).setDuration(600);
                         holder.viewConfirm.setClickable(true);
+                        holder.btnDraw.setBackgroundResource(R.drawable.retangle_white_border);
                         match.setAwayToWin(true);
                         match.setHomeToWin(false);
                     }
@@ -208,17 +221,20 @@ public class MatchesAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View view) {
                     holder.imgAwayTeam.setBackgroundResource(0);
-                    holder.imgAwayTeam.animate().alpha(0.5f).setDuration(1000);
-                    holder.txtAwayTeam.animate().alpha(0.5f).setDuration(1000);
+                    holder.imgAwayTeam.animate().alpha(0.5f).setDuration(600);
+                    holder.txtAwayTeam.animate().alpha(0.5f).setDuration(600);
                     holder.imgAwayTeam.startAnimation(scale_down);
 
                     holder.imgHomeTeam.setBackgroundResource(0);
-                    holder.imgHomeTeam.animate().alpha(0.5f).setDuration(1000);
-                    holder.txtHomeTeam.animate().alpha(0.5f).setDuration(1000);
+                    holder.imgHomeTeam.animate().alpha(0.5f).setDuration(600);
+                    holder.txtHomeTeam.animate().alpha(0.5f).setDuration(600);
                     holder.imgHomeTeam.startAnimation(scale_down);
 
-                    holder.viewConfirm.animate().alpha(1f).setDuration(1000);
+                    holder.viewConfirm.animate().alpha(1f).setDuration(600);
                     holder.viewConfirm.setClickable(true);
+
+
+                    holder.btnDraw.setBackgroundResource(R.color.appBlue);
 
                     match.setAwayToWin(false);
                     match.setHomeToWin(false);

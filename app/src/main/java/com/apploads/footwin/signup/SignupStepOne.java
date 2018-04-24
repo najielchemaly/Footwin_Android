@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.apploads.footwin.helpers.BaseActivity;
@@ -12,7 +13,8 @@ import com.apploads.footwin.helpers.StaticData;
 
 public class SignupStepOne extends BaseActivity {
     GridView gridTeams;
-    Button btnCancel, btnConfirm;
+    Button btnCancel;
+    RelativeLayout viewContinue;
     TeamsAdapter teamsAdapter;
 
     @Override
@@ -30,7 +32,7 @@ public class SignupStepOne extends BaseActivity {
      * initialize view
      */
     private void initView() {
-        btnConfirm = _findViewById(R.id.btnConfirm);
+        viewContinue = _findViewById(R.id.viewContinue);
         gridTeams = _findViewById(R.id.gridTeams);
         btnCancel = _findViewById(R.id.btnCancel);
         teamsAdapter = new TeamsAdapter(SignupStepOne.this, StaticData.config.getTeams());
@@ -49,7 +51,7 @@ public class SignupStepOne extends BaseActivity {
             }
         });
 
-        btnConfirm.setOnClickListener(new View.OnClickListener() {
+        viewContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(StaticData.favTeam == null){

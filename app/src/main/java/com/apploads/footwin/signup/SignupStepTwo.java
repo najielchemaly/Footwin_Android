@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,10 +27,11 @@ import retrofit2.Response;
 
 
 public class SignupStepTwo extends BaseActivity {
-    Button btnCancel, btnContinue;
+    Button btnCancel;
     TextView txtBack;
     TextView txtCountry;
     TextView txtPhoneCode;
+    RelativeLayout viewContinue;
     MaterialSpinner spinnerGender;
     EditText txtFullname, txtUsername, txtEmail, txtPassword, txtMobile;
 
@@ -46,7 +48,7 @@ public class SignupStepTwo extends BaseActivity {
 
     private void initView(){
         btnCancel = _findViewById(R.id.btnCancel);
-        btnContinue = _findViewById(R.id.btnContinue);
+        viewContinue = _findViewById(R.id.viewContinue);
         txtBack = _findViewById(R.id.txtBack);
         txtCountry = _findViewById(R.id.txtCountry);
         spinnerGender = _findViewById(R.id.spinnerGender);
@@ -62,7 +64,7 @@ public class SignupStepTwo extends BaseActivity {
     }
 
     private void initListeners(){
-        btnContinue.setOnClickListener(new View.OnClickListener() {
+        viewContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(validateView()){
