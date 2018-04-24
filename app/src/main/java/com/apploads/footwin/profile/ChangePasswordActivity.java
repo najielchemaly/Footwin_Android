@@ -7,10 +7,12 @@ import android.widget.Toast;
 
 import com.apploads.footwin.R;
 import com.apploads.footwin.helpers.BaseActivity;
+import com.apploads.footwin.helpers.CustomDialogClass;
 import com.apploads.footwin.helpers.utils.StringUtils;
 import com.apploads.footwin.model.BasicResponse;
 import com.apploads.footwin.model.UserResponse;
 import com.apploads.footwin.services.ApiManager;
+import com.apploads.footwin.signup.SignupStepTwo;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -51,11 +53,39 @@ public class ChangePasswordActivity extends BaseActivity {
                     if(txtNewPassword.getText().toString().equals(txtConfirmPassword.getText().toString())){
                         callChangePasswordService();
                     }else {
-                        Toast.makeText(ChangePasswordActivity.this, "Passwords do not match", Toast.LENGTH_SHORT).show();
+                        CustomDialogClass dialogClass = new CustomDialogClass(ChangePasswordActivity.this, new CustomDialogClass.AbstractCustomDialogListener() {
+                            @Override
+                            public void onConfirm(CustomDialogClass.DialogResponse response) {
+                                response.getDialog().dismiss();
+                            }
+
+                            @Override
+                            public void onCancel(CustomDialogClass.DialogResponse dialogResponse) {
+                            }
+                        }, true);
+
+                        dialogClass.setTitle("Oops");
+                        dialogClass.setMessage("Passwords do not match");
+                        dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                        dialogClass.show();
                     }
 
                 }else {
-                    Toast.makeText(ChangePasswordActivity.this, "Fill All the fields to continue", Toast.LENGTH_SHORT).show();
+                    CustomDialogClass dialogClass = new CustomDialogClass(ChangePasswordActivity.this, new CustomDialogClass.AbstractCustomDialogListener() {
+                        @Override
+                        public void onConfirm(CustomDialogClass.DialogResponse response) {
+                            response.getDialog().dismiss();
+                        }
+
+                        @Override
+                        public void onCancel(CustomDialogClass.DialogResponse dialogResponse) {
+                        }
+                    }, true);
+
+                    dialogClass.setTitle("Oops");
+                    dialogClass.setMessage("Fill all the fields to continue");
+                    dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                    dialogClass.show();
                 }
             }
         });

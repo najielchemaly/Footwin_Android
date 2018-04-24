@@ -5,6 +5,7 @@ import com.apploads.footwin.model.Config;
 import com.apploads.footwin.model.LeaderboardResponse;
 import com.apploads.footwin.model.Match;
 import com.apploads.footwin.model.News;
+import com.apploads.footwin.model.PackageResponse;
 import com.apploads.footwin.model.Profile;
 import com.apploads.footwin.model.UserResponse;
 
@@ -49,11 +50,20 @@ public interface ServiceInterface {
     Call<UserResponse> login(@Field("email") String email, @Field("password") String password);
 
     @FormUrlEncoded
+    @POST("editUser/")
+    Call<UserResponse> editUser(@Field("fullname") String fullname, @Field("email") String email
+            , @Field("country") String country, @Field("phone_code") String phone_code, @Field("phone") String phone
+            , @Field("gender") String gender);
+
+    @FormUrlEncoded
     @POST("forgotPassword/")
     Call<BasicResponse> forgotPassword(@Field("email") String email);
 
     @FormUrlEncoded
     @POST("changePassword/")
     Call<BasicResponse> changePassowrd(@Field("oldPassword") String oldPassword, @Field("newPassword") String newPassword);
+
+    @POST("getPackages/")
+    Call<PackageResponse> getPackages();
 
 }

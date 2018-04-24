@@ -1,27 +1,25 @@
 package com.apploads.footwin.coins;
 
 import android.content.Context;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.apploads.footwin.R;
+import com.apploads.footwin.model.Package;
 
 import java.util.List;
 
 
 public class CoinsAdapter extends RecyclerView.Adapter<CoinsViewHolder> {
 
-    private List<Coin> coinList;
+    private List<Package> coinList;
     private Context context;
 
-    public CoinsAdapter(List<Coin> coinList, Context context) {
+    public CoinsAdapter(List<Package> coinList, Context context) {
         this.coinList = coinList;
         this.context = context;
     }
@@ -36,11 +34,11 @@ public class CoinsAdapter extends RecyclerView.Adapter<CoinsViewHolder> {
     @Override
     public void onBindViewHolder(final CoinsViewHolder holder, final int position) {
 
-        final Coin coin = coinList.get(position);
+        final Package aPackage = coinList.get(position);
 
-        holder.txtTitle.setText(coin.getTitle());
-        holder.txtDesc.setText(coin.getDescription());
-        holder.txtCoins.setText(coin.getAmount());
+        holder.txtTitle.setText(aPackage.getTitle());
+        holder.txtDesc.setText(aPackage.getDescription());
+        holder.txtCoins.setText(aPackage.getCoins());
 
     }
 

@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.apploads.footwin.helpers.BaseActivity;
 import com.apploads.footwin.R;
+import com.apploads.footwin.helpers.CustomDialogClass;
 import com.apploads.footwin.helpers.utils.StringUtils;
 import com.apploads.footwin.model.BasicResponse;
 import com.apploads.footwin.services.ApiManager;
@@ -57,7 +58,22 @@ public class RetrievePasswordActivity extends BaseActivity {
                 if(StringUtils.isValid(txtEmail.getText())){
                     callForgotPasswordService();
                 }else {
-                    Toast.makeText(RetrievePasswordActivity.this, "Please Fill your email before proceeding", Toast.LENGTH_SHORT).show();
+                    CustomDialogClass dialogClass = new CustomDialogClass(RetrievePasswordActivity.this, new CustomDialogClass.AbstractCustomDialogListener() {
+                        @Override
+                        public void onConfirm(CustomDialogClass.DialogResponse response) {
+                            response.getDialog().dismiss();
+                            txtEmail.setText("");
+                        }
+
+                        @Override
+                        public void onCancel(CustomDialogClass.DialogResponse dialogResponse) {
+                        }
+                    }, true);
+
+                    dialogClass.setTitle("Oops");
+                    dialogClass.setMessage("Make sure you fill your email before proceeding");
+                    dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                    dialogClass.show();
                 }
             }
         });

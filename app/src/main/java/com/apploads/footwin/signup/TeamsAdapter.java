@@ -90,7 +90,6 @@ public class TeamsAdapter extends BaseAdapter {
                 selectedLayout = holder.imgHighlight;
                 selectedLayout = selectView(team,holder);
                 StaticData.favTeam = team;
-                Toast.makeText(context, team.getName(), Toast.LENGTH_SHORT).show();
             }
         });
 

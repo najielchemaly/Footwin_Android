@@ -9,9 +9,11 @@ import android.widget.Toast;
 
 import com.apploads.footwin.helpers.BaseActivity;
 import com.apploads.footwin.R;
+import com.apploads.footwin.helpers.CustomDialogClass;
 import com.apploads.footwin.helpers.StaticData;
 import com.apploads.footwin.helpers.utils.StringUtils;
 import com.apploads.footwin.login.LoginActivity;
+import com.apploads.footwin.login.RetrievePasswordActivity;
 import com.apploads.footwin.model.UserResponse;
 import com.apploads.footwin.services.ApiManager;
 import com.jaredrummler.materialspinner.MaterialSpinner;
@@ -66,7 +68,21 @@ public class SignupStepTwo extends BaseActivity {
                 if(validateView()){
                     registerUser();
                 }else {
-                    Toast.makeText(SignupStepTwo.this, "Fill all the fields to continue", Toast.LENGTH_SHORT).show();
+                    CustomDialogClass dialogClass = new CustomDialogClass(SignupStepTwo.this, new CustomDialogClass.AbstractCustomDialogListener() {
+                        @Override
+                        public void onConfirm(CustomDialogClass.DialogResponse response) {
+                            response.getDialog().dismiss();
+                        }
+
+                        @Override
+                        public void onCancel(CustomDialogClass.DialogResponse dialogResponse) {
+                        }
+                    }, true);
+
+                    dialogClass.setTitle("Oops");
+                    dialogClass.setMessage("Make sure you fill all the fields before proceeding");
+                    dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                    dialogClass.show();
                 }
             }
         });
@@ -118,13 +134,14 @@ public class SignupStepTwo extends BaseActivity {
     }
 
     private void registerUser(){
-        ApiManager.getService().registerUser(txtFullname.getText().toString() ,txtUsername.getText().toString()
+        ApiManager.getService(true).registerUser(txtFullname.getText().toString() ,txtUsername.getText().toString()
                 ,txtEmail.getText().toString(),txtPassword.getText().toString(),txtPhoneCode.getText().toString()
                 ,txtMobile.getText().toString(),spinnerGender.getText().toString().toLowerCase(),
                  txtCountry.getText().toString(), StaticData.favTeam.getId()).enqueue(new Callback<UserResponse>() {
             @Override
             public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                 UserResponse userResponse = response.body();
+                StaticData.user = userResponse.getUser();
                 Intent intent = new Intent(getApplicationContext(), SignupStepThree.class);
                 startActivity(intent);
             }

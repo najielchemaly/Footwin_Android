@@ -6,14 +6,22 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.apploads.footwin.R;
 import com.apploads.footwin.helpers.BaseActivity;
 import com.apploads.footwin.helpers.StaticData;
+import com.apploads.footwin.model.Package;
+import com.apploads.footwin.model.PackageResponse;
+import com.apploads.footwin.services.ApiManager;
 import com.budiyev.android.circularprogressbar.CircularProgressBar;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CoinsActivity extends BaseActivity {
     CircularProgressBar circularProgressBar;
@@ -57,7 +65,7 @@ public class CoinsActivity extends BaseActivity {
     private void initCarousel() {
         // vertical and cycle layout
         listPackages.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        listPackages.setAdapter(new CoinsAdapter(generateRandomPackages(), CoinsActivity.this));
+        getPackages();
     }
 
     private void initListeners(){
@@ -83,34 +91,19 @@ public class CoinsActivity extends BaseActivity {
         });
     }
 
-    private List<Coin> generateRandomPackages(){
-        List<Coin> coinsList = new ArrayList<>();
+    private void getPackages(){
+        ApiManager.getService().getPackages().enqueue(new Callback<PackageResponse>() {
+            @Override
+            public void onResponse(Call<PackageResponse> call, Response<PackageResponse> response) {
+                PackageResponse packageResponse = response.body();
+                listPackages.setAdapter(new CoinsAdapter(packageResponse.getPackages(), CoinsActivity.this));
+            }
 
-        Coin coin = new Coin();
-        coin.setTitle("Started Pack");
-        coin.setAmount("200 COINS");
-        coin.setDescription("THIS PACK IS IDEAL IF YOU JUST STARTED USING THIS APP!");
-        coinsList.add(coin);
-
-        coin = new Coin();
-        coin.setTitle("HAT-TRICK PACL");
-        coin.setAmount("500 COINS");
-        coin.setDescription("THIS PACK IS IDEAL IF YOU JUST STARTED USING THIS APP!");
-        coinsList.add(coin);
-
-        coin = new Coin();
-        coin.setTitle("Started Pack");
-        coin.setAmount("200 COINS");
-        coin.setDescription("THIS PACK IS IDEAL IF YOU JUST STARTED USING THIS APP!");
-        coinsList.add(coin);
-
-        coin = new Coin();
-        coin.setTitle("Started Pack");
-        coin.setAmount("200 COINS");
-        coin.setDescription("THIS PACK IS IDEAL IF YOU JUST STARTED USING THIS APP!");
-        coinsList.add(coin);
-
-        return coinsList;
+            @Override
+            public void onFailure(Call<PackageResponse> call, Throwable t) {
+                Toast.makeText(CoinsActivity.this, "error", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void showPackages(boolean toShow){
@@ -129,7 +122,5 @@ public class CoinsActivity extends BaseActivity {
             btnClose.setVisibility(View.VISIBLE);
             btnGetCoins.setVisibility(View.VISIBLE);
         }
-
     }
-
 }

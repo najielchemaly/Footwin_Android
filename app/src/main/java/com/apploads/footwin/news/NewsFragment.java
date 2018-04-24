@@ -56,7 +56,6 @@ public class NewsFragment extends Fragment {
 
             @Override
             public void onFailure(Call<News> call, Throwable t) {
-                Toast.makeText(getActivity(), "asdasd", Toast.LENGTH_SHORT).show();
             }
         });
 

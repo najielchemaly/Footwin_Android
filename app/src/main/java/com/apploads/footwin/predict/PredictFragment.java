@@ -164,7 +164,6 @@ public class PredictFragment extends Fragment {
 
             @Override
             public void onFailure(Call<Profile> call, Throwable t) {
-                Toast.makeText(getActivity(), "dasdasd", Toast.LENGTH_SHORT).show();
             }
         });
     }
