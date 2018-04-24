@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Article implements Serializable{
 
@@ -27,7 +28,7 @@ public class Article implements Serializable{
     private String urlToImage;
     @SerializedName("publishedAt")
     @Expose
-    private String publishedAt;
+    private Date publishedAt;
 
     public Source getSource() {
         return source;
@@ -77,11 +78,11 @@ public class Article implements Serializable{
         this.urlToImage = urlToImage;
     }
 
-    public String getPublishedAt() {
+    public Date getPublishedAt() {
         return publishedAt;
     }
 
-    public void setPublishedAt(String publishedAt) {
+    public void setPublishedAt(Date publishedAt) {
         this.publishedAt = publishedAt;
     }
 

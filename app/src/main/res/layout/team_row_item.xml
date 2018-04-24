@@ -4,26 +4,31 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    
-    <ImageView
-        android:id="@+id/imgCheck"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/checked_green"
-        android:layout_marginEnd="30dp"
-        android:layout_marginTop="30dp"
-        app:layout_constraintEnd_toEndOf="@+id/imgTeam"
-        app:layout_constraintTop_toTopOf="@+id/imgTeam" />
-
 
     <ImageView
-        android:id="@+id/imgTeam"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:id="@+id/imgHighlight"
+        android:layout_width="170dp"
+        android:layout_height="170dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:background="@drawable/selected_team_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imgTeam"
+        android:layout_width="170dp"
+        android:layout_height="170dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:padding="5dp"
+        android:src="@drawable/brazil"
         android:background="@drawable/circle_shape"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -44,5 +49,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imgTeam" />
+
+    <ImageView
+        android:id="@+id/imgCheck"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/checked_green"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="@+id/imgTeam"
+        app:layout_constraintTop_toTopOf="@+id/imgTeam" />
 
 </android.support.constraint.ConstraintLayout>

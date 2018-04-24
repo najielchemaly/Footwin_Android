@@ -17,7 +17,7 @@
         android:textAllCaps="true"
         android:imeOptions="actionNext"
         android:textColor="@color/white"
-        android:textSize="49dp"
+        android:textSize="56sp"
         android:layout_marginLeft="@dimen/app_margin"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -25,7 +25,7 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_height="55dp"
         android:layout_marginEnd="@dimen/app_margin"
         android:layout_marginStart="@dimen/app_margin"
         android:layout_marginTop="@dimen/app_margin"
@@ -65,7 +65,7 @@
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_height="55dp"
         android:layout_marginEnd="@dimen/app_margin"
         android:layout_marginStart="@dimen/app_margin"
         android:background="@drawable/retangle_white_border"
@@ -106,9 +106,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/app_margin"
-        android:layout_marginTop="@dimen/app_margin"
+        android:layout_marginTop="20dp"
         android:text="forgot your password?"
         android:textAllCaps="true"
+        android:textSize="16sp"
         android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
@@ -117,7 +118,8 @@
         android:id="@+id/txtRecover"
         android:layout_width="wrap_content"
         android:layout_height="19dp"
-        android:layout_marginLeft="@dimen/app_margin"
+        android:textSize="16sp"
+        android:layout_marginLeft="5dp"
         android:text="recover it"
         android:textAllCaps="true"
         android:clickable="true"
@@ -132,14 +134,14 @@
         android:layout_height="50dp"
         android:layout_marginEnd="@dimen/app_margin"
         android:layout_marginStart="@dimen/app_margin"
-        android:layout_marginTop="@dimen/app_margin"
+        android:layout_marginTop="20dp"
         android:background="@color/white"
         android:gravity="left|center_vertical"
         android:paddingStart="@dimen/app_margin"
         android:text="SIGN in"
         android:textSize="@dimen/large_text"
         android:textStyle="bold"
-        android:textColor="@color/darkBlue"
+        android:textColor="@color/appBlue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
@@ -154,7 +156,7 @@
         android:text="Login with"
         android:textAllCaps="true"
         android:textColor="@color/white"
-        android:textSize="@dimen/medium_text"
+        android:textSize="@dimen/large_text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
 
@@ -176,6 +178,7 @@
         android:paddingLeft="1dp"
         android:scaleType="centerCrop"
         android:src="@drawable/google"
+        android:visibility="gone"
         android:layout_marginLeft="@dimen/app_margin"
         app:layout_constraintStart_toEndOf="@+id/imgFB"
         app:layout_constraintTop_toTopOf="@+id/imgFB" />
@@ -197,7 +200,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/app_margin"
         android:layout_marginStart="@dimen/app_margin"
-        android:text="Create your own account"
+        android:text="Create your account"
         android:textAllCaps="true"
         android:textColor="@color/white"
         android:clickable="true"
@@ -205,6 +208,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-
+    <com.github.ybq.android.spinkit.SpinKitView
+        android:id="@+id/spin_kit"
+        style="@style/SpinKitView.Large.Circle"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        app:SpinKit_Color="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

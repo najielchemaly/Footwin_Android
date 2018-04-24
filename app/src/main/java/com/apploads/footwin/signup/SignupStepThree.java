@@ -14,12 +14,15 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.apploads.footwin.helpers.BaseActivity;
 import com.apploads.footwin.MainPageActivity;
 import com.apploads.footwin.R;
 import com.apploads.footwin.helpers.Utility;
+import com.apploads.footwin.login.LoginActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -30,9 +33,11 @@ import java.io.IOException;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SignupStepThree extends BaseActivity {
-    Button btnConfirm;
+    RelativeLayout viewContinue;
+    Button btnCancel;
     CircleImageView imgAddImage;
-    TextView lblSkip;
+    TextView txtBack;
+    ImageView imgCamera;
 
     public String userChoosenTask;
     private int REQUEST_CAMERA = 0,
@@ -54,8 +59,12 @@ public class SignupStepThree extends BaseActivity {
      * initialize view
      */
     private void initView() {
-        btnConfirm = _findViewById(R.id.btnConfirm);
+        viewContinue = _findViewById(R.id.viewContinue);
         imgAddImage = _findViewById(R.id.imgAddImage);
+        txtBack = _findViewById(R.id.txtBack);
+        btnCancel = _findViewById(R.id.btnCancel);
+        imgCamera = _findViewById(R.id.imgCamera);
+        imgCamera.setVisibility(View.GONE);
 
         Animation scaleDown = AnimationUtils.loadAnimation(SignupStepThree.this, R.anim.scale_up);
         imgAddImage.startAnimation(scaleDown);
@@ -72,12 +81,29 @@ public class SignupStepThree extends BaseActivity {
      */
     private void initListeners() {
 
-        btnConfirm.setOnClickListener(new View.OnClickListener() {
+        viewContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), MainPageActivity.class);
                 startActivity(intent);
                 finish();
+            }
+        });
+
+        txtBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_down, R.anim.slide_out_down);
             }
         });
 
@@ -149,6 +175,7 @@ public class SignupStepThree extends BaseActivity {
         }
 
         imgAddImage.setImageBitmap(thumbnail);
+        imgCamera.setVisibility(View.VISIBLE);
     }
 
     @SuppressWarnings("deprecation")
@@ -164,6 +191,7 @@ public class SignupStepThree extends BaseActivity {
         }
 
         imgAddImage.setImageBitmap(bm);
+        imgCamera.setVisibility(View.VISIBLE);
     }
 
     @Override

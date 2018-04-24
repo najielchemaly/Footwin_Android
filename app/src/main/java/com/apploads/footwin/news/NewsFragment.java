@@ -6,11 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.apploads.footwin.R;
 import com.apploads.footwin.model.News;
 import com.apploads.footwin.services.ApiManager;
+import com.github.ybq.android.spinkit.style.DoubleBounce;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,7 @@ public class NewsFragment extends Fragment {
     ListView listNews;
     NewsAdapter newsAdapter;
     private View parentView;
+    ProgressBar progressBar;
 
     public static NewsFragment newInstance() {
         NewsFragment fragment = new NewsFragment();
@@ -42,6 +45,10 @@ public class NewsFragment extends Fragment {
 
     private void initView(){
         listNews = parentView.findViewById(R.id.listNews);
+        progressBar = parentView.findViewById(R.id.spin_kit);
+        DoubleBounce doubleBounce = new DoubleBounce();
+        progressBar.setIndeterminateDrawable(doubleBounce);
+
 //
 
         ApiManager.getService().getNews("http://newsapi.org//v2//everything?sources=bbc-sport&apiKey=bf84323b4c7244aca799c4ff1dda7e1e&q=world%20cup%20").enqueue(new Callback<News>() {
@@ -51,12 +58,13 @@ public class NewsFragment extends Fragment {
                 if(news != null && response.isSuccessful()){
                     newsAdapter = new NewsAdapter(news.getArticles(), getContext());
                     listNews.setAdapter(newsAdapter);
+                    progressBar.setVisibility(View.GONE);
                 }
             }
 
             @Override
             public void onFailure(Call<News> call, Throwable t) {
-                Toast.makeText(getActivity(), "asdasd", Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
             }
         });
 

@@ -33,6 +33,7 @@ public class ProfileFragment extends Fragment {
 
         txtMyPredictions = parentView.findViewById(R.id.txtMyPredictions);
         txtChangePassword = parentView.findViewById(R.id.txtChangePassword);
+        txtEditMyProfile = parentView.findViewById(R.id.txtEditMyProfile);
         txtTerms = parentView.findViewById(R.id.txtTerms);
         viewLogout = parentView.findViewById(R.id.viewLogout);
 
@@ -40,6 +41,14 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), MyPredictionsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        txtEditMyProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), EditProfileActivity.class);
                 startActivity(intent);
             }
         });
@@ -75,7 +84,7 @@ public class ProfileFragment extends Fragment {
                     public void onCancel(CustomDialogClass.DialogResponse dialogResponse) {
                         dialogResponse.getDialog().dismiss();
                     }
-                });
+                }, false);
 
                 customDialogClass.setTitle("Title");
                 customDialogClass.setMessage("Are you sure you want to logout?");
