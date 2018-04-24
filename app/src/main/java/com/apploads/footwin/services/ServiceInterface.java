@@ -1,6 +1,7 @@
 package com.apploads.footwin.services;
 
 import com.apploads.footwin.model.Config;
+import com.apploads.footwin.model.LeaderboardResponse;
 import com.apploads.footwin.model.Match;
 import com.apploads.footwin.model.News;
 import com.apploads.footwin.model.Profile;
@@ -29,6 +30,13 @@ public interface ServiceInterface {
     })
     @POST("getMatches/")
     Call<Profile> getMatches();
+
+    @Headers({
+            "Content-Type: application/json",
+            "User-id: 1"
+    })
+    @POST("getMatches/")
+    Call<LeaderboardResponse> getLeaderBoard();
 
     @FormUrlEncoded
     @POST("registerUser/")

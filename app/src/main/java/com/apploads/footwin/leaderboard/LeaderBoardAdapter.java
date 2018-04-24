@@ -16,6 +16,8 @@ import com.apploads.footwin.news.NewsDetailsActivity;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class LeaderBoardAdapter extends BaseAdapter {
 
     private List<Leaderboard> root;
@@ -51,11 +53,11 @@ public class LeaderBoardAdapter extends BaseAdapter {
         TextView txtName = convertView.findViewById(R.id.txtName);
         TextView txtRank = convertView.findViewById(R.id.txtRank);
         TextView txtCoins = convertView.findViewById(R.id.txtCoins);
+        CircleImageView imgProfile = convertView.findViewById(R.id.imgProfile);
 
-        txtName.setText(leaderboard.getUsername());
-        txtRank.setText(String.valueOf(leaderboard.getRank()));
-        txtCoins.setText(String.valueOf(leaderboard.getAmount()));
-
+        txtName.setText(leaderboard.getFullname());
+        txtRank.setText(String.valueOf(position));
+        txtCoins.setText(String.valueOf(leaderboard.getCoins()));
 
         return convertView;
     }

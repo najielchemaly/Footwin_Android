@@ -1,41 +1,53 @@
 package com.apploads.footwin.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class Leaderboard {
 
-    private String username;
-    private int amount;
-    private int rank;
-    private int iamge;
+    @SerializedName("user_id")
+    @Expose
+    private String userId;
+    @SerializedName("avatar")
+    @Expose
+    private String avatar;
+    @SerializedName("fullname")
+    @Expose
+    private String fullname;
+    @SerializedName("coins")
+    @Expose
+    private String coins;
 
-    public String getUsername() {
-        return username;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public int getAmount() {
-        return amount;
+    public String getAvatar() {
+        return avatar;
     }
 
-    public void setAmount(int amount) {
-        this.amount = amount;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
-    public int getRank() {
-        return rank;
+    public String getFullname() {
+        return fullname;
     }
 
-    public void setRank(int rank) {
-        this.rank = rank;
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
     }
 
-    public int getIamge() {
-        return iamge;
+    public String getCoins() {
+        return coins;
     }
 
-    public void setIamge(int iamge) {
-        this.iamge = iamge;
+    public void setCoins(String coins) {
+        this.coins = coins;
     }
+
 }

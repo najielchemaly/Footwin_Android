@@ -7,18 +7,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.apploads.footwin.R;
 import com.apploads.footwin.model.Leaderboard;
+import com.apploads.footwin.model.LeaderboardResponse;
+import com.apploads.footwin.services.ApiManager;
+import com.github.ybq.android.spinkit.style.DoubleBounce;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LeaderboardFragment extends Fragment {
     ListView listLeaderboard;
     private View parentView;
     ImageButton btnUp, btnDown, btnMe;
     LeaderBoardAdapter leaderBoardAdapter;
+    ProgressBar progressBar;
+    List<Leaderboard> leaderboards = new ArrayList<>();
 
     public static LeaderboardFragment newInstance() {
         LeaderboardFragment fragment = new LeaderboardFragment();
@@ -36,18 +47,20 @@ public class LeaderboardFragment extends Fragment {
         return parentView;
     }
 
-    private void initView(){
+    private void initView() {
         listLeaderboard = parentView.findViewById(R.id.listLeaderboard);
         btnUp = parentView.findViewById(R.id.btnUp);
         btnDown = parentView.findViewById(R.id.btnDown);
         btnMe = parentView.findViewById(R.id.btnMe);
+        progressBar = parentView.findViewById(R.id.spin_kit);
+        DoubleBounce doubleBounce = new DoubleBounce();
+        progressBar.setIndeterminateDrawable(doubleBounce);
 
-        leaderBoardAdapter = new LeaderBoardAdapter(getRanks(), getContext());
-        listLeaderboard.setAdapter(leaderBoardAdapter);
+        getRanks();
     }
 
 
-    private void initListeners(){
+    private void initListeners() {
         btnUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,21 +71,27 @@ public class LeaderboardFragment extends Fragment {
         btnDown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listLeaderboard.smoothScrollToPosition(getRanks().size() - 1);
+                listLeaderboard.smoothScrollToPosition(leaderboards.size() - 1);
             }
         });
     }
-    private List<Leaderboard> getRanks(){
-        List<Leaderboard> leaderboardsList = new ArrayList<>();
 
-        for(int i = 0; i<50; i++){
-            Leaderboard leaderboard = new Leaderboard();
-            leaderboard.setAmount(1000);
-            leaderboard.setUsername("MEssi");
-            leaderboard.setRank(i);
-            leaderboardsList.add(leaderboard);
-        }
+    private void getRanks() {
+        ApiManager.getService().getLeaderBoard().enqueue(new Callback<LeaderboardResponse>() {
+            @Override
+            public void onResponse(Call<LeaderboardResponse> call, Response<LeaderboardResponse> response) {
+                LeaderboardResponse leaderboardResponse = response.body();
+                leaderBoardAdapter = new LeaderBoardAdapter(leaderboardResponse.getLeaderboard(), getContext());
+                listLeaderboard.setAdapter(leaderBoardAdapter);
+                leaderboards = leaderboardResponse.getLeaderboard();
+                progressBar.setVisibility(View.GONE);
+            }
 
-        return leaderboardsList;
+            @Override
+            public void onFailure(Call<LeaderboardResponse> call, Throwable t) {
+                Toast.makeText(getActivity(), "Error fetching leaderboard", Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
+            }
+        });
     }
 }
