@@ -5,11 +5,14 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -23,6 +26,8 @@ import com.apploads.footwin.MainPageActivity;
 import com.apploads.footwin.R;
 import com.apploads.footwin.helpers.Utility;
 import com.apploads.footwin.login.LoginActivity;
+import com.apploads.footwin.services.ApiManager;
+import com.google.gson.internal.LinkedTreeMap;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -31,6 +36,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SignupStepThree extends BaseActivity {
     RelativeLayout viewContinue;
@@ -39,10 +50,10 @@ public class SignupStepThree extends BaseActivity {
     TextView txtBack;
     ImageView imgCamera;
 
+    private String imgPath = null;
     public String userChoosenTask;
     private int REQUEST_CAMERA = 0,
             SELECT_FILE = 1;
-
 
     @Override
     public int getContentViewId() {
@@ -157,10 +168,12 @@ public class SignupStepThree extends BaseActivity {
     private void onCaptureImageResult(Intent data) {
         Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+        thumbnail.compress(Bitmap.CompressFormat.JPEG, 50, bytes);
 
         File destination = new File(Environment.getExternalStorageDirectory(),
                 System.currentTimeMillis() + ".jpg");
+
+        imgPath = destination.getAbsolutePath();
 
         FileOutputStream fo;
         try {
@@ -185,6 +198,8 @@ public class SignupStepThree extends BaseActivity {
         if (data != null) {
             try {
                 bm = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
+                Uri selectedImage = data.getData();
+                imgPath = getRealPathFromURI(selectedImage);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -192,6 +207,18 @@ public class SignupStepThree extends BaseActivity {
 
         imgAddImage.setImageBitmap(bm);
         imgCamera.setVisibility(View.VISIBLE);
+    }
+
+    public String getRealPathFromURI(Uri contentUri) {
+        String res = null;
+        String[] proj = { MediaStore.Images.Media.DATA };
+        Cursor cursor = this.getContentResolver().query(contentUri, proj, null, null, null);
+        if(cursor.moveToFirst()){;
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            res = cursor.getString(column_index);
+        }
+        cursor.close();
+        return res;
     }
 
     @Override
@@ -208,5 +235,26 @@ public class SignupStepThree extends BaseActivity {
             else if (requestCode == REQUEST_CAMERA)
                 onCaptureImageResult(data);
         }
+    }
+
+    private void updateAvatar() {
+        RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), new File(imgPath));
+        MultipartBody.Part body = MultipartBody.Part.createFormData("file", imgPath, requestFile);
+
+        ApiManager.getService().updateAvatar(body).enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                try {
+                    String avatar = ((LinkedTreeMap) response.body()).get("avatar").toString();
+                } catch (Exception ex) {
+                    Log.d("", ex.getLocalizedMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+                Log.d("", t.getMessage());
+            }
+        });
     }
 }
