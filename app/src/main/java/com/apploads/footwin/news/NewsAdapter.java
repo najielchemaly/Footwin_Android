@@ -17,6 +17,7 @@ import com.apploads.footwin.model.News;
 import com.apploads.footwin.model.Notification;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class NewsAdapter extends BaseAdapter {
@@ -58,7 +59,9 @@ public class NewsAdapter extends BaseAdapter {
         final ImageView imgNews = convertView.findViewById(R.id.imgNews);
 
         txtTitle.setText(article.getTitle());
-        txtDate.setText(article.getPublishedAt());
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM yy");
+        txtDate.setText(simpleDateFormat.format(article.getPublishedAt()));
 
         Picasso.with(context)
                 .load(article.getUrlToImage())

@@ -5,20 +5,32 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.apploads.footwin.helpers.BaseActivity;
 import com.apploads.footwin.MainPageActivity;
 import com.apploads.footwin.R;
+import com.apploads.footwin.helpers.CustomDialogClass;
+import com.apploads.footwin.helpers.StaticData;
+import com.apploads.footwin.model.UserResponse;
+import com.apploads.footwin.services.ApiManager;
 import com.apploads.footwin.signup.SignupStepOne;
 import com.apploads.footwin.helpers.utils.AppUtils;
 import com.apploads.footwin.helpers.utils.StringUtils;
+import com.github.ybq.android.spinkit.style.DoubleBounce;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends BaseActivity {
     TextView txtRecover, txtCreateAccount;
     EditText txtEmail, txtPassword;
     ImageView imgFB, imgGoogle;
     Button btnLogin;
+    ProgressBar progressBar;
 
     @Override
     public int getContentViewId() {
@@ -26,7 +38,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     @Override
-    public void doOnCreate(){
+    public void doOnCreate() {
         initView();
         initListeners();
     }
@@ -34,28 +46,31 @@ public class LoginActivity extends BaseActivity {
     /**
      * initialize view
      */
-    private void initView(){
+    private void initView() {
         txtCreateAccount = _findViewById(R.id.txtCreateAccount);
         txtPassword = _findViewById(R.id.txtPassword);
         txtRecover = _findViewById(R.id.txtRecover);
+        progressBar = _findViewById(R.id.spin_kit);
         imgGoogle = _findViewById(R.id.imgGoogle);
         btnLogin = _findViewById(R.id.btnLogin);
         txtEmail = _findViewById(R.id.txtEmail);
         imgFB = _findViewById(R.id.imgFB);
+
+        DoubleBounce doubleBounce = new DoubleBounce();
+        progressBar.setIndeterminateDrawable(doubleBounce);
+        progressBar.setVisibility(View.GONE);
     }
 
     /**
      * initialize listeners
      */
-    private void initListeners(){
+    private void initListeners() {
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(validateFields()){
-                    Intent intent = new Intent(getApplicationContext(), MainPageActivity.class);
-                    startActivity(intent);
-                    finish();
+                if (validateFields()) {
+                    callLoginService();
                 }
             }
         });
@@ -82,18 +97,92 @@ public class LoginActivity extends BaseActivity {
     /**
      * this function is for validating the email and password fields before proceeding
      */
-    private boolean validateFields(){
-        if(!StringUtils.isValid(txtEmail.getText()) || !StringUtils.isValid(txtPassword.getText())){
-            AppUtils.showAlert(LoginActivity.this,"Error", "Fill both fields to continue");
+    private boolean validateFields() {
+        if (!StringUtils.isValid(txtEmail.getText()) || !StringUtils.isValid(txtPassword.getText())) {
+            CustomDialogClass dialogClass = new CustomDialogClass(LoginActivity.this, new CustomDialogClass.AbstractCustomDialogListener() {
+                @Override
+                public void onConfirm(CustomDialogClass.DialogResponse response) {
+                    response.getDialog().dismiss();
+                    txtEmail.setText("");
+                    txtPassword.setText("");
+                }
+
+                @Override
+                public void onCancel(CustomDialogClass.DialogResponse dialogResponse) {
+                }
+            }, true);
+
+            dialogClass.setTitle("Oops");
+            dialogClass.setMessage("Make sure you fill both fields to continue");
+            dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+            dialogClass.show();
             return false;
-        }else {
-            if(!AppUtils.isEmailValid(txtEmail.getText().toString())){
-                AppUtils.showAlert(LoginActivity.this,"Error", "Enter a valid email address");
+        } else {
+            if (!AppUtils.isEmailValid(txtEmail.getText().toString())) {
+                CustomDialogClass dialogClass = new CustomDialogClass(LoginActivity.this, new CustomDialogClass.AbstractCustomDialogListener() {
+                    @Override
+                    public void onConfirm(CustomDialogClass.DialogResponse response) {
+                        response.getDialog().dismiss();
+                        txtEmail.setText("");
+                        txtPassword.setText("");
+                    }
+
+                    @Override
+                    public void onCancel(CustomDialogClass.DialogResponse dialogResponse) {
+                    }
+                }, true);
+
+                dialogClass.setTitle("Oops");
+                dialogClass.setMessage("Make sure you enter a valid email address");
+                dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                dialogClass.show();
                 return false;
-            }else {
+            } else {
                 return true;
             }
         }
+    }
+
+    private void callLoginService() {
+        progressBar.setVisibility(View.VISIBLE);
+        ApiManager.getService(true).login(txtEmail.getText().toString(), txtPassword.getText().toString()).enqueue(new Callback<UserResponse>() {
+            @Override
+            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                if(response.body().getStatus() == 1){
+                    UserResponse userResponse = response.body();
+                    StaticData.user = userResponse.getUser();
+                    Intent intent = new Intent(getApplicationContext(), MainPageActivity.class);
+                    startActivity(intent);
+                    finish();
+                    progressBar.setVisibility(View.GONE);
+                }else if(response.body().getStatus() == 0){
+                    progressBar.setVisibility(View.GONE);
+                    CustomDialogClass dialogClass = new CustomDialogClass(LoginActivity.this, new CustomDialogClass.AbstractCustomDialogListener() {
+                        @Override
+                        public void onConfirm(CustomDialogClass.DialogResponse response) {
+                            response.getDialog().dismiss();
+                            txtEmail.setText("");
+                            txtPassword.setText("");
+                        }
+
+                        @Override
+                        public void onCancel(CustomDialogClass.DialogResponse dialogResponse) {
+                        }
+                    }, true);
+
+                    dialogClass.setTitle("Oops");
+                    dialogClass.setMessage("Incorrect Username or password");
+                    dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                    dialogClass.show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserResponse> call, Throwable t) {
+                Toast.makeText(LoginActivity.this, "Check your internet connection", Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
+            }
+        });
     }
 
     @Override

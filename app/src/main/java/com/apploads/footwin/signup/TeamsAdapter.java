@@ -15,7 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.apploads.footwin.R;
+import com.apploads.footwin.helpers.StaticData;
 import com.apploads.footwin.model.Team;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,7 @@ public class TeamsAdapter extends BaseAdapter {
 
     Context context;
     List<Team> teams;
+    private Team teamSelected;
     private static LayoutInflater inflater = null;
     private ImageView selectedLayout;
 
@@ -64,58 +67,47 @@ public class TeamsAdapter extends BaseAdapter {
         holder.txtTeam = rowView.findViewById(R.id.txtTeam);
         holder.imgTeam = rowView.findViewById(R.id.imgTeam);
         holder.imgCheck = rowView.findViewById(R.id.imgCheck);
+        holder.imgHighlight = rowView.findViewById(R.id.imgHighlight);
 
         holder.txtTeam.setText(team.getName());
         holder.imgCheck.setVisibility(View.GONE);
-        holder.imgTeam.setImageResource(0);
+        holder.imgHighlight.setVisibility(View.GONE);
 
-        if(team.isSelected()){
-          holder.imgTeam.setImageResource(R.drawable.selected_team_background);
-          holder.imgCheck.setVisibility(View.VISIBLE);
-        }
+        Picasso.with(context)
+                .load(StaticData.config.getMediaUrl()+team.getFlag())
+                .into(holder.imgTeam);
 
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                team.setSelected(true);
-                notifyDataSetChanged();
+                holder.imgHighlight.setVisibility(View.VISIBLE);
+//                holder.imgCheck.setVisibility(View.VISIBLE);
+
+                if (selectedLayout != null) {
+                    selectedLayout.setVisibility(View.GONE);
+//                    holder.imgCheck.setVisibility(View.GONE);
+                }
+                selectedLayout = holder.imgHighlight;
+                selectedLayout = selectView(team,holder);
+                StaticData.favTeam = team;
+                Toast.makeText(context, team.getName(), Toast.LENGTH_SHORT).show();
             }
         });
 
         return rowView;
     }
 
-//    private LinearLayout selectView(String type,BillMenu item , BillsViewHolder holder){
-//        switch (type) {
-//            case "add":
-//                Intent intent = new Intent(context, AddBillerActivity.class);
-//                context.startActivity(intent);
-//                break;
-//            case "electricity":
-//                selectedMenu = item;
-//                holder.viewSelected.setBackgroundResource(R.drawable.selected_bill);
-//                break;
-//            case "phone":
-//                selectedMenu = item;
-//                holder.viewSelected.setBackgroundResource(R.drawable.selected_bill);
-//                break;
-//            case "landline":
-//                selectedMenu = item;
-//                holder.viewSelected.setBackgroundResource(R.drawable.selected_bill);
-//                break;
-//            case "water":
-//                selectedMenu = item;
-//                holder.viewSelected.setBackgroundResource(R.drawable.selected_bill);
-//                break;
-//            default:
-//        }
-//
-//        return holder.viewSelected;
-//    }
+    private ImageView selectView( Team item , Holder holder){
+        teamSelected = item;
+        holder.imgHighlight.setVisibility(View.VISIBLE);
+//        holder.imgCheck.setVisibility(View.VISIBLE);
+
+        return holder.imgHighlight;
+    }
 
     public class Holder {
         TextView txtTeam;
-        ImageView imgTeam, imgCheck;
+        ImageView imgTeam, imgCheck, imgHighlight;
     }
 
 }

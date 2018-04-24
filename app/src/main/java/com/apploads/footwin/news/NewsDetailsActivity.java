@@ -13,6 +13,8 @@ import com.apploads.footwin.model.Article;
 import com.apploads.footwin.model.News;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
+
 public class NewsDetailsActivity extends BaseActivity {
 
     Article article;
@@ -44,7 +46,8 @@ public class NewsDetailsActivity extends BaseActivity {
         if (b != null) {
             article = (Article) b.getSerializable("news");
 
-            txtDate.setText(article.getPublishedAt());
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM yy");
+            txtDate.setText(simpleDateFormat.format(article.getPublishedAt()));
             txtTitle.setText(article.getTitle());
             txtDesc.setText(article.getDescription());
 

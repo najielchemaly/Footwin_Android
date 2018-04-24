@@ -3,7 +3,7 @@ package com.apploads.footwin.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Team {
+public class Country {
 
     @SerializedName("id")
     @Expose
@@ -11,15 +11,12 @@ public class Team {
     @SerializedName("name")
     @Expose
     private String name;
-    @SerializedName("flag")
+    @SerializedName("code")
     @Expose
-    private String flag;
-    @SerializedName("type")
+    private String code;
+    @SerializedName("dialing_code")
     @Expose
-    private String type;
-    @SerializedName("group")
-    @Expose
-    private String group;
+    private String dialingCode;
 
     public String getId() {
         return id;
@@ -37,27 +34,20 @@ public class Team {
         this.name = name;
     }
 
-    public String getFlag() {
-        return flag;
+    public String getCode() {
+        return code;
     }
 
-    public void setFlag(String flag) {
-        this.flag = flag;
+    public void setCode(String code) {
+        this.code = code;
     }
 
-    public String getType() {
-        return type;
+    public String getDialingCode() {
+        return dialingCode;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setDialingCode(String dialingCode) {
+        this.dialingCode = dialingCode;
     }
 
-    public String getGroup() {
-        return group;
-    }
-
-    public void setGroup(String group) {
-        this.group = group;
-    }
 }

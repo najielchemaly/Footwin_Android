@@ -18,12 +18,14 @@ public class CustomDialogClass extends Dialog {
     private String message = "";
     private TextView txtTitle;
     private TextView txtMessage;
+    private boolean isSingleButton;
     private AbstractCustomDialogListener listener;
 
-    public CustomDialogClass(Activity a, AbstractCustomDialogListener listener) {
+    public CustomDialogClass(Activity a, AbstractCustomDialogListener listener, boolean isSingleButton) {
         super(a);
         // TODO Auto-generated constructor stub
         this.c = a;
+        this.isSingleButton = isSingleButton;
         this.listener = listener;
         this.listener.setDialog(this);
         this.listener.setDialog(this);
@@ -41,9 +43,14 @@ public class CustomDialogClass extends Dialog {
         txtMessage = findViewById(R.id.txtMessage);
         yes.setOnClickListener(listener);
         no.setOnClickListener(listener);
-
+        getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         txtTitle.setText(title);
         txtMessage.setText(message);
+
+        if(isSingleButton){
+            no.setVisibility(View.GONE);
+            yes.setText("DONE");
+        }
     }
 
     public void setTitle(String title) {

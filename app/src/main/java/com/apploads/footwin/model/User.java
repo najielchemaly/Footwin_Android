@@ -1,6 +1,5 @@
 package com.apploads.footwin.model;
 
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -18,9 +17,6 @@ public class User {
     @SerializedName("email")
     @Expose
     private String email;
-    @SerializedName("password")
-    @Expose
-    private String password;
     @SerializedName("phone_code")
     @Expose
     private String phoneCode;
@@ -48,15 +44,9 @@ public class User {
     @SerializedName("avatar")
     @Expose
     private String avatar;
-    @SerializedName("favorite_team")
-    @Expose
-    private String favoriteTeam;
     @SerializedName("firebase_token")
     @Expose
     private String firebaseToken;
-    @SerializedName("is_verified")
-    @Expose
-    private String isVerified;
     @SerializedName("coins")
     @Expose
     private String coins;
@@ -69,6 +59,12 @@ public class User {
     @SerializedName("expected_winning_team")
     @Expose
     private String expectedWinningTeam;
+    @SerializedName("role")
+    @Expose
+    private String role;
+    @SerializedName("favorite_team")
+    @Expose
+    private String favoriteTeam;
 
     public String getId() {
         return id;
@@ -100,14 +96,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getPhoneCode() {
@@ -182,28 +170,12 @@ public class User {
         this.avatar = avatar;
     }
 
-    public String getFavoriteTeam() {
-        return favoriteTeam;
-    }
-
-    public void setFavoriteTeam(String favoriteTeam) {
-        this.favoriteTeam = favoriteTeam;
-    }
-
     public String getFirebaseToken() {
         return firebaseToken;
     }
 
     public void setFirebaseToken(String firebaseToken) {
         this.firebaseToken = firebaseToken;
-    }
-
-    public String getIsVerified() {
-        return isVerified;
-    }
-
-    public void setIsVerified(String isVerified) {
-        this.isVerified = isVerified;
     }
 
     public String getCoins() {
@@ -236,6 +208,22 @@ public class User {
 
     public void setExpectedWinningTeam(String expectedWinningTeam) {
         this.expectedWinningTeam = expectedWinningTeam;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getFavoriteTeam() {
+        return favoriteTeam;
+    }
+
+    public void setFavoriteTeam(String favoriteTeam) {
+        this.favoriteTeam = favoriteTeam;
     }
 
 }

@@ -75,7 +75,7 @@ public class ProfileFragment extends Fragment {
                     public void onCancel(CustomDialogClass.DialogResponse dialogResponse) {
                         dialogResponse.getDialog().dismiss();
                     }
-                });
+                }, false);
 
                 customDialogClass.setTitle("Title");
                 customDialogClass.setMessage("Are you sure you want to logout?");
