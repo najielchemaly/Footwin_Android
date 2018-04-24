@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/background_blue"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/lblTellUsMore"
+        android:layout_width="220dp"
+        android:layout_marginTop="@dimen/app_margin"
+        android:layout_height="wrap_content"
+        android:text="edit profile"
+        android:textAllCaps="true"
+        android:layout_below="@+id/lblStep2"
+        android:textSize="@dimen/xlarge_text"
+        android:textColor="@color/white"
+        android:layout_marginLeft="@dimen/app_margin"
+        android:textStyle="bold"
+        />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imgProfile"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/app_margin"
+        android:layout_below="@+id/lblTellUsMore"
+        android:src="@drawable/brazil"
+        />
+
+    <ImageButton
+        android:id="@+id/btnCamera"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_below="@+id/imgProfile"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="-30dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/camera"
+        android:scaleType="centerCrop"
+        android:padding="3dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/app_margin"
+        android:layout_marginRight="@dimen/app_margin"
+        android:layout_marginTop="@dimen/app_margin"
+        android:layout_below="@+id/imgProfile"
+        android:layout_marginBottom="80dp"
+        android:orientation="vertical"
+        >
+
+        <EditText
+            android:id="@+id/txtName"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:padding="@dimen/app_margin"
+            android:textColor="@color/white"
+            android:hint="FULL NAME"
+            android:textAllCaps="true"
+            android:textColorHint="@color/white"
+            android:imeOptions="actionNext"
+            android:inputType="textCapWords"
+            android:background="@drawable/retangle_white_border"
+            />
+
+        <EditText
+            android:id="@+id/txtEmail"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:padding="@dimen/app_margin"
+            android:textColor="@color/white"
+            android:hint="EMAIL"
+            android:textAllCaps="true"
+            android:textColorHint="@color/white"
+            android:imeOptions="actionNext"
+            android:inputType="textEmailAddress"
+            android:background="@drawable/retangle_white_border"
+            />
+
+        <TextView
+            android:id="@+id/txtCountry"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:clickable="true"
+            android:padding="@dimen/app_margin"
+            android:textColor="@color/white"
+            android:textSize="@dimen/large_text"
+            android:text="Country"
+            android:textAllCaps="true"
+            android:textColorHint="@color/white"
+            android:imeOptions="actionNext"
+            android:inputType=""
+            android:background="@drawable/retangle_white_border"
+            />
+        <EditText
+            android:id="@+id/txtMobile"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:padding="@dimen/app_margin"
+            android:textColor="@color/white"
+            android:hint="MOBILE"
+            android:text="+961"
+            android:textAllCaps="true"
+            android:textColorHint="@color/white"
+            android:imeOptions="actionDone"
+            android:inputType="number"
+            android:background="@drawable/retangle_white_border"
+            />
+
+        <TextView
+            android:id="@+id/txtGender"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:padding="@dimen/app_margin"
+            android:textColor="@color/white"
+            android:text="GENDER"
+            android:textSize="@dimen/large_text"
+            android:textAllCaps="true"
+            android:textColorHint="@color/white"
+            android:imeOptions="actionNext"
+            android:inputType=""
+            android:background="@drawable/retangle_white_border"
+            />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnContinue"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:textColor="@color/appBlue"
+        android:layout_marginLeft="130dp"
+        android:layout_marginBottom="@dimen/app_margin"
+        android:layout_marginRight="@dimen/app_margin"
+        android:text="save changes"
+        android:gravity="center|left"
+        android:paddingLeft="@dimen/app_margin"
+        android:textSize="@dimen/xlarge_text"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:id="@+id/txtBack"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="@dimen/app_margin"
+        android:layout_marginBottom="@dimen/app_margin"
+        android:layout_marginRight="@dimen/app_margin"
+        android:textColor="@color/white"
+        android:text="go back"
+        android:textSize="@dimen/large_text"
+        android:gravity="center|left"
+        android:textAllCaps="true"
+        />
+
+
+</RelativeLayout>

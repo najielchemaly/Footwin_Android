@@ -5,12 +5,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.apploads.footwin.helpers.BaseActivity;
 import com.apploads.footwin.R;
+import com.apploads.footwin.helpers.utils.StringUtils;
 import com.apploads.footwin.login.LoginActivity;
+import com.apploads.footwin.model.UserResponse;
+import com.apploads.footwin.services.ApiManager;
 import com.ybs.countrypicker.CountryPicker;
 import com.ybs.countrypicker.CountryPickerListener;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class SignupStepTwo extends BaseActivity {
@@ -18,7 +26,7 @@ public class SignupStepTwo extends BaseActivity {
     TextView txtBack;
     TextView txtCountry;
     TextView txtGender;
-    EditText txtMobile;
+    EditText txtFullname, txtUsername, txtEmail, txtPassword, txtMobile;
 
     @Override
     public int getContentViewId() {
@@ -38,14 +46,18 @@ public class SignupStepTwo extends BaseActivity {
         txtCountry = _findViewById(R.id.txtCountry);
         txtGender = _findViewById(R.id.txtGender);
         txtMobile = _findViewById(R.id.txtMobile);
+
+        txtUsername = _findViewById(R.id.txtUsername);
+        txtFullname = _findViewById(R.id.txtFullname);
+        txtEmail = _findViewById(R.id.txtEmail);
+        txtPassword = _findViewById(R.id.txtPassword);
     }
 
     private void initListeners(){
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), SignupStepThree.class);
-                startActivity(intent);
+                registerUser();
             }
         });
 
@@ -69,7 +81,7 @@ public class SignupStepTwo extends BaseActivity {
         txtGender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                registerUser();
             }
         });
 
@@ -89,6 +101,24 @@ public class SignupStepTwo extends BaseActivity {
             }
         });
 
+    }
+
+    private void registerUser(){
+        ApiManager.getService().registerUser(txtFullname.getText().toString() ,txtUsername.getText().toString()
+                ,txtEmail.getText().toString(),txtPassword.getText().toString(),"+961"
+                ,txtMobile.getText().toString(),"male",txtCountry.getText().toString(),"1").enqueue(new Callback<UserResponse>() {
+            @Override
+            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                UserResponse userResponse = response.body();
+                Intent intent = new Intent(getApplicationContext(), SignupStepThree.class);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onFailure(Call<UserResponse> call, Throwable t) {
+                Toast.makeText(SignupStepTwo.this, "test", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

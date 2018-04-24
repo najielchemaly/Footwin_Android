@@ -1,12 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="leaderboard"
+    <RelativeLayout
+        android:id="@+id/viewHeader"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@drawable/background_blue"
+        >
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imgRank1"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/app_margin"
+            android:src="@drawable/germany"
+            />
+
+        <TextView
+            android:id="@+id/txtRank1"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/imgRank1"
+            android:layout_marginTop="-30dp"
+            android:background="@drawable/leaderboard_rank"
+            android:textAllCaps="true"
+            android:textSize="@dimen/large_text"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:text="1"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            />
+
+        <TextView
+            android:id="@+id/txtUserNameRank1"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/txtRank1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Messi"
+            android:textColor="@color/white"
+            android:textSize="@dimen/small_text"
+            android:textAllCaps="true"
+            />
+
+        <TextView
+            android:id="@+id/txtCoinsRank1"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/txtUserNameRank1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="35000"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="@dimen/large_text"
+            android:textAllCaps="true"
+            />
+
+        <LinearLayout
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:orientation="vertical"
+            android:layout_marginTop="@dimen/app_margin"
+            >
+
+            <ImageButton
+                android:id="@+id/btnUp"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:src="@drawable/leaderboard_up"
+                android:scaleType="centerCrop"
+                android:padding="5dp"
+                />
+
+            <ImageButton
+                android:id="@+id/btnMe"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:src="@drawable/leaderboard_me"
+                android:scaleType="centerCrop"
+                android:padding="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                />
+
+            <ImageButton
+                android:id="@+id/btnDown"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:src="@drawable/leaderboard_down"
+                android:scaleType="centerCrop"
+                android:padding="5dp"
+                />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/listLeaderboard"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:dividerHeight="0dp"
+        android:divider="@null"
+        android:layout_below="@+id/viewHeader"
         />
-    
-</android.support.constraint.ConstraintLayout>
+
+    <com.github.ybq.android.spinkit.SpinKitView
+        android:id="@+id/spin_kit"
+        style="@style/SpinKitView.Large.Circle"
+        app:SpinKit_Color="@color/white"
+        android:layout_centerInParent="true"
+        android:layout_width="70dp"
+        android:layout_height="70dp" />
+
+</RelativeLayout>

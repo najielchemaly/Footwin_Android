@@ -52,6 +52,7 @@
         android:orientation="vertical"
         >
         <EditText
+            android:id="@+id/txtFullname"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:padding="@dimen/app_margin"
@@ -64,6 +65,7 @@
             android:background="@drawable/retangle_white_border"
             />
         <EditText
+            android:id="@+id/txtUsername"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:padding="@dimen/app_margin"
@@ -76,6 +78,7 @@
             android:background="@drawable/retangle_white_border"
             />
         <EditText
+            android:id="@+id/txtEmail"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:padding="@dimen/app_margin"
@@ -88,6 +91,7 @@
             android:background="@drawable/retangle_white_border"
             />
         <EditText
+            android:id="@+id/txtPassword"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:padding="@dimen/app_margin"
