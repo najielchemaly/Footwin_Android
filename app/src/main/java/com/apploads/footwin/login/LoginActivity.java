@@ -19,11 +19,23 @@ import com.apploads.footwin.services.ApiManager;
 import com.apploads.footwin.signup.SignupStepOne;
 import com.apploads.footwin.helpers.utils.AppUtils;
 import com.apploads.footwin.helpers.utils.StringUtils;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+
+import java.util.Arrays;
 
 public class LoginActivity extends BaseActivity {
     TextView txtRecover, txtCreateAccount;
@@ -31,6 +43,8 @@ public class LoginActivity extends BaseActivity {
     ImageView imgFB, imgGoogle;
     Button btnLogin;
     ProgressBar progressBar;
+
+    private static final String EMAIL = "email";
 
     @Override
     public int getContentViewId() {
@@ -41,6 +55,64 @@ public class LoginActivity extends BaseActivity {
     public void doOnCreate() {
         initView();
         initListeners();
+
+        // TODO
+//        onButtonFacebookPressed();
+    }
+
+    private void onButtonFacebookPressed() {
+        CallbackManager callbackManager = CallbackManager.Factory.create();
+
+        LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
+        loginButton.setReadPermissions(Arrays.asList(EMAIL));
+        // If you are using in a fragment, call loginButton.setFragment(this);
+
+        // Callback registration
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                // App code
+            }
+
+            @Override
+            public void onCancel() {
+                // App code
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                // App code
+            }
+        });
+
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
+
+        LoginManager.getInstance().registerCallback(callbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        // App code
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        // App code
+                    }
+
+                    @Override
+                    public void onError(FacebookException exception) {
+                        // App code
+                    }
+                });
+
+        // TODO
+//        Finally, in your onActivityResult method, call callbackManager.onActivityResult
+//        to pass the login results to the LoginManager via callbackManager.
+
+        // This to check if you are already logged in
+//        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+//        boolean isLoggedIn = accessToken == null;
+//        boolean isExpired = accessToken.isExpired();
     }
 
     /**
@@ -59,6 +131,9 @@ public class LoginActivity extends BaseActivity {
         DoubleBounce doubleBounce = new DoubleBounce();
         progressBar.setIndeterminateDrawable(doubleBounce);
         progressBar.setVisibility(View.GONE);
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
     }
 
     /**
