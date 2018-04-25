@@ -95,6 +95,7 @@ public class SignupStepThree extends BaseActivity {
         viewContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                updateAvatar();
                 Intent intent = new Intent(getApplicationContext(), MainPageActivity.class);
                 startActivity(intent);
                 finish();

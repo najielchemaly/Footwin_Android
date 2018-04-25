@@ -17,7 +17,7 @@
             android:layout_height="80dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/app_margin"
-            android:src="@drawable/germany"
+            android:src="@drawable/logo_white"
             />
 
         <TextView
@@ -43,7 +43,6 @@
             android:layout_below="@+id/txtRank1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Messi"
             android:textColor="@color/white"
             android:textSize="@dimen/small_text"
             android:textAllCaps="true"
@@ -55,7 +54,6 @@
             android:layout_below="@+id/txtUserNameRank1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="35000"
             android:textColor="@color/white"
             android:textStyle="bold"
             android:textSize="@dimen/large_text"
