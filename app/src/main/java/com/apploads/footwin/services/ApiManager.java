@@ -33,10 +33,11 @@ public final class ApiManager {
             public Response intercept(Chain chain) throws IOException {
                 Request original = chain.request();
                 Request.Builder requestBuilder = null;
-               if (disbaleHeader) {
+                if (disbaleHeader) {
                     requestBuilder = original.newBuilder().header("ID", "1");
                 } else {
                     //LoadingActivity.appConfig.getTOKEN()
+
                     requestBuilder = original.newBuilder().header("User-Id",StaticData.user.getId());
                 }
 

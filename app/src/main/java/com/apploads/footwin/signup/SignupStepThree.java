@@ -24,8 +24,11 @@ import android.widget.TextView;
 import com.apploads.footwin.helpers.BaseActivity;
 import com.apploads.footwin.MainPageActivity;
 import com.apploads.footwin.R;
+import com.apploads.footwin.helpers.StaticData;
 import com.apploads.footwin.helpers.Utility;
+import com.apploads.footwin.helpers.utils.AppUtils;
 import com.apploads.footwin.login.LoginActivity;
+import com.apploads.footwin.model.User;
 import com.apploads.footwin.services.ApiManager;
 import com.google.gson.internal.LinkedTreeMap;
 
@@ -247,6 +250,9 @@ public class SignupStepThree extends BaseActivity {
             public void onResponse(Call<Object> call, Response<Object> response) {
                 try {
                     String avatar = ((LinkedTreeMap) response.body()).get("avatar").toString();
+                    User user = StaticData.user;
+                    user.setAvatar(avatar);
+                    AppUtils.saveUser(SignupStepThree.this, user);
                 } catch (Exception ex) {
                     Log.d("", ex.getLocalizedMessage());
                 }

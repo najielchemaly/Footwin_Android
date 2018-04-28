@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.apploads.footwin.R;
@@ -22,6 +23,7 @@ public class NotificationsActivity extends BaseActivity {
     ListView listNotifications;
     Button btnClose;
     ProgressBar progressBar;
+    RelativeLayout viewNoData;
     NotificationsAdapter notificationsAdapter;
 
     @Override
@@ -40,6 +42,7 @@ public class NotificationsActivity extends BaseActivity {
         btnClose = _findViewById(R.id.btnClose);
 
         progressBar = _findViewById(R.id.spin_kit);
+        viewNoData = _findViewById(R.id.viewNoData);
         DoubleBounce doubleBounce = new DoubleBounce();
         progressBar.setIndeterminateDrawable(doubleBounce);
 
@@ -52,24 +55,6 @@ public class NotificationsActivity extends BaseActivity {
                 progressBar.setVisibility(View.GONE);
             }
         }, 2000);
-
-//        CustomDialogClass dialogClass = new CustomDialogClass(this, new CustomDialogClass.AbstractCustomDialogListener() {
-//            @Override
-//            public void onConfirm(CustomDialogClass.DialogResponse response) {
-//                Toast.makeText(NotificationsActivity.this, "yes", Toast.LENGTH_SHORT).show();
-//                response.getDialog().dismiss();
-//            }
-//
-//            @Override
-//            public void onCancel(CustomDialogClass.DialogResponse dialogResponse) {
-//                Toast.makeText(NotificationsActivity.this, "no", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//
-//        dialogClass.setTitle("notification title");
-//        dialogClass.setMessage("notification message");
-//        dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-//        dialogClass.show();
     }
 
     private void initListeners() {

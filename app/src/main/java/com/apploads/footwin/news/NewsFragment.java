@@ -5,11 +5,15 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.apploads.footwin.NoDataView;
 import com.apploads.footwin.R;
+import com.apploads.footwin.helpers.StaticData;
 import com.apploads.footwin.model.News;
 import com.apploads.footwin.services.ApiManager;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
@@ -26,7 +30,9 @@ public class NewsFragment extends Fragment {
     ListView listNews;
     NewsAdapter newsAdapter;
     private View parentView;
+    RelativeLayout viewNoData;
     ProgressBar progressBar;
+    NoDataView noDataView;
 
     public static NewsFragment newInstance() {
         NewsFragment fragment = new NewsFragment();
@@ -46,18 +52,31 @@ public class NewsFragment extends Fragment {
     private void initView(){
         listNews = parentView.findViewById(R.id.listNews);
         progressBar = parentView.findViewById(R.id.spin_kit);
+        viewNoData = parentView.findViewById(R.id.viewNoData);
         DoubleBounce doubleBounce = new DoubleBounce();
         progressBar.setIndeterminateDrawable(doubleBounce);
 
-//
-
-        ApiManager.getService().getNews("http://newsapi.org//v2//everything?sources=bbc-sport&apiKey=bf84323b4c7244aca799c4ff1dda7e1e&q=world%20cup%20").enqueue(new Callback<News>() {
+        ApiManager.getService().getNews(StaticData.config.getNewsUrl()).enqueue(new Callback<News>() {
             @Override
             public void onResponse(Call<News> call, Response<News> response) {
-                News news = response.body();
-                if(news != null && response.isSuccessful()){
-                    newsAdapter = new NewsAdapter(news.getArticles(), getContext());
-                    listNews.setAdapter(newsAdapter);
+                if(response.isSuccessful()){
+                    if(response.body().getArticles() != null){
+                        News news = response.body();
+                        newsAdapter = new NewsAdapter(news.getArticles(), getContext());
+                        listNews.setAdapter(newsAdapter);
+                        progressBar.setVisibility(View.GONE);
+                    }else {
+                        noDataView = new NoDataView(getActivity(),"test");
+                        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                        viewNoData.addView(noDataView, lp);
+                        viewNoData.setVisibility(View.VISIBLE);
+                        progressBar.setVisibility(View.GONE);
+                    }
+                }else {
+                    noDataView = new NoDataView(getActivity(),"test");
+                    FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                    viewNoData.addView(noDataView, lp);
+                    viewNoData.setVisibility(View.VISIBLE);
                     progressBar.setVisibility(View.GONE);
                 }
             }
@@ -67,6 +86,5 @@ public class NewsFragment extends Fragment {
                 progressBar.setVisibility(View.GONE);
             }
         });
-
     }
 }

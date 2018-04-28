@@ -18,12 +18,15 @@ public class Config {
     @SerializedName("base_url")
     @Expose
     private String baseUrl;
+
     @SerializedName("media_url")
     @Expose
     private String mediaUrl;
+
     @SerializedName("news_url")
     @Expose
     private String newsUrl;
+
     @SerializedName("admin_url")
     @Expose
     private String adminUrl;

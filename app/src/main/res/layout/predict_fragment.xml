@@ -277,6 +277,7 @@
             >
 
             <EditText
+                android:id="@+id/txtHomeScore"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
@@ -301,6 +302,7 @@
                 />
 
             <EditText
+                android:id="@+id/txtAwayScore"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center"

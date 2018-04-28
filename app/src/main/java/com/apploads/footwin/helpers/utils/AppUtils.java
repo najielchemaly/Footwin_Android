@@ -3,6 +3,11 @@ package com.apploads.footwin.helpers.utils;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+
+import com.apploads.footwin.helpers.StaticData;
+import com.apploads.footwin.model.User;
+import com.google.gson.Gson;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,5 +44,19 @@ public final class AppUtils {
                     }
                 });
         alertDialog.show();
+    }
+
+    public static void saveUser(Context context, User user) {
+        StaticData.user = user;
+
+        SharedPreferences settings;
+        SharedPreferences.Editor editor;
+        settings = context.getSharedPreferences(StaticData.PREFS_NAME, Context.MODE_PRIVATE);
+        editor = settings.edit();
+
+        Gson gson = new Gson();
+        String json = gson.toJson(user);
+        editor.putString(StaticData.PREFS_USER, json);
+        editor.apply();
     }
 }

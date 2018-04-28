@@ -54,6 +54,8 @@ public class Match {
     private boolean isHomeToWin;
     private boolean isAwayToWin;
 
+    private boolean isConfirm;
+
     public boolean isHomeToWin() {
         return isHomeToWin;
     }
@@ -190,4 +192,11 @@ public class Match {
         this.exactScoreCoins = exactScoreCoins;
     }
 
+    public boolean isConfirm() {
+        return isConfirm;
+    }
+
+    public void setConfirm(boolean confirm) {
+        isConfirm = confirm;
+    }
 }

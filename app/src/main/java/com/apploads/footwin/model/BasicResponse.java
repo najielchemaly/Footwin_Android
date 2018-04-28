@@ -12,6 +12,18 @@ public class BasicResponse {
     @Expose
     private String message;
 
+    public String getFields() {
+        return fields;
+    }
+
+    public void setFields(String fields) {
+        this.fields = fields;
+    }
+
+    @SerializedName("fields")
+    @Expose
+    private String fields;
+
     public Integer getStatus() {
         return status;
     }

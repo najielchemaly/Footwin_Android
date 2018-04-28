@@ -28,6 +28,12 @@ public interface ServiceInterface {
     @POST
     Call<Config> getConfig(@Url String url);
 
+    @Headers({
+            "Content-Type: application/json"
+    })
+    @POST("logout/")
+    Call<BasicResponse> logout();
+
     @GET
     Call<News> getNews(@Url String url);
 
@@ -104,18 +110,21 @@ public interface ServiceInterface {
     @POST("updateAvatar/")
     Call<Object> updateAvatar(@Part MultipartBody.Part file);
 
-    @Headers({
-            "Content-Type: application/json"
-    })
-    @POST("sendPredictions/")
-    Call<Object> senfPredictions(@Field("user_id") String user_id, @Field("match_id") String match_id,
-                                 @Field("winning_team") String winning_team, @Field("home_score") String home_score,
-                                 @Field("away_score") String away_score, @Field("status") String status,
-                                 @Field("selected_team") String selected_team, @Field("date") String date); // TODO change the response object
+//    @FormUrlEncoded
+//    @POST("sendPredictions/")
+//    Call<BasicResponse> sendPredictions(@Field("user_id") String user_id, @Field("match_id") String match_id,
+//                                 @Field("winning_team") String winning_team, @Field("home_score") String home_score,
+//                                 @Field("away_score") String away_score, @Field("status") String status,
+//                                 @Field("selected_team") String selected_team, @Field("date") String date);
 
-    @Headers({
-            "Content-Type: application/json"
-    })
+    @FormUrlEncoded
+    @POST("sendPredictions/")
+    Call<BasicResponse> sendPredictions(@Field("user_id") String user_id, @Field("match_id") String match_id, @Field("winning_team") String winning_team
+            , @Field("home_score") String home_score, @Field("away_score") String away_score, @Field("status") String status
+            , @Field("selected_team") String selected_team, @Field("date") String date);
+
+
+    @FormUrlEncoded
     @POST("updateFirebaseToken/")
     Call<Object> updateFirebaseToken(@Field("firebase_token") String firebase_token); // TODO change the response object
 

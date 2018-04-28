@@ -34,5 +34,14 @@
         android:layout_height="70dp"
         app:SpinKit_Color="@color/white"
         android:layout_centerInParent="true"/>
+
+    <RelativeLayout
+        android:id="@+id/viewNoData"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/txtTitle"
+        android:layout_marginTop="@dimen/app_margin"
+        android:visibility="gone"
+        />
     
 </RelativeLayout>

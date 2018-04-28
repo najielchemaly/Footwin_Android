@@ -4,12 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -20,12 +22,17 @@ import android.widget.Toast;
 import com.apploads.footwin.ViewRulesActivity;
 import com.apploads.footwin.coins.CoinsActivity;
 import com.apploads.footwin.R;
+import com.apploads.footwin.helpers.CustomDialogClass;
 import com.apploads.footwin.helpers.StaticData;
+import com.apploads.footwin.helpers.utils.StringUtils;
+import com.apploads.footwin.login.LoginActivity;
+import com.apploads.footwin.model.BasicResponse;
 import com.apploads.footwin.model.Match;
 import com.apploads.footwin.model.Profile;
 import com.apploads.footwin.notifications.NotificationsActivity;
 import com.apploads.footwin.services.ApiManager;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
+import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -36,14 +43,18 @@ public class PredictFragment extends Fragment {
 
     ListView listMatches;
     Button btnRules, btnConfirm, btnCancel;
+    EditText txtAwayScore, txtHomeScore;
     TextView txtRound, txtWinningCoinsTotal, txtCoinsTotal, txtNotificationTag, txtHomeTeam, txtAwayTeam;
     CircleImageView imgProfile, imgHomeTeam, imgAwayTeam;
     private View parentView;
-    MatchesAdapter matchesAdapter;
     RelativeLayout viewExactScore;
     ImageView imgCoins;
     ProgressBar progressBar;
     Animation bottom_to_top, top_to_bottom;
+    MatchesAdapter matchesAdapter;
+
+    private String homeScore = "-1";
+    private String awayScore = "-1";
 
 
     public static PredictFragment newInstance() {
@@ -75,6 +86,8 @@ public class PredictFragment extends Fragment {
         viewExactScore = parentView.findViewById(R.id.viewExactScore);
         btnCancel = parentView.findViewById(R.id.btnCancel);
         btnConfirm = parentView.findViewById(R.id.btnConfirm);
+        txtAwayScore = parentView.findViewById(R.id.txtAwayScore);
+        txtHomeScore = parentView.findViewById(R.id.txtHomeScore);
         txtHomeTeam = parentView.findViewById(R.id.txtHomeTeam);
         txtAwayTeam = parentView.findViewById(R.id.txtAwayTeam);
         imgHomeTeam = parentView.findViewById(R.id.imgHomeTeam);
@@ -84,9 +97,13 @@ public class PredictFragment extends Fragment {
 
         viewExactScore.setVisibility(View.GONE);
 
+        Picasso.with(getActivity())
+                .load(StaticData.config.getMediaUrl() + StaticData.user.getAvatar())
+                .into(imgProfile);
+
         txtRound.setText(StaticData.config.getActiveRound().getTitle());
-        txtWinningCoinsTotal.setText(StaticData.config.getActiveRound().getWinningCoins());
-        txtCoinsTotal.setText(StaticData.config.getActiveRound().getAllInCoins());
+        txtWinningCoinsTotal.setText(StaticData.user.getWinningCoins());
+        txtCoinsTotal.setText(StaticData.user.getCoins());
 
         bottom_to_top = AnimationUtils.loadAnimation(getContext(), R.anim.bottom_to_top_wt);
         top_to_bottom = AnimationUtils.loadAnimation(getContext(), R.anim.top_to_bottom_wt);
@@ -116,6 +133,11 @@ public class PredictFragment extends Fragment {
             public void onClick(View view) {
                 viewExactScore.startAnimation(top_to_bottom);
                 viewExactScore.setVisibility(View.GONE);
+
+                if(StringUtils.isValid(txtAwayScore.getText()) || StringUtils.isValid(txtHomeScore)){
+                    homeScore = txtHomeScore.getText().toString();
+                    awayScore = txtAwayScore.getText().toString();
+                }
             }
         });
 
@@ -144,6 +166,41 @@ public class PredictFragment extends Fragment {
         });
     }
 
+    public void showAlert(final Match match, final String winningTeamID, final String winningTeamName){
+        CustomDialogClass dialogClass = new CustomDialogClass(getActivity(), new CustomDialogClass.AbstractCustomDialogListener() {
+            @Override
+            public void onConfirm(CustomDialogClass.DialogResponse response) {
+                response.getDialog().dismiss();
+
+                ApiManager.getService().sendPredictions(StaticData.user.getId(), match.getId(), winningTeamID, homeScore
+                        , awayScore ,"1", winningTeamName,match.getDate()).enqueue(new Callback<BasicResponse>() {
+                    @Override
+                    public void onResponse(Call<BasicResponse> call, Response<BasicResponse> response) {
+                        BasicResponse basicResponse = response.body();
+
+                        match.setConfirm(true);
+                        listMatches.setAdapter(matchesAdapter);
+                    }
+
+                    @Override
+                    public void onFailure(Call<BasicResponse> call, Throwable t) {
+                        Toast.makeText(getActivity(), "error", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onCancel(CustomDialogClass.DialogResponse dialogResponse) {
+                dialogResponse.getDialog().dismiss();
+            }
+        }, false);
+
+        dialogClass.setTitle("Title");
+        dialogClass.setMessage("Are you sure you want to confirm you prediction ?");
+        dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialogClass.show();
+    }
+
     private void callMatchesService() {
         ApiManager.getService().getMatches().enqueue(new Callback<Profile>() {
             @Override
@@ -154,7 +211,7 @@ public class PredictFragment extends Fragment {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        MatchesAdapter matchesAdapter = new MatchesAdapter(match.getMatches(), getContext(), PredictFragment.this);
+                        matchesAdapter = new MatchesAdapter(match.getMatches(), getContext(), PredictFragment.this);
                         listMatches.setAdapter(matchesAdapter);
                         progressBar.setVisibility(View.GONE);
 

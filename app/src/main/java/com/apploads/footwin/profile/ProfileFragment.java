@@ -12,7 +12,15 @@ import android.widget.TextView;
 
 import com.apploads.footwin.R;
 import com.apploads.footwin.helpers.CustomDialogClass;
+import com.apploads.footwin.helpers.utils.AppUtils;
 import com.apploads.footwin.login.LoginActivity;
+import com.apploads.footwin.model.BasicResponse;
+import com.apploads.footwin.services.ApiManager;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ProfileFragment extends Fragment {
 
@@ -20,7 +28,6 @@ public class ProfileFragment extends Fragment {
     TextView txtMyPredictions, txtEditMyProfile, txtChangePassword, txtTerms;
     LinearLayout viewLogout;
     ImageButton btnCamera;
-
 
     public static ProfileFragment newInstance() {
         ProfileFragment fragment = new ProfileFragment();
@@ -74,9 +81,7 @@ public class ProfileFragment extends Fragment {
                 CustomDialogClass customDialogClass = new CustomDialogClass(getActivity(), new CustomDialogClass.AbstractCustomDialogListener() {
                     @Override
                     public void onConfirm(CustomDialogClass.DialogResponse response) {
-                        Intent intent = new Intent(getActivity(), LoginActivity.class);
-                        getActivity().finish();
-                        startActivity(intent);
+                        callLogoutService();
                         response.getDialog().dismiss();
                     }
 
@@ -92,5 +97,26 @@ public class ProfileFragment extends Fragment {
             }
         });
         return parentView;
+    }
+
+    private void callLogoutService(){
+        ApiManager.getService().logout().enqueue(new Callback<BasicResponse>() {
+            @Override
+            public void onResponse(Call<BasicResponse> call, Response<BasicResponse> response) {
+                BasicResponse basicResponse = response.body();
+
+                FirebaseMessaging.getInstance().unsubscribeFromTopic("/topics/footwinnews");
+                AppUtils.saveUser(getContext(), null);
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                getActivity().finish();
+                startActivity(intent);
+
+            }
+
+            @Override
+            public void onFailure(Call<BasicResponse> call, Throwable t) {
+
+            }
+        });
     }
 }
