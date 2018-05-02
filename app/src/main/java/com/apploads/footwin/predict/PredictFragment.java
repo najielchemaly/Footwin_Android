@@ -55,7 +55,7 @@ public class PredictFragment extends Fragment {
 
     private String homeScore = "-1";
     private String awayScore = "-1";
-
+    Match selectedMatch;
 
     public static PredictFragment newInstance() {
         PredictFragment fragment = new PredictFragment();
@@ -114,9 +114,18 @@ public class PredictFragment extends Fragment {
     public void showExactScore(Match match) {
         viewExactScore.setVisibility(View.VISIBLE);
         viewExactScore.startAnimation(bottom_to_top);
+        selectedMatch = match;
 
         txtHomeTeam.setText(match.getHomeName());
         txtAwayTeam.setText(match.getAwayName());
+
+        Picasso.with(getActivity())
+                .load(StaticData.config.getMediaUrl()+match.getHomeFlag())
+                .into(imgHomeTeam);
+
+        Picasso.with(getActivity())
+                .load(StaticData.config.getMediaUrl()+match.getAwayFlag())
+                .into(imgAwayTeam);
     }
 
     private void initListeners() {
@@ -133,6 +142,17 @@ public class PredictFragment extends Fragment {
             public void onClick(View view) {
                 viewExactScore.startAnimation(top_to_bottom);
                 viewExactScore.setVisibility(View.GONE);
+
+                int homeScoreInt = Integer.parseInt(txtHomeScore.getText().toString());
+                int awayScoreInt = Integer.parseInt(txtAwayScore.getText().toString());
+
+                if(homeScoreInt > awayScoreInt && selectedMatch.isAwayToWin()){
+                    Toast.makeText(getActivity(), "You entered a score that is conficting with your prediction, set home to win", Toast.LENGTH_SHORT).show();
+                }
+
+                if(homeScoreInt < awayScoreInt && selectedMatch.isHomeToWin()){
+                    Toast.makeText(getActivity(), "You entered a score that is conficting with your prediction, set away to win", Toast.LENGTH_SHORT).show();
+                }
 
                 if(StringUtils.isValid(txtAwayScore.getText()) || StringUtils.isValid(txtHomeScore)){
                     homeScore = txtHomeScore.getText().toString();
@@ -178,7 +198,7 @@ public class PredictFragment extends Fragment {
                     public void onResponse(Call<BasicResponse> call, Response<BasicResponse> response) {
                         BasicResponse basicResponse = response.body();
 
-                        match.setConfirm(true);
+                        match.setIsConfirmed("1");
                         listMatches.setAdapter(matchesAdapter);
                     }
 

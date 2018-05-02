@@ -2,6 +2,7 @@ package com.apploads.footwin.news;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +26,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class NewsFragment extends Fragment {
+public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     ListView listNews;
     NewsAdapter newsAdapter;
@@ -33,6 +34,7 @@ public class NewsFragment extends Fragment {
     RelativeLayout viewNoData;
     ProgressBar progressBar;
     NoDataView noDataView;
+    SwipeRefreshLayout swipeRefreshLayout;
 
     public static NewsFragment newInstance() {
         NewsFragment fragment = new NewsFragment();
@@ -53,9 +55,22 @@ public class NewsFragment extends Fragment {
         listNews = parentView.findViewById(R.id.listNews);
         progressBar = parentView.findViewById(R.id.spin_kit);
         viewNoData = parentView.findViewById(R.id.viewNoData);
+        swipeRefreshLayout = (SwipeRefreshLayout) parentView.findViewById(R.id.refresh);
+        swipeRefreshLayout.setOnRefreshListener(this);
         DoubleBounce doubleBounce = new DoubleBounce();
         progressBar.setIndeterminateDrawable(doubleBounce);
 
+        callService();
+    }
+
+    @Override
+    public void onRefresh() {
+        swipeRefreshLayout.setRefreshing(true);
+        callService();
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    private void callService(){
         ApiManager.getService().getNews(StaticData.config.getNewsUrl()).enqueue(new Callback<News>() {
             @Override
             public void onResponse(Call<News> call, Response<News> response) {

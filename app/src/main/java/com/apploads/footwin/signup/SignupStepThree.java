@@ -1,5 +1,6 @@
 package com.apploads.footwin.signup;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -20,6 +21,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.apploads.footwin.helpers.BaseActivity;
 import com.apploads.footwin.MainPageActivity;
@@ -37,6 +39,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MediaType;
@@ -52,11 +58,13 @@ public class SignupStepThree extends BaseActivity {
     CircleImageView imgAddImage;
     TextView txtBack;
     ImageView imgCamera;
+    Bitmap bitmap;
 
+    private File destination = null;
+    private InputStream inputStreamImg;
     private String imgPath = null;
     public String userChoosenTask;
-    private int REQUEST_CAMERA = 0,
-            SELECT_FILE = 1;
+    private final int PICK_IMAGE_CAMERA = 1, PICK_IMAGE_GALLERY = 2, REQUEST_READ_EXTERNAL_STORAGE = 3;
 
     @Override
     public int getContentViewId() {
@@ -125,98 +133,68 @@ public class SignupStepThree extends BaseActivity {
         imgAddImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectImage();
+                openImageDialog();
             }
         });
     }
 
 
     // CAMERA FUNCTIONS
-    private void selectImage() {
-        final CharSequence[] items = {"Take Photo", "Choose from Library",
-                "Cancel"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(SignupStepThree.this);
-        builder.setTitle("Add profile Picture");
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-                boolean result = Utility.checkPermission(SignupStepThree.this);
-                if (items[item].equals("Take Photo")) {
-                    userChoosenTask = "Take Photo";
-                    if (result)
-                        cameraIntent();
-                } else if (items[item].equals("Choose from Library")) {
-                    userChoosenTask = "Choose from Library";
-                    if (result)
-                        galleryIntent();
-                } else if (items[item].equals("Cancel")) {
-                    dialog.dismiss();
+    private void openImageDialog() {
+        try {
+            PackageManager packageManager = getPackageManager();
+            int hasPerm = packageManager.checkPermission(Manifest.permission.CAMERA, getPackageName());
+            if (hasPerm == PackageManager.PERMISSION_GRANTED) {
+                hasPerm = packageManager.checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE, getPackageName());
+                if (hasPerm == PackageManager.PERMISSION_GRANTED) {
+                    final CharSequence[] options = {"Take Photo", "Choose From Gallery", "Cancel"};
+                    android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(SignupStepThree.this);
+                    builder.setTitle("Select Option");
+                    builder.setItems(options, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int item) {
+                            if (options[item].equals("Take Photo")) {
+                                dialog.dismiss();
+                                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                startActivityForResult(intent, PICK_IMAGE_CAMERA);
+                            } else if (options[item].equals("Choose From Gallery")) {
+                                dialog.dismiss();
+                                Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                startActivityForResult(pickPhoto, PICK_IMAGE_GALLERY);
+                            } else if (options[item].equals("Cancel")) {
+                                dialog.dismiss();
+                            }
+                        }
+                    });
+                    builder.show();
+                } else {
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(SignupStepThree.this,
+                            Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                        Toast.makeText(SignupStepThree.this, "Read External Storage Permission error", Toast.LENGTH_SHORT);
+                    } else {
+                        ActivityCompat.requestPermissions(SignupStepThree.this,
+                                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_READ_EXTERNAL_STORAGE);
+                    }
+                }
+            } else {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(SignupStepThree.this,
+                        Manifest.permission.CAMERA)) {
+                    Toast.makeText(SignupStepThree.this, "Camera Permission error", Toast.LENGTH_SHORT);
+                } else {
+                    ActivityCompat.requestPermissions(SignupStepThree.this,
+                            new String[]{Manifest.permission.CAMERA}, PICK_IMAGE_CAMERA);
                 }
             }
-        });
-        builder.show();
-    }
-
-    private void galleryIntent() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Photo"), SELECT_FILE);
-    }
-
-    private void cameraIntent() {
-        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-        startActivityForResult(intent, REQUEST_CAMERA);
-    }
-
-    private void onCaptureImageResult(Intent data) {
-        Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        thumbnail.compress(Bitmap.CompressFormat.JPEG, 50, bytes);
-
-        File destination = new File(Environment.getExternalStorageDirectory(),
-                System.currentTimeMillis() + ".jpg");
-
-        imgPath = destination.getAbsolutePath();
-
-        FileOutputStream fo;
-        try {
-            destination.createNewFile();
-            fo = new FileOutputStream(destination);
-            fo.write(bytes.toByteArray());
-            fo.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (Exception e) {
+            Toast.makeText(SignupStepThree.this, "Camera Permission error", Toast.LENGTH_SHORT);
             e.printStackTrace();
         }
-
-        imgAddImage.setImageBitmap(thumbnail);
-        imgCamera.setVisibility(View.VISIBLE);
-    }
-
-    @SuppressWarnings("deprecation")
-    private void onSelectFromGalleryResult(Intent data) throws IOException {
-
-        Bitmap bm = null;
-        if (data != null) {
-            try {
-                bm = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
-                Uri selectedImage = data.getData();
-                imgPath = getRealPathFromURI(selectedImage);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        imgAddImage.setImageBitmap(bm);
-        imgCamera.setVisibility(View.VISIBLE);
     }
 
     public String getRealPathFromURI(Uri contentUri) {
         String res = null;
         String[] proj = { MediaStore.Images.Media.DATA };
-        Cursor cursor = this.getContentResolver().query(contentUri, proj, null, null, null);
+        Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
         if(cursor.moveToFirst()){;
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             res = cursor.getString(column_index);
@@ -229,15 +207,50 @@ public class SignupStepThree extends BaseActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == SELECT_FILE)
+        inputStreamImg = null;
+        if (requestCode == PICK_IMAGE_CAMERA) {
+            try {
+                Uri selectedImage = data.getData();
+                bitmap = (Bitmap) data.getExtras().get("data");
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, bytes);
+
+                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+                destination = new File(Environment.getExternalStorageDirectory() + "/" +
+                        getString(R.string.app_name), "IMG_" + timeStamp + ".jpg");
+                FileOutputStream fo;
                 try {
-                    onSelectFromGalleryResult(data);
+                    destination.createNewFile();
+                    fo = new FileOutputStream(destination);
+                    fo.write(bytes.toByteArray());
+                    fo.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            else if (requestCode == REQUEST_CAMERA)
-                onCaptureImageResult(data);
+
+                imgPath = destination.getAbsolutePath();
+                imgAddImage.setImageBitmap(bitmap);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if (requestCode == PICK_IMAGE_GALLERY) {
+            try {
+                if(data != null) {
+                    Uri selectedImage = data.getData();
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
+                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 50, bytes);
+
+                    imgPath = getRealPathFromURI(selectedImage);
+                    destination = new File(imgPath.toString());
+                    imgAddImage.setImageBitmap(bitmap);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -250,6 +263,7 @@ public class SignupStepThree extends BaseActivity {
             public void onResponse(Call<Object> call, Response<Object> response) {
                 try {
                     String avatar = ((LinkedTreeMap) response.body()).get("avatar").toString();
+
                     User user = StaticData.user;
                     user.setAvatar(avatar);
                     AppUtils.saveUser(SignupStepThree.this, user);

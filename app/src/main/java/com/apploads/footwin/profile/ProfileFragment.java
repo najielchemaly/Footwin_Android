@@ -12,12 +12,15 @@ import android.widget.TextView;
 
 import com.apploads.footwin.R;
 import com.apploads.footwin.helpers.CustomDialogClass;
+import com.apploads.footwin.helpers.StaticData;
 import com.apploads.footwin.helpers.utils.AppUtils;
 import com.apploads.footwin.login.LoginActivity;
 import com.apploads.footwin.model.BasicResponse;
 import com.apploads.footwin.services.ApiManager;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.squareup.picasso.Picasso;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -25,9 +28,10 @@ import retrofit2.Response;
 public class ProfileFragment extends Fragment {
 
     private View parentView;
-    TextView txtMyPredictions, txtEditMyProfile, txtChangePassword, txtTerms;
+    TextView txtMyPredictions, txtEditMyProfile, txtChangePassword, txtTerms, txtName;
     LinearLayout viewLogout;
     ImageButton btnCamera;
+    CircleImageView imgProfile;
 
     public static ProfileFragment newInstance() {
         ProfileFragment fragment = new ProfileFragment();
@@ -41,8 +45,15 @@ public class ProfileFragment extends Fragment {
         txtMyPredictions = parentView.findViewById(R.id.txtMyPredictions);
         txtChangePassword = parentView.findViewById(R.id.txtChangePassword);
         txtEditMyProfile = parentView.findViewById(R.id.txtEditMyProfile);
+        txtName = parentView.findViewById(R.id.txtName);
         txtTerms = parentView.findViewById(R.id.txtTerms);
+        imgProfile = parentView.findViewById(R.id.imgProfile);
         viewLogout = parentView.findViewById(R.id.viewLogout);
+
+        txtName.setText(StaticData.user.getUsername());
+        Picasso.with(getActivity())
+                .load(StaticData.config.getMediaUrl() + StaticData.user.getAvatar())
+                .into(imgProfile);
 
         txtMyPredictions.setOnClickListener(new View.OnClickListener() {
             @Override

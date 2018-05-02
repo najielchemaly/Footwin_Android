@@ -7,6 +7,7 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -100,16 +101,16 @@ public class MainPageActivity extends BaseActivity {
                 });
     }
 
-    private void sendRegistrationToServer(String token) {
+    private void sendRegistrationToServer(final String token) {
         ApiManager.getService().updateFirebaseToken(token).enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
-                Toast.makeText(MainPageActivity.this, "asdasd", Toast.LENGTH_SHORT).show();
+                Log.d("TOKEN UPDATED: ", token);
             }
 
             @Override
             public void onFailure(Call<Object> call, Throwable t) {
-                Toast.makeText(MainPageActivity.this, "asdasd", Toast.LENGTH_SHORT).show();
+                Log.e("TOKEN ERROR: ", t.getMessage());
             }
         });
     }

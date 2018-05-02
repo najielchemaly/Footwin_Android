@@ -14,10 +14,16 @@ import com.apploads.footwin.helpers.BaseActivity;
 import com.apploads.footwin.helpers.CustomDialogClass;
 import com.apploads.footwin.login.LoginActivity;
 import com.apploads.footwin.model.Notification;
+import com.apploads.footwin.model.NotificationResponse;
+import com.apploads.footwin.services.ApiManager;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class NotificationsActivity extends BaseActivity {
     ListView listNotifications;
@@ -46,15 +52,7 @@ public class NotificationsActivity extends BaseActivity {
         DoubleBounce doubleBounce = new DoubleBounce();
         progressBar.setIndeterminateDrawable(doubleBounce);
 
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                notificationsAdapter = new NotificationsAdapter(getNotifications(), NotificationsActivity.this);
-                listNotifications.setAdapter(notificationsAdapter);
-                progressBar.setVisibility(View.GONE);
-            }
-        }, 2000);
+        getNotifications();
     }
 
     private void initListeners() {
@@ -66,35 +64,21 @@ public class NotificationsActivity extends BaseActivity {
         });
     }
 
-    private List<Notification> getNotifications() {
-        List<Notification> notificationList = new ArrayList<>();
+    private void getNotifications() {
+        ApiManager.getService().getNotifications().enqueue(new Callback<NotificationResponse>() {
+            @Override
+            public void onResponse(Call<NotificationResponse> call, Response<NotificationResponse> response) {
+                NotificationResponse notificationResponse = response.body();
 
-        Notification notification = new Notification();
-        notification.setDate("1 hr ago");
-        notification.setDescription("Naji you are almost out of coins! Let's go refill your account and start making predictions again");
-        notification.setType(1);
-        notificationList.add(notification);
+                notificationsAdapter = new NotificationsAdapter(notificationResponse.getNotifications(), NotificationsActivity.this);
+                listNotifications.setAdapter(notificationsAdapter);
+                progressBar.setVisibility(View.GONE);
+            }
 
-        notification = new Notification();
-        notification.setDate("1 hr ago");
-        notification.setDescription("WELL DONE! \n You have made the correct predictions! 200 coins have been added to your account.");
-        notification.setType(2);
-        notificationList.add(notification);
-
-        notification = new Notification();
-        notification.setDate("1 hr ago");
-        notification.setDescription("Naji you are almost out of coins! Let's go refill your account and start making predictions again");
-        notification.setType(1);
-        notificationList.add(notification);
-
-        notification = new Notification();
-        notification.setDate("1 hr ago");
-        notification.setDescription("WELL DONE! \n You have made the correct predictions! 200 coins have been added to your account.");
-        notification.setType(2);
-        notificationList.add(notification);
-
-        return notificationList;
-
+            @Override
+            public void onFailure(Call<NotificationResponse> call, Throwable t) {
+                progressBar.setVisibility(View.GONE);
+            }
+        });
     }
-
 }

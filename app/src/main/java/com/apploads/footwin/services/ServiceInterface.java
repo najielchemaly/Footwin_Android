@@ -6,7 +6,9 @@ import com.apploads.footwin.model.LeaderboardResponse;
 import com.apploads.footwin.model.Match;
 import com.apploads.footwin.model.News;
 import com.apploads.footwin.model.Notification;
+import com.apploads.footwin.model.NotificationResponse;
 import com.apploads.footwin.model.PackageResponse;
+import com.apploads.footwin.model.PredictionResponse;
 import com.apploads.footwin.model.Profile;
 import com.apploads.footwin.model.UserResponse;
 
@@ -47,7 +49,7 @@ public interface ServiceInterface {
             "Content-Type: application/json"
     })
     @POST("getNotifications/")
-    Call<Object> getNotifications(); // TODO change the response object
+    Call<NotificationResponse> getNotifications();
 
     @Headers({
             "Content-Type: application/json"
@@ -100,11 +102,8 @@ public interface ServiceInterface {
     @POST("getPackages/")
     Call<PackageResponse> getPackages();
 
-    @Headers({
-            "Content-Type: application/json"
-    })
     @POST("getPredictions/")
-    Call<Object> getPredictions(); // TODO change the response object
+    Call<PredictionResponse> getPredictions();
 
     @Multipart
     @POST("updateAvatar/")

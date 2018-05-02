@@ -16,18 +16,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.apploads.footwin.R;
+import com.apploads.footwin.helpers.StaticData;
 import com.apploads.footwin.model.Match;
+import com.apploads.footwin.model.Prediction;
 import com.apploads.footwin.predict.PredictFragment;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class MatchesResultAdapter extends BaseAdapter {
 
-    private List<Match> root;
+    private List<Prediction> root;
     private Context context;
     LayoutInflater mInflater;
 
-    public MatchesResultAdapter(List<Match> root, Context context){
+    public MatchesResultAdapter(List<Prediction> root, Context context){
         this.root        = root;
         this.context     = context;
         if(context != null){
@@ -62,7 +65,7 @@ public class MatchesResultAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final Match match = (Match) getItem(position);
+        final Prediction prediction = (Prediction) getItem(position);
         final Holder holder = new Holder();
 
         if (convertView == null) {
@@ -86,15 +89,28 @@ public class MatchesResultAdapter extends BaseAdapter {
             holder.btnDraw = convertView.findViewById(R.id.btnDraw);
             holder.viewConfirm.setClickable(false);
 
-            holder.txtHomeTeam.setText(match.getHomeName());
-            holder.txtAwayTeam.setText(match.getAwayName());
-            holder.txtScoreHome.setText(match.getHomeScore());
-            holder.txtScoreAway.setText(match.getAwayScore());
+            holder.txtHomeTeam.setText(prediction.getHomeName());
+            holder.txtAwayTeam.setText(prediction.getAwayName());
+            holder.txtHeaderTite.setText(prediction.getTitle());
+            holder.txtHeaderDesc.setText(prediction.getDescription());
+
+            if(prediction.getHomeScore().equals("-1") && prediction.getAwayScore().equals("-1")){
+                holder.txtScoreHome.setText(prediction.getHomeScore());
+                holder.txtScoreAway.setText(prediction.getAwayScore());
+            }
+
+            Picasso.with(context)
+                    .load(StaticData.config.getMediaUrl()+prediction.getHomeFlag())
+                    .into(holder.imgHomeTeam);
+
+            Picasso.with(context)
+                    .load(StaticData.config.getMediaUrl()+prediction.getAwayFlag())
+                    .into(holder.imgAwayTeam);
 
             final Animation scale_up = AnimationUtils.loadAnimation(context, R.anim.scale_up);
             final Animation scale_down = AnimationUtils.loadAnimation(context, R.anim.scale_down);
 
-            if(Integer.parseInt(match.getHomeScore()) > Integer.parseInt(match.getAwayScore())){
+            if(prediction.getHomeId().equals(prediction.getWinningTeam())){
                 holder.imgHomeTeam.setBackgroundResource(R.drawable.selected_team_background);
                 holder.imgHomeTeam.startAnimation(scale_up);
                 holder.imgHomeTeam.animate().alpha(1f).setDuration(1000);
@@ -105,7 +121,7 @@ public class MatchesResultAdapter extends BaseAdapter {
                 holder.imgAwayTeam.startAnimation(scale_down);
                 holder.viewConfirm.animate().alpha(1f).setDuration(1000);
                 holder.viewConfirm.setClickable(true);
-            }else if(Integer.parseInt(match.getHomeScore()) < Integer.parseInt(match.getAwayScore())){
+            }else if(prediction.getAwayId().equals(prediction.getWinningTeam())){
                 holder.imgAwayTeam.setBackgroundResource(R.drawable.selected_team_background);
                 holder.imgAwayTeam.startAnimation(scale_up);
                 holder.imgAwayTeam.animate().alpha(1f).setDuration(1000);

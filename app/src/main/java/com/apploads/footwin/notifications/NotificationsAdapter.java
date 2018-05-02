@@ -10,10 +10,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.apploads.footwin.R;
+import com.apploads.footwin.helpers.StaticData;
 import com.apploads.footwin.model.Match;
 import com.apploads.footwin.model.Notification;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class NotificationsAdapter extends BaseAdapter {
 
@@ -47,15 +51,40 @@ public class NotificationsAdapter extends BaseAdapter {
         final Notification notification = (Notification) getItem(position);
         convertView = mInflater.inflate(R.layout.notifications_row_item, null);
 
-        TextView txtNotification = convertView.findViewById(R.id.txtNotification);
+        TextView txtNotificationDesc = convertView.findViewById(R.id.txtNotificationDesc);
+        TextView txtNotificationTitle = convertView.findViewById(R.id.txtNotificationTitle);
         TextView txtDate = convertView.findViewById(R.id.txtDate);
+        CircleImageView imgHomeTeam = convertView.findViewById(R.id.imgHomeTeam);
+        CircleImageView imgAwayTeam = convertView.findViewById(R.id.imgAwayTeam);
+        TextView txtHomeTeam = convertView.findViewById(R.id.txtHomeTeam);
+        TextView txtAwayTeam = convertView.findViewById(R.id.txtAwayTeam);
+        TextView txtHomeScore = convertView.findViewById(R.id.txtHomeScore);
+        TextView txtAwayScore = convertView.findViewById(R.id.txtAwayScore);
         Button btnCoins = convertView.findViewById(R.id.btnCoins);
         RelativeLayout viewResults = convertView.findViewById(R.id.viewResults);
 
-        txtNotification.setText(notification.getDescription());
+        txtNotificationTitle.setText(notification.getTitle());
+        txtNotificationDesc.setText(notification.getDescription());
         txtDate.setText(notification.getDate());
 
-        if(notification.getType() == 1){
+        txtHomeTeam.setText(notification.getHomeName());
+        txtAwayTeam.setText(notification.getAwayName());
+        txtHomeScore.setText(notification.getHomeScore());
+        txtAwayScore.setText(notification.getAwayScore());
+
+        Picasso.with(context)
+                .load(StaticData.config.getMediaUrl()+notification.getHomeFlag())
+                .into(imgHomeTeam);
+
+        Picasso.with(context)
+                .load(StaticData.config.getMediaUrl()+notification.getAwayFlag())
+                .into(imgAwayTeam);
+
+
+        if(notification.getType().equals("message")){
+            btnCoins.setVisibility(View.GONE);
+            viewResults.setVisibility(View.GONE);
+        } else if (notification.getType().equals("get_coins")){
             btnCoins.setVisibility(View.VISIBLE);
             viewResults.setVisibility(View.GONE);
         }else {

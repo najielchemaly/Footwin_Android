@@ -108,7 +108,7 @@ public class MatchesAdapter extends BaseAdapter {
                     .load(StaticData.config.getMediaUrl()+match.getAwayFlag())
                     .into(holder.imgAwayTeam);
 
-            if(match.isConfirm()){
+            if("1".equals(match.getIsConfirmed())){
                 holder.viewAwayTeam.setClickable(false);
                 holder.viewHomeTeam.setClickable(false);
                 holder.viewAwayTeam.setEnabled(false);
@@ -121,6 +121,16 @@ public class MatchesAdapter extends BaseAdapter {
                 holder.viewConfirm.setEnabled(false);
                 holder.viewConfirm.setAlpha(1f);
                 holder.txtConfirm.setText("Confirmed!");
+
+                if(match.getPredictionWinningTeam().equals(match.getHomeId())){
+                    match.setHomeToWin(true);
+                    match.setAwayToWin(false);
+                }
+
+                if(match.getPredictionWinningTeam().equals(match.getAwayId())){
+                    match.setAwayToWin(true);
+                    match.setHomeToWin(false);
+                }
 
                 if(match.isHomeToWin()){
                     holder.imgHomeTeam.setBackgroundResource(R.drawable.selected_team_background);
@@ -220,7 +230,6 @@ public class MatchesAdapter extends BaseAdapter {
             holder.viewAwayTeam.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                     if(match.isAwayToWin()){
                         holder.imgAwayTeam.setBackgroundResource(0);
                         holder.imgAwayTeam.startAnimation(scale_down_normal);
@@ -302,6 +311,9 @@ public class MatchesAdapter extends BaseAdapter {
         return convertView;
     }
 
+    public void setHomeToWin(){
+
+    }
 
     public class Holder {
         TextView txtHomeTeam, txtAwayTeam, txtDate, txtConfirm;
