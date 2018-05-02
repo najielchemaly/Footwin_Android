@@ -9,6 +9,7 @@ import com.apploads.footwin.R;
 import com.apploads.footwin.helpers.BaseActivity;
 import com.apploads.footwin.helpers.CustomDialogClass;
 import com.apploads.footwin.helpers.StaticData;
+import com.apploads.footwin.helpers.utils.AppUtils;
 import com.apploads.footwin.helpers.utils.StringUtils;
 import com.apploads.footwin.login.LoginActivity;
 import com.apploads.footwin.model.UserResponse;
@@ -102,7 +103,7 @@ public class EditProfileActivity extends BaseActivity {
             public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                 UserResponse userResponse = response.body();
                 StaticData.user = userResponse.getUser();
-
+                AppUtils.saveUser(EditProfileActivity.this, userResponse.getUser());
                 CustomDialogClass dialogClass = new CustomDialogClass(EditProfileActivity.this, new CustomDialogClass.AbstractCustomDialogListener() {
                     @Override
                     public void onConfirm(CustomDialogClass.DialogResponse response) {

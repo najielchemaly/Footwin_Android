@@ -120,7 +120,7 @@
     <com.github.ybq.android.spinkit.SpinKitView
         android:id="@+id/spin_kit"
         style="@style/SpinKitView.Large.Circle"
-        app:SpinKit_Color="@color/white"
+        app:SpinKit_Color="@color/appBlue"
         android:layout_centerInParent="true"
         android:layout_width="70dp"
         android:layout_height="70dp" />

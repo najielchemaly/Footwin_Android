@@ -1,6 +1,8 @@
 package com.apploads.footwin.login;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,6 +25,9 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.Login;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -35,6 +40,9 @@ import retrofit2.Response;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Arrays;
 
 public class LoginActivity extends BaseActivity {
@@ -43,6 +51,7 @@ public class LoginActivity extends BaseActivity {
     ImageView imgFB, imgGoogle;
     Button btnLogin;
     ProgressBar progressBar;
+    LoginButton btnFacebookLogin;
 
     private static final String EMAIL = "email";
 
@@ -55,70 +64,13 @@ public class LoginActivity extends BaseActivity {
     public void doOnCreate() {
         initView();
         initListeners();
-
-        // TODO
-//        onButtonFacebookPressed();
-    }
-
-    private void onButtonFacebookPressed() {
-        CallbackManager callbackManager = CallbackManager.Factory.create();
-
-        LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
-        loginButton.setReadPermissions(Arrays.asList(EMAIL));
-        // If you are using in a fragment, call loginButton.setFragment(this);
-
-        // Callback registration
-        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                // App code
-            }
-
-            @Override
-            public void onCancel() {
-                // App code
-            }
-
-            @Override
-            public void onError(FacebookException exception) {
-                // App code
-            }
-        });
-
-        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
-
-        LoginManager.getInstance().registerCallback(callbackManager,
-                new FacebookCallback<LoginResult>() {
-                    @Override
-                    public void onSuccess(LoginResult loginResult) {
-                        // App code
-                    }
-
-                    @Override
-                    public void onCancel() {
-                        // App code
-                    }
-
-                    @Override
-                    public void onError(FacebookException exception) {
-                        // App code
-                    }
-                });
-
-        // TODO
-//        Finally, in your onActivityResult method, call callbackManager.onActivityResult
-//        to pass the login results to the LoginManager via callbackManager.
-
-        // This to check if you are already logged in
-//        AccessToken accessToken = AccessToken.getCurrentAccessToken();
-//        boolean isLoggedIn = accessToken == null;
-//        boolean isExpired = accessToken.isExpired();
     }
 
     /**
      * initialize view
      */
     private void initView() {
+        btnFacebookLogin = findViewById(R.id.btnFacebookLogin);
         txtCreateAccount = _findViewById(R.id.txtCreateAccount);
         txtPassword = _findViewById(R.id.txtPassword);
         txtRecover = _findViewById(R.id.txtRecover);
@@ -140,6 +92,13 @@ public class LoginActivity extends BaseActivity {
      * initialize listeners
      */
     private void initListeners() {
+
+        imgFB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onButtonFacebookPressed();
+            }
+        });
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,6 +126,107 @@ public class LoginActivity extends BaseActivity {
                 overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
             }
         });
+
+        btnFacebookLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onButtonFacebookPressed();
+            }
+        });
+    }
+
+    private void onButtonFacebookPressed() {
+        CallbackManager callbackManager = CallbackManager.Factory.create();
+        btnFacebookLogin.setReadPermissions(Arrays.asList(EMAIL));
+
+        // If you are using in a fragment, call loginButton.setFragment(this);
+        // Callback registration
+        btnFacebookLogin.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                GraphRequest request = GraphRequest.newMeRequest(
+                        loginResult.getAccessToken(),
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(JSONObject object, GraphResponse response) {
+                                Log.v("LoginActivity", response.toString());
+
+                                try {
+                                    String email = object.getString("email");
+                                    String birthday = object.getString("birthday"); // 01/31/1980 format
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,name,email,gender,birthday");
+                request.setParameters(parameters);
+                request.executeAsync();
+            }
+
+            @Override
+            public void onCancel() {
+                // App code
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                // App code
+            }
+        });
+
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList(
+                "public_profile", "email", "user_birthday", "user_friends"));
+
+        LoginManager.getInstance().registerCallback(callbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        // App code
+                        GraphRequest request = GraphRequest.newMeRequest(
+                                loginResult.getAccessToken(),
+                                new GraphRequest.GraphJSONObjectCallback() {
+                                    @Override
+                                    public void onCompleted(JSONObject object, GraphResponse response) {
+                                        Log.v("LoginActivity", response.toString());
+
+                                        try {
+                                            String email = object.getString("email");
+                                            String birthday = object.getString("birthday"); // 01/31/1980 format
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+                        Bundle parameters = new Bundle();
+                        parameters.putString("fields", "id,name,email,gender,birthday");
+                        request.setParameters(parameters);
+                        request.executeAsync();
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        // App code
+
+                        Toast.makeText(LoginActivity.this, "error", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(FacebookException exception) {
+                        // App code
+                        Toast.makeText(LoginActivity.this, "error" + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        // TODO
+//        Finally, in your onActivityResult method, call callbackManager.onActivityResult
+//        to pass the login results to the LoginManager via callbackManager.
+
+        // This to check if you are already logged in
+//        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+//        boolean isLoggedIn = accessToken == null;
+//        boolean isExpired = accessToken.isExpired();
     }
 
     /**
@@ -227,6 +287,7 @@ public class LoginActivity extends BaseActivity {
                     if(response.body().getStatus() == 1){
                         UserResponse userResponse = response.body();
                         StaticData.user = userResponse.getUser();
+                        AppUtils.saveUser(LoginActivity.this, userResponse.getUser());
                         Intent intent = new Intent(getApplicationContext(), MainPageActivity.class);
                         startActivity(intent);
                         finish();

@@ -12,6 +12,7 @@ import com.apploads.footwin.helpers.BaseActivity;
 import com.apploads.footwin.R;
 import com.apploads.footwin.helpers.CustomDialogClass;
 import com.apploads.footwin.helpers.StaticData;
+import com.apploads.footwin.helpers.utils.AppUtils;
 import com.apploads.footwin.helpers.utils.StringUtils;
 import com.apploads.footwin.login.LoginActivity;
 import com.apploads.footwin.login.RetrievePasswordActivity;

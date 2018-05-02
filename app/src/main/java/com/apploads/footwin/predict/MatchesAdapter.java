@@ -94,6 +94,7 @@ public class MatchesAdapter extends BaseAdapter {
             holder.viewExactScore = convertView.findViewById(R.id.viewExactScore);
             holder.txtDate = convertView.findViewById(R.id.txtDate);
             holder.btnDraw = convertView.findViewById(R.id.btnDraw);
+            holder.txtConfirm = convertView.findViewById(R.id.txtConfirm);
             holder.viewConfirm.setClickable(false);
 
             holder.txtHomeTeam.setText(match.getHomeName());
@@ -106,6 +107,49 @@ public class MatchesAdapter extends BaseAdapter {
             Picasso.with(context)
                     .load(StaticData.config.getMediaUrl()+match.getAwayFlag())
                     .into(holder.imgAwayTeam);
+
+            if("1".equals(match.getIsConfirmed())){
+                holder.viewAwayTeam.setClickable(false);
+                holder.viewHomeTeam.setClickable(false);
+                holder.viewAwayTeam.setEnabled(false);
+                holder.viewHomeTeam.setEnabled(false);
+
+
+                holder.btnDraw.setClickable(false);
+                holder.btnDraw.setEnabled(false);
+                holder.viewConfirm.setClickable(false);
+                holder.viewConfirm.setEnabled(false);
+                holder.viewConfirm.setAlpha(1f);
+                holder.txtConfirm.setText("Confirmed!");
+
+                if(match.getPredictionWinningTeam().equals(match.getHomeId())){
+                    match.setHomeToWin(true);
+                    match.setAwayToWin(false);
+                }
+
+                if(match.getPredictionWinningTeam().equals(match.getAwayId())){
+                    match.setAwayToWin(true);
+                    match.setHomeToWin(false);
+                }
+
+                if(match.isHomeToWin()){
+                    holder.imgHomeTeam.setBackgroundResource(R.drawable.selected_team_background);
+                    holder.imgHomeTeam.setAlpha(1f);
+                    holder.txtHomeTeam.setAlpha(1f);
+
+                    holder.imgAwayTeam.setBackgroundResource(0);
+                    holder.imgAwayTeam.setAlpha(0.5f);
+                    holder.txtAwayTeam.setAlpha(0.5f);
+                }else if(match.isAwayToWin()) {
+                    holder.imgAwayTeam.setBackgroundResource(R.drawable.selected_team_background);
+                    holder.imgAwayTeam.setAlpha(1f);
+                    holder.txtAwayTeam.setAlpha(1f);
+
+                    holder.imgHomeTeam.setBackgroundResource(0);
+                    holder.imgHomeTeam.setAlpha(0.5f);
+                    holder.txtHomeTeam.setAlpha(0.5f);
+                }
+            }
 
             final Animation scale_up = AnimationUtils.loadAnimation(context, R.anim.scale_up);
             final Animation scale_up_normal = AnimationUtils.loadAnimation(context, R.anim.scale_up_normal);
@@ -186,7 +230,6 @@ public class MatchesAdapter extends BaseAdapter {
             holder.viewAwayTeam.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                     if(match.isAwayToWin()){
                         holder.imgAwayTeam.setBackgroundResource(0);
                         holder.imgAwayTeam.startAnimation(scale_down_normal);
@@ -245,8 +288,13 @@ public class MatchesAdapter extends BaseAdapter {
             holder.viewConfirm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    String name =  match.isHomeToWin() ? match.getHomeName() : match.getAwayName();
-                    Toast.makeText(context, "predict " + name, Toast.LENGTH_SHORT).show();
+                    String winningTeamName =  match.isHomeToWin() ? match.getHomeName() : match.getAwayName();
+                    String winningTeamID =  match.isHomeToWin() ? match.getHomeId() : match.getAwayId();
+                    if(!match.isAwayToWin() && !match.isHomeToWin()){
+                        predictFragment.showAlert(match,"","");
+                    }else {
+                        predictFragment.showAlert(match,winningTeamID,winningTeamName);
+                    }
                 }
             });
 
@@ -263,9 +311,12 @@ public class MatchesAdapter extends BaseAdapter {
         return convertView;
     }
 
+    public void setHomeToWin(){
+
+    }
 
     public class Holder {
-        TextView txtHomeTeam, txtAwayTeam, txtDate;
+        TextView txtHomeTeam, txtAwayTeam, txtDate, txtConfirm;
         LinearLayout viewHomeTeam, viewAwayTeam, viewConfirm, viewExactScore;
         ImageView imgAwayTeam, imgHomeTeam;
         Button btnDraw;

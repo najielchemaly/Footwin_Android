@@ -3,8 +3,13 @@ package com.apploads.footwin.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class BasicResponse {
+import java.util.List;
 
+public class NotificationResponse {
+
+    @SerializedName("notifications")
+    @Expose
+    private List<Notification> notifications = null;
     @SerializedName("status")
     @Expose
     private Integer status;
@@ -12,17 +17,13 @@ public class BasicResponse {
     @Expose
     private String message;
 
-    public String getFields() {
-        return fields;
+    public List<Notification> getNotifications() {
+        return notifications;
     }
 
-    public void setFields(String fields) {
-        this.fields = fields;
+    public void setNotifications(List<Notification> notifications) {
+        this.notifications = notifications;
     }
-
-    @SerializedName("fields")
-    @Expose
-    private String fields;
 
     public Integer getStatus() {
         return status;

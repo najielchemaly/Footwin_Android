@@ -1,10 +1,15 @@
 package com.apploads.footwin.model;
 
+
+import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class BasicResponse {
+public class PredictionResponse {
 
+    @SerializedName("predictions")
+    @Expose
+    private List<Prediction> predictions = null;
     @SerializedName("status")
     @Expose
     private Integer status;
@@ -12,17 +17,13 @@ public class BasicResponse {
     @Expose
     private String message;
 
-    public String getFields() {
-        return fields;
+    public List<Prediction> getPredictions() {
+        return predictions;
     }
 
-    public void setFields(String fields) {
-        this.fields = fields;
+    public void setPredictions(List<Prediction> predictions) {
+        this.predictions = predictions;
     }
-
-    @SerializedName("fields")
-    @Expose
-    private String fields;
 
     public Integer getStatus() {
         return status;

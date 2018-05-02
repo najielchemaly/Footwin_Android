@@ -18,14 +18,21 @@
         android:textAllCaps="true"
         />
 
-    <ListView
-        android:id="@+id/listNews"
-        android:layout_width="match_parent"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refresh"
         android:layout_height="match_parent"
-        android:layout_below="@+id/txtTitle"
-        android:divider="@null"
-        android:dividerHeight="0dp"
-        />
+        android:layout_width="match_parent"
+        android:layout_below="@+id/txtTitle">
+
+        <ListView
+            android:id="@+id/listNews"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@null"
+            android:dividerHeight="0dp"
+            />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <com.github.ybq.android.spinkit.SpinKitView
         android:id="@+id/spin_kit"
@@ -34,5 +41,14 @@
         android:layout_height="70dp"
         app:SpinKit_Color="@color/white"
         android:layout_centerInParent="true"/>
+
+    <RelativeLayout
+        android:id="@+id/viewNoData"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/txtTitle"
+        android:layout_marginTop="@dimen/app_margin"
+        android:visibility="gone"
+        />
     
 </RelativeLayout>

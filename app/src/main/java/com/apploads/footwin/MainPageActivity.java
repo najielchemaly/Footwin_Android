@@ -7,15 +7,24 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.apploads.footwin.firebase.FirebaseIdService;
 import com.apploads.footwin.helpers.BaseActivity;
 import com.apploads.footwin.leaderboard.LeaderboardFragment;
 import com.apploads.footwin.news.NewsFragment;
 import com.apploads.footwin.predict.PredictFragment;
 import com.apploads.footwin.profile.ProfileFragment;
+import com.apploads.footwin.services.ApiManager;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainPageActivity extends BaseActivity {
 
@@ -30,12 +39,15 @@ public class MainPageActivity extends BaseActivity {
 
     @Override
     public void doOnCreate() {
+        FirebaseMessaging.getInstance().subscribeToTopic("/topics/footwinnews");
         BottomNavigationView bottomNavigationView = _findViewById(R.id.bottom_navigation);
 
         BottomNavigationViewHelper.removeShiftMode(bottomNavigationView);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_layout, PredictFragment.newInstance());
         transaction.commit();
+
+        sendRegistrationToServer(FirebaseInstanceId.getInstance().getToken());
 
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -87,6 +99,20 @@ public class MainPageActivity extends BaseActivity {
                         return true;
                     }
                 });
+    }
+
+    private void sendRegistrationToServer(final String token) {
+        ApiManager.getService().updateFirebaseToken(token).enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                Log.d("TOKEN UPDATED: ", token);
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+                Log.e("TOKEN ERROR: ", t.getMessage());
+            }
+        });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)

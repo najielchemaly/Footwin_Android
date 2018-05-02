@@ -56,10 +56,10 @@
                 >
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/imgHomeTeam"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
                     android:scaleType="centerCrop"
-                    android:padding="10dp"
+                    android:padding="3dp"
                     android:src="@drawable/brazil"
                     />
 
@@ -94,7 +94,7 @@
                     android:textAllCaps="true"
                     android:gravity="center"
                     android:textStyle="bold"
-                    android:text="2"
+                    android:text=""
                     android:layout_marginRight="5dp"
                     android:textColor="@color/white"
                     android:textSize="@dimen/xlarge_text" />
@@ -149,7 +149,7 @@
                     android:layout_height="30dp"
                     android:layout_marginLeft="5dp"
                     android:textAllCaps="true"
-                    android:text="2"
+                    android:text=""
                     android:gravity="center"
                     android:textColor="@color/white"
                     android:textSize="@dimen/xlarge_text" />
@@ -182,10 +182,10 @@
                 >
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/imgAwayTeam"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
                     android:scaleType="centerCrop"
-                    android:padding="10dp"
+                    android:padding="3dp"
                     android:src="@drawable/germany"
                     />
 

@@ -27,7 +27,9 @@ public class LeaderBoardAdapter extends BaseAdapter {
     public LeaderBoardAdapter(List<Leaderboard> root, Context context){
         this.root        = root;
         this.context     = context;
-        mInflater = LayoutInflater.from(context);
+        if(context != null){
+            mInflater = LayoutInflater.from(context);
+        }
     }
 
     @Override

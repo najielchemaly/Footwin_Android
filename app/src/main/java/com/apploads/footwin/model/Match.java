@@ -29,6 +29,9 @@ public class Match {
     @SerializedName("is_active")
     @Expose
     private String isActive;
+    @SerializedName("winning_team")
+    @Expose
+    private String winningTeam;
     @SerializedName("home_name")
     @Expose
     private String homeName;
@@ -50,24 +53,36 @@ public class Match {
     @SerializedName("exact_score_coins")
     @Expose
     private String exactScoreCoins;
+    @SerializedName("is_confirmed")
+    @Expose
+    private String is_confirmed;
+    @SerializedName("prediction_winning_team")
+    @Expose
+    private String predictionWinningTeam;
+    @SerializedName("prediction_home_score")
+    @Expose
+    private String predictionHomeScore;
+    @SerializedName("prediction_away_score")
+    @Expose
+    private String predictionAwayScore;
 
-    private boolean isHomeToWin;
-    private boolean isAwayToWin;
+    private boolean homeToWin;
+    private boolean awayToWin;
 
     public boolean isHomeToWin() {
-        return isHomeToWin;
+        return homeToWin;
     }
 
     public void setHomeToWin(boolean homeToWin) {
-        isHomeToWin = homeToWin;
+        this.homeToWin = homeToWin;
     }
 
     public boolean isAwayToWin() {
-        return isAwayToWin;
+        return awayToWin;
     }
 
     public void setAwayToWin(boolean awayToWin) {
-        isAwayToWin = awayToWin;
+        this.awayToWin = awayToWin;
     }
 
     public String getId() {
@@ -134,6 +149,14 @@ public class Match {
         this.isActive = isActive;
     }
 
+    public String getWinningTeam() {
+        return winningTeam;
+    }
+
+    public void setWinningTeam(String winningTeam) {
+        this.winningTeam = winningTeam;
+    }
+
     public String getHomeName() {
         return homeName;
     }
@@ -188,6 +211,38 @@ public class Match {
 
     public void setExactScoreCoins(String exactScoreCoins) {
         this.exactScoreCoins = exactScoreCoins;
+    }
+
+    public String getIsConfirmed() {
+        return is_confirmed;
+    }
+
+    public void setIsConfirmed(String isConfirmed) {
+        this.is_confirmed = isConfirmed;
+    }
+
+    public String getPredictionWinningTeam() {
+        return predictionWinningTeam;
+    }
+
+    public void setPredictionWinningTeam(String predictionWinningTeam) {
+        this.predictionWinningTeam = predictionWinningTeam;
+    }
+
+    public String getPredictionHomeScore() {
+        return predictionHomeScore;
+    }
+
+    public void setPredictionHomeScore(String predictionHomeScore) {
+        this.predictionHomeScore = predictionHomeScore;
+    }
+
+    public String getPredictionAwayScore() {
+        return predictionAwayScore;
+    }
+
+    public void setPredictionAwayScore(String predictionAwayScore) {
+        this.predictionAwayScore = predictionAwayScore;
     }
 
 }

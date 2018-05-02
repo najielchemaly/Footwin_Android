@@ -1,10 +1,14 @@
 package com.apploads.footwin.firebase;
 
 import android.util.Log;
+import android.widget.Toast;
 
+import com.apploads.footwin.helpers.StaticData;
+import com.apploads.footwin.helpers.utils.StringUtils;
 import com.apploads.footwin.services.ApiManager;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -20,7 +24,9 @@ public class FirebaseIdService extends FirebaseInstanceIdService {
         Log.d(TAG, "Refreshed token: " + refreshedToken);
 
         // TODO: Implement this method to send any registration to your app's servers.
-        sendRegistrationToServer(refreshedToken);
+        if(StringUtils.isValid(StaticData.user.getId())){
+            sendRegistrationToServer(refreshedToken);
+        }
     }
 
     /**
@@ -35,12 +41,12 @@ public class FirebaseIdService extends FirebaseInstanceIdService {
         ApiManager.getService().updateFirebaseToken(token).enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
-
+                Toast.makeText(FirebaseIdService.this, "asdasd", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(Call<Object> call, Throwable t) {
-
+                Toast.makeText(FirebaseIdService.this, "asdasd", Toast.LENGTH_SHORT).show();
             }
         });
     }
