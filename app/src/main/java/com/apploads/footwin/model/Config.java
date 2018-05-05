@@ -1,6 +1,7 @@
 package com.apploads.footwin.model;
 
 import java.util.List;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -18,15 +19,12 @@ public class Config {
     @SerializedName("base_url")
     @Expose
     private String baseUrl;
-
     @SerializedName("media_url")
     @Expose
     private String mediaUrl;
-
     @SerializedName("news_url")
     @Expose
     private String newsUrl;
-
     @SerializedName("admin_url")
     @Expose
     private String adminUrl;
@@ -36,6 +34,9 @@ public class Config {
     @SerializedName("is_app_active")
     @Expose
     private Boolean isAppActive;
+    @SerializedName("tutorial_text")
+    @Expose
+    private String tutorialText;
     @SerializedName("status")
     @Expose
     private Integer status;
@@ -113,6 +114,14 @@ public class Config {
 
     public void setIsAppActive(Boolean isAppActive) {
         this.isAppActive = isAppActive;
+    }
+
+    public String getTutorialText() {
+        return tutorialText;
+    }
+
+    public void setTutorialText(String tutorialText) {
+        this.tutorialText = tutorialText;
     }
 
     public Integer getStatus() {

@@ -24,13 +24,13 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="25dp"
                 >
-                <ImageButton
+                <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/winning_coin"
                     android:background="@android:color/transparent"
-                    android:paddingBottom="3dp"
+                    android:padding="3dp"
                     />
 
                 <TextView

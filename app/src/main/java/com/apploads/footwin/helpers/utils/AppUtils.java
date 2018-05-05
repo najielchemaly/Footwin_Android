@@ -29,11 +29,12 @@ public final class AppUtils {
 
     /**
      * for showing a native alertview with custom title and message
+     *
      * @param context do not user getapplication context , user ActivityName.this
-     * @param title title of the dialogue
+     * @param title   title of the dialogue
      * @param message message of the dialogue
      */
-    public static void showAlert(Context context, String title, String message){
+    public static void showAlert(Context context, String title, String message) {
         AlertDialog alertDialog = new AlertDialog.Builder(context).create();
         alertDialog.setTitle(title);
         alertDialog.setMessage(message);
@@ -58,5 +59,17 @@ public final class AppUtils {
         String json = gson.toJson(user);
         editor.putString(StaticData.PREFS_USER, json);
         editor.apply();
+    }
+
+    public static void setFirstLaunch(Context context) {
+        SharedPreferences.Editor editor = context.getSharedPreferences(StaticData.PREFS_NAME, Context.MODE_PRIVATE).edit();
+        editor.putBoolean("firstLaunch", true);
+        editor.apply();
+    }
+
+    public static boolean isFirstLaunch(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(StaticData.PREFS_NAME, context.MODE_PRIVATE);
+        boolean isFirstLaunch = prefs.getBoolean("firstLaunch", false);
+        return isFirstLaunch;
     }
 }
