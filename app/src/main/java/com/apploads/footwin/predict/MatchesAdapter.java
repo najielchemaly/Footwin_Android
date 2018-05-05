@@ -115,6 +115,7 @@ public class MatchesAdapter extends BaseAdapter {
                 holder.viewHomeTeam.setClickable(false);
                 holder.viewAwayTeam.setEnabled(false);
                 holder.viewHomeTeam.setEnabled(false);
+                holder.viewExactScore.setEnabled(false);
 
 
                 holder.btnDraw.setClickable(false);

@@ -57,8 +57,8 @@ public class CoinsActivity extends BaseActivity {
         viewBlackOpacity.setAlpha(0f);
         listPackages.setVisibility(View.GONE);
 
-        txtCoinsTotal.setText(StaticData.config.getActiveRound().getAllInCoins());
-        txtWinningCoinsTotal.setText(StaticData.config.getActiveRound().getWinningCoins());
+        txtCoinsTotal.setText(StaticData.user.getCoins());
+        txtWinningCoinsTotal.setText(StaticData.user.getWinningCoins());
         circularProgressBar.setProgress(30f);
     }
 
