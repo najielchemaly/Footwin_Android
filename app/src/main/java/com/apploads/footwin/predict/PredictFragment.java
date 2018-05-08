@@ -143,8 +143,12 @@ public class PredictFragment extends Fragment {
                 viewExactScore.startAnimation(top_to_bottom);
                 viewExactScore.setVisibility(View.GONE);
 
-                int homeScoreInt = Integer.parseInt(txtHomeScore.getText().toString());
-                int awayScoreInt = Integer.parseInt(txtAwayScore.getText().toString());
+                int homeScoreInt = 0;
+                int awayScoreInt = 0;
+                if(!txtHomeScore.getText().toString().equals("") && !txtAwayScore.getText().toString().equals("")){
+                     homeScoreInt = Integer.parseInt(txtHomeScore.getText().toString());
+                     awayScoreInt = Integer.parseInt(txtAwayScore.getText().toString());
+                }
 
                 if(homeScoreInt > awayScoreInt && selectedMatch.isAwayToWin()){
                     Toast.makeText(getActivity(), "You entered a score that is conficting with your prediction, set home to win", Toast.LENGTH_SHORT).show();
@@ -224,19 +228,22 @@ public class PredictFragment extends Fragment {
     private void callMatchesService() {
         ApiManager.getService().getMatches().enqueue(new Callback<Profile>() {
             @Override
-            public void onResponse(Call<Profile> call, Response<Profile> response) {
-                final Profile match = response.body();
+            public void onResponse(Call<Profile> call, final Response<Profile> response) {
+                if(response.isSuccessful()  && response.body() != null){
+                    final Profile match = response.body();
 
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        matchesAdapter = new MatchesAdapter(match.getMatches(), getContext(), PredictFragment.this);
-                        listMatches.setAdapter(matchesAdapter);
-                        progressBar.setVisibility(View.GONE);
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
 
-                    }
-                }, 2000);
+                            matchesAdapter = new MatchesAdapter(match.getMatches(), getContext(), PredictFragment.this);
+                            listMatches.setAdapter(matchesAdapter);
+                            progressBar.setVisibility(View.GONE);
+
+                        }
+                    }, 2000);
+                }
             }
 
             @Override

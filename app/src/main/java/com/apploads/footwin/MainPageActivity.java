@@ -10,10 +10,17 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.apploads.footwin.firebase.FirebaseIdService;
 import com.apploads.footwin.helpers.BaseActivity;
+import com.apploads.footwin.helpers.StaticData;
+import com.apploads.footwin.helpers.utils.AppUtils;
 import com.apploads.footwin.leaderboard.LeaderboardFragment;
 import com.apploads.footwin.news.NewsFragment;
 import com.apploads.footwin.predict.PredictFragment;
@@ -21,7 +28,9 @@ import com.apploads.footwin.profile.ProfileFragment;
 import com.apploads.footwin.services.ApiManager;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.squareup.picasso.Picasso;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -30,7 +39,13 @@ public class MainPageActivity extends BaseActivity {
 
     Fragment selectedFragment;
     boolean doubleBackToExitPressedOnce;
+    TextView txtTutorialText, txtTutorialInTitle, txtTutorialInDesc;
+    Button btnStart,btnNextStep;
+    CircleImageView imgProfile;
+    LinearLayout viewNotification, viewCoins, viewRules, viewTeam, viewExactScore;
+    RelativeLayout viewTutorial, viewSteps, viewWelcome;
     public String selectedFragmentstr = "predict";
+    int selectedView = 0;
 
     @Override
     public int getContentViewId() {
@@ -41,11 +56,93 @@ public class MainPageActivity extends BaseActivity {
     public void doOnCreate() {
         FirebaseMessaging.getInstance().subscribeToTopic("/topics/footwinnews");
         BottomNavigationView bottomNavigationView = _findViewById(R.id.bottom_navigation);
+        btnStart = _findViewById(R.id.btnStart);
+        viewTutorial = _findViewById(R.id.viewTutorial);
+        btnNextStep = _findViewById(R.id.btnNextStep);
+
+        viewWelcome = _findViewById(R.id.viewWelcome);
+        viewSteps = _findViewById(R.id.viewSteps);
+        txtTutorialText = _findViewById(R.id.txtTutorialText);
+        viewNotification = _findViewById(R.id.viewNotification);
+        viewCoins = _findViewById(R.id.viewCoins);
+        viewRules = _findViewById(R.id.viewRules);
+        viewTeam = _findViewById(R.id.viewTeam);
+        viewExactScore = _findViewById(R.id.viewExactScore);
+        txtTutorialInTitle = _findViewById(R.id.txtTutorialInTitle);
+        txtTutorialInDesc = _findViewById(R.id.txtTutorialInDesc);
+        imgProfile = _findViewById(R.id.imgProfile);
+
+        Picasso.with(MainPageActivity.this)
+                .load(StaticData.config.getMediaUrl()+StaticData.user.getAvatar())
+                .into(imgProfile);
+
+        viewNotification.setAlpha(0f);
+        viewCoins.setAlpha(0f);
+        viewRules.setAlpha(0f);
+        viewTeam.setAlpha(0f);
+        viewExactScore.setAlpha(0f);
+        viewWelcome.setVisibility(View.VISIBLE);
+        viewSteps.setVisibility(View.GONE);
 
         BottomNavigationViewHelper.removeShiftMode(bottomNavigationView);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_layout, PredictFragment.newInstance());
         transaction.commit();
+
+        txtTutorialText.setText(StaticData.config.getTutorialText());
+        if(AppUtils.isFirstLaunch(MainPageActivity.this)){
+            viewTutorial.setVisibility(View.GONE);
+        }else {
+            viewTutorial.setVisibility(View.VISIBLE);
+            AppUtils.setFirstLaunch(MainPageActivity.this);
+        }
+
+        btnStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewWelcome.setVisibility(View.GONE);
+                viewSteps.setVisibility(View.VISIBLE);
+                viewNotification.animate().alpha(1f).setDuration(500);
+            }
+        });
+
+        btnNextStep.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(selectedView == 0){
+                    viewNotification.animate().alpha(0f).setDuration(500);
+                    viewCoins.animate().alpha(1f).setDuration(500);
+
+                    txtTutorialInTitle.setText("coin stash");
+                    txtTutorialInDesc.setText("tap on the yellow coin to check your balance, and get more whenever you are out of coins");
+                    selectedView = 1;
+                }else if(selectedView == 1){
+                    viewCoins.animate().alpha(0f).setDuration(500);
+                    viewRules.animate().alpha(1f).setDuration(500);
+
+                    txtTutorialInTitle.setText("view rules");
+                    txtTutorialInDesc.setText("tap on the 'view rules' button to check the round rules");
+                    selectedView = 2;
+                }else if(selectedView == 2){
+                    viewRules.animate().alpha(0f).setDuration(500);
+                    viewTeam.animate().alpha(1f).setDuration(500);
+
+                    txtTutorialInTitle.setText("Prediction");
+                    txtTutorialInDesc.setText("tap on the team icon to predict the winning team");
+                    selectedView = 3;
+                }else if(selectedView == 3) {
+                    viewTeam.animate().alpha(0f).setDuration(500);
+                    viewExactScore.animate().alpha(1f).setDuration(500);
+
+                    txtTutorialInTitle.setText("exact score");
+                    txtTutorialInDesc.setText("tap here to predict the exact score and increase your winning coins");
+                    btnNextStep.setText("get started");
+                    selectedView = 4;
+                }else {
+                    viewTutorial.setVisibility(View.GONE);
+                }
+            }
+        });
 
         sendRegistrationToServer(FirebaseInstanceId.getInstance().getToken());
 

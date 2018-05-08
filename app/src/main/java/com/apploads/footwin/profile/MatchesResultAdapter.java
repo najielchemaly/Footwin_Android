@@ -89,12 +89,17 @@ public class MatchesResultAdapter extends BaseAdapter {
             holder.btnDraw = convertView.findViewById(R.id.btnDraw);
             holder.viewConfirm.setClickable(false);
 
+            holder.viewWinning.setVisibility(View.GONE);
+
             holder.txtHomeTeam.setText(prediction.getHomeName());
             holder.txtAwayTeam.setText(prediction.getAwayName());
             holder.txtHeaderTite.setText(prediction.getTitle());
             holder.txtHeaderDesc.setText(prediction.getDescription());
 
             if(prediction.getHomeScore().equals("-1") && prediction.getAwayScore().equals("-1")){
+                holder.txtScoreHome.setText("");
+                holder.txtScoreAway.setText("");
+            }else {
                 holder.txtScoreHome.setText(prediction.getHomeScore());
                 holder.txtScoreAway.setText(prediction.getAwayScore());
             }
@@ -118,6 +123,7 @@ public class MatchesResultAdapter extends BaseAdapter {
                 holder.imgAwayTeam.setBackgroundResource(0);
                 holder.imgAwayTeam.animate().alpha(0.5f).setDuration(1000);
                 holder.txtAwayTeam.animate().alpha(0.5f).setDuration(1000);
+                holder.btnDraw.animate().alpha(0.5f).setDuration(1000);
                 holder.imgAwayTeam.startAnimation(scale_down);
                 holder.viewConfirm.animate().alpha(1f).setDuration(1000);
                 holder.viewConfirm.setClickable(true);
@@ -130,6 +136,7 @@ public class MatchesResultAdapter extends BaseAdapter {
                 holder.imgHomeTeam.setBackgroundResource(0);
                 holder.imgHomeTeam.animate().alpha(0.5f).setDuration(1000);
                 holder.txtHomeTeam.animate().alpha(0.5f).setDuration(1000);
+                holder.btnDraw.animate().alpha(0.5f).setDuration(1000);
                 holder.imgHomeTeam.startAnimation(scale_down);
                 holder.viewConfirm.animate().alpha(1f).setDuration(1000);
                 holder.viewConfirm.setClickable(true);
@@ -145,6 +152,7 @@ public class MatchesResultAdapter extends BaseAdapter {
                 holder.imgHomeTeam.startAnimation(scale_down);
 
                 holder.viewConfirm.animate().alpha(1f).setDuration(1000);
+                holder.btnDraw.setBackgroundResource(R.color.appBlue);
                 holder.viewConfirm.setClickable(true);
             }
 

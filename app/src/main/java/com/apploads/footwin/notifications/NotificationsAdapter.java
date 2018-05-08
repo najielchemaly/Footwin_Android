@@ -80,7 +80,6 @@ public class NotificationsAdapter extends BaseAdapter {
                 .load(StaticData.config.getMediaUrl()+notification.getAwayFlag())
                 .into(imgAwayTeam);
 
-
         if(notification.getType().equals("message")){
             btnCoins.setVisibility(View.GONE);
             viewResults.setVisibility(View.GONE);
@@ -94,5 +93,4 @@ public class NotificationsAdapter extends BaseAdapter {
 
         return convertView;
     }
-
 }

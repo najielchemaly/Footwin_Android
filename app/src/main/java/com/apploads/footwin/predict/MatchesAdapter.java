@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -92,6 +93,7 @@ public class MatchesAdapter extends BaseAdapter {
             holder.imgAwayTeam = convertView.findViewById(R.id.imgAwayTeam);
             holder.viewConfirm = convertView.findViewById(R.id.viewConfirm);
             holder.viewExactScore = convertView.findViewById(R.id.viewExactScore);
+            holder.imgCheck = convertView.findViewById(R.id.imgCheck);
             holder.txtDate = convertView.findViewById(R.id.txtDate);
             holder.btnDraw = convertView.findViewById(R.id.btnDraw);
             holder.txtConfirm = convertView.findViewById(R.id.txtConfirm);
@@ -113,6 +115,7 @@ public class MatchesAdapter extends BaseAdapter {
                 holder.viewHomeTeam.setClickable(false);
                 holder.viewAwayTeam.setEnabled(false);
                 holder.viewHomeTeam.setEnabled(false);
+                holder.viewExactScore.setEnabled(false);
 
 
                 holder.btnDraw.setClickable(false);
@@ -121,6 +124,8 @@ public class MatchesAdapter extends BaseAdapter {
                 holder.viewConfirm.setEnabled(false);
                 holder.viewConfirm.setAlpha(1f);
                 holder.txtConfirm.setText("Confirmed!");
+                holder.txtConfirm.setTextColor(context.getResources().getColor(R.color.white));
+                holder.imgCheck.setColorFilter(ContextCompat.getColor(context, R.color.white), android.graphics.PorterDuff.Mode.SRC_IN);
 
                 if(match.getPredictionWinningTeam().equals(match.getHomeId())){
                     match.setHomeToWin(true);
@@ -140,6 +145,10 @@ public class MatchesAdapter extends BaseAdapter {
                     holder.imgAwayTeam.setBackgroundResource(0);
                     holder.imgAwayTeam.setAlpha(0.5f);
                     holder.txtAwayTeam.setAlpha(0.5f);
+                    holder.btnDraw.setAlpha(0.5f);
+                    holder.txtConfirm.setTextColor(context.getResources().getColor(R.color.white));
+                    holder.imgCheck.setColorFilter(ContextCompat.getColor(context, R.color.white), android.graphics.PorterDuff.Mode.SRC_IN);
+                    holder.viewConfirm.setBackgroundResource(R.drawable.circle_shape_green);
                 }else if(match.isAwayToWin()) {
                     holder.imgAwayTeam.setBackgroundResource(R.drawable.selected_team_background);
                     holder.imgAwayTeam.setAlpha(1f);
@@ -148,6 +157,25 @@ public class MatchesAdapter extends BaseAdapter {
                     holder.imgHomeTeam.setBackgroundResource(0);
                     holder.imgHomeTeam.setAlpha(0.5f);
                     holder.txtHomeTeam.setAlpha(0.5f);
+                    holder.btnDraw.setAlpha(0.5f);
+                    holder.txtConfirm.setTextColor(context.getResources().getColor(R.color.white));
+                    holder.imgCheck.setColorFilter(ContextCompat.getColor(context, R.color.white), android.graphics.PorterDuff.Mode.SRC_IN);
+                    holder.viewConfirm.setBackgroundResource(R.drawable.circle_shape_green);
+                }else {
+                    holder.imgAwayTeam.setBackgroundResource(0);
+                    holder.imgAwayTeam.setAlpha(0.5f);
+                    holder.txtAwayTeam.setAlpha(0.5f);
+
+                    holder.imgHomeTeam.setBackgroundResource(0);
+                    holder.imgHomeTeam.setAlpha(0.5f);
+                    holder.txtHomeTeam.setAlpha(0.5f);
+
+                    holder.viewConfirm.animate().alpha(1f).setDuration(600);
+                    holder.viewConfirm.setClickable(true);
+
+                    holder.txtConfirm.setTextColor(context.getResources().getColor(R.color.white));
+                    holder.btnDraw.setBackgroundResource(R.color.appBlue);
+                    holder.viewConfirm.setBackgroundResource(R.drawable.circle_shape_green);
                 }
             }
 
@@ -318,7 +346,7 @@ public class MatchesAdapter extends BaseAdapter {
     public class Holder {
         TextView txtHomeTeam, txtAwayTeam, txtDate, txtConfirm;
         LinearLayout viewHomeTeam, viewAwayTeam, viewConfirm, viewExactScore;
-        ImageView imgAwayTeam, imgHomeTeam;
+        ImageView imgAwayTeam, imgHomeTeam, imgCheck;
         Button btnDraw;
     }
 
