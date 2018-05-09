@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,6 +54,7 @@ public class PredictFragment extends Fragment {
     ProgressBar progressBar;
     Animation bottom_to_top, top_to_bottom;
     MatchesAdapter matchesAdapter;
+    SwipeRefreshLayout pullToRefresh;
 
     private String homeScore = "-1";
     private String awayScore = "-1";
@@ -97,6 +99,8 @@ public class PredictFragment extends Fragment {
         txtAwayTeam = parentView.findViewById(R.id.txtAwayTeam);
         imgHomeTeam = parentView.findViewById(R.id.imgHomeTeam);
         imgAwayTeam = parentView.findViewById(R.id.imgAwayTeam);
+        pullToRefresh = parentView.findViewById(R.id.pullToRefresh);
+
         DoubleBounce doubleBounce = new DoubleBounce();
         progressBar.setIndeterminateDrawable(doubleBounce);
 
@@ -126,6 +130,8 @@ public class PredictFragment extends Fragment {
 
     public void showExactScore(Match match) {
         viewExactScoreParent.setVisibility(View.VISIBLE);
+        btnRules.setAlpha(0.5f);
+        btnRules.setClickable(false);
         viewExactScore.startAnimation(bottom_to_top);
         selectedMatch = match;
 
@@ -159,6 +165,8 @@ public class PredictFragment extends Fragment {
             public void onClick(View view) {
                 viewExactScore.startAnimation(top_to_bottom);
                 viewExactScoreParent.setVisibility(View.GONE);
+                btnRules.setAlpha(1f);
+                btnRules.setClickable(true);
 
                 int homeScoreInt = 0;
                 int awayScoreInt = 0;
@@ -191,6 +199,8 @@ public class PredictFragment extends Fragment {
             public void onClick(View view) {
                 viewExactScore.startAnimation(top_to_bottom);
                 viewExactScoreParent.setVisibility(View.GONE);
+                btnRules.setAlpha(1f);
+                btnRules.setClickable(true);
 
                 if(mainPageActivity != null) {
                     mainPageActivity.bottomNavigationView.setVisibility(View.VISIBLE);
@@ -213,6 +223,18 @@ public class PredictFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // TODO Auto-generated method stub
+                refreshContent();
+            }
+        });
+    }
+
+    private void refreshContent(){
+        callMatchesService(true);
     }
 
     public void showAlert(final Match match, final String winningTeamID, final String winningTeamName){
@@ -251,6 +273,10 @@ public class PredictFragment extends Fragment {
     }
 
     private void callMatchesService() {
+        callMatchesService(false);
+    }
+
+    private void callMatchesService(final Boolean isRefreshing) {
         ApiManager.getService().getMatches().enqueue(new Callback<Profile>() {
             @Override
             public void onResponse(Call<Profile> call, final Response<Profile> response) {
@@ -260,6 +286,10 @@ public class PredictFragment extends Fragment {
                     if(mainPageActivity != null) {
                         Match currentMatch = match.getMatches().get(0);
                         mainPageActivity.checkTutorial(currentMatch.getHomeName(), currentMatch.getHomeFlag());
+                    }
+
+                    if(isRefreshing) {
+                        pullToRefresh.setRefreshing(false);
                     }
 
                     final Handler handler = new Handler();

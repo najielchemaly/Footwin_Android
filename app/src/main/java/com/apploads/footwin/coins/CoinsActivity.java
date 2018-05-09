@@ -95,8 +95,12 @@ public class CoinsActivity extends BaseActivity {
         ApiManager.getService().getPackages().enqueue(new Callback<PackageResponse>() {
             @Override
             public void onResponse(Call<PackageResponse> call, Response<PackageResponse> response) {
-                PackageResponse packageResponse = response.body();
-                listPackages.setAdapter(new CoinsAdapter(packageResponse.getPackages(), CoinsActivity.this));
+                try {
+                    PackageResponse packageResponse = response.body();
+                    listPackages.setAdapter(new CoinsAdapter(packageResponse.getPackages(), CoinsActivity.this));
+                } catch (Exception ex) {
+
+                }
             }
 
             @Override

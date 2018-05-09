@@ -105,8 +105,7 @@ public class MainPageActivity extends BaseActivity {
                 viewWelcome.setVisibility(View.GONE);
                 viewSteps.setVisibility(View.VISIBLE);
                 viewNotification.animate().alpha(1f).setDuration(500);
-                // TODO
-//                AppUtils.setFirstLaunch(MainPageActivity.this);
+                AppUtils.setFirstLaunch(MainPageActivity.this);
             }
         });
 

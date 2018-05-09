@@ -189,12 +189,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/viewCoins"
-                android:layout_marginLeft="@dimen/app_margin"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="30dp"
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
+                    android:layout_width="130dp"
+                    android:layout_height="130dp"
                     android:layout_marginTop="@dimen/app_margin"
                     android:clickable="true"
                     android:gravity="center"
@@ -202,18 +203,16 @@
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/imgHomeTeam"
-                        android:layout_width="90dp"
-                        android:layout_height="90dp"
-                        android:padding="3dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/brazil" />
+                        android:layout_width="110dp"
+                        android:layout_height="110dp"
+                        android:padding="1dp"
+                        android:scaleType="centerCrop" />
 
                     <TextView
                         android:id="@+id/txtHomeTeam"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="Brazil"
                         android:textAllCaps="true"
                         android:textColor="@color/white"
                         android:textSize="@dimen/medium_text" />

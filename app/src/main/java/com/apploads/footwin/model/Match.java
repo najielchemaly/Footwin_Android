@@ -68,6 +68,15 @@ public class Match {
 
     private boolean homeToWin;
     private boolean awayToWin;
+    private boolean draw;
+
+    public boolean isDraw() {
+        return draw;
+    }
+
+    public void setDraw(boolean draw) {
+        this.draw = draw;
+    }
 
     public boolean isHomeToWin() {
         return homeToWin;

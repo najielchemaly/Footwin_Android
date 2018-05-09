@@ -30,8 +30,8 @@
             android:layout_marginLeft="5dp"
             android:text="Total coins"
             android:textAllCaps="true"
-            android:textColor="@color/lightText"
-            android:textSize="@dimen/small_text"
+            android:textColor="@color/darkText"
+            android:textSize="@dimen/medium_text2"
             android:textStyle="bold" />
 
         <TextView
@@ -40,7 +40,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="5dp"
-            android:text="250"
             android:textAllCaps="true"
             android:textColor="@color/darkText"
             android:textSize="@dimen/large_text"
@@ -49,8 +48,8 @@
 
     <RelativeLayout
         android:id="@+id/relativeLayout3"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -62,21 +61,21 @@
             android:id="@+id/progress_bar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:animateProgress="true"
-            app:backgroundStrokeColor="@color/appBlue"
-            app:backgroundStrokeWidth="5dp"
-            app:drawBackgroundStroke="true"
-            app:foregroundStrokeCap="butt"
-            app:foregroundStrokeColor="@color/lightText"
-            app:foregroundStrokeWidth="5dp"
-            app:indeterminate="false"
-            app:indeterminateMinimumAngle="45"
             app:indeterminateRotationAnimationDuration="1200"
             app:indeterminateSweepAnimationDuration="600"
-            app:maximum="100"
-            app:progress="10"
+            app:foregroundStrokeColor="@color/lightText"
+            app:backgroundStrokeColor="@color/appBlue"
             app:progressAnimationDuration="2000"
-            app:startAngle="270" />
+            app:indeterminateMinimumAngle="45"
+            app:backgroundStrokeWidth="8dp"
+            app:foregroundStrokeWidth="8dp"
+            app:drawBackgroundStroke="true"
+            app:foregroundStrokeCap="butt"
+            app:animateProgress="true"
+            app:indeterminate="false"
+            app:startAngle="270"
+            app:maximum="100"
+            app:progress="10" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -92,19 +91,20 @@
                 android:src="@drawable/winning_coin" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:text="your winning coins"
                 android:textAllCaps="true"
-                android:textColor="@color/lightText"
-                android:textSize="@dimen/xsmall_text"
-                android:textStyle="bold" />
+                android:textColor="@color/darkText"
+                android:textSize="@dimen/large_text"
+                android:textStyle="bold"
+                android:lines="2"
+                android:textAlignment="center"/>
 
             <TextView
                 android:id="@+id/txtWinningCoinsTotal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2500"
                 android:textAllCaps="true"
                 android:textColor="@color/appBlue"
                 android:textSize="20sp"
@@ -130,14 +130,13 @@
             android:layout_height="wrap_content"
             android:text="collect"
             android:textAllCaps="true"
-            android:textColor="@color/lightText"
-            android:textSize="@dimen/xsmall_text" />
+            android:textColor="@color/darkText"
+            android:textSize="@dimen/medium_text2" />
 
         <TextView
             android:id="@+id/txtNextRoundCoins"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="2000 coins"
             android:textAllCaps="true"
             android:textColor="@color/appBlue"
             android:textSize="@dimen/large_text"
@@ -148,8 +147,8 @@
             android:layout_height="wrap_content"
             android:text="to advance to the next round"
             android:textAllCaps="true"
-            android:textColor="@color/lightText"
-            android:textSize="@dimen/xsmall_text"
+            android:textColor="@color/darkText"
+            android:textSize="@dimen/medium_text2"
             android:textStyle="bold" />
 
     </LinearLayout>
@@ -161,7 +160,7 @@
         android:background="@color/darkBlue"
         android:text="close"
         android:textColor="@color/white"
-        android:textSize="@dimen/medium_text"
+        android:textSize="@dimen/medium_text2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -170,7 +169,7 @@
         android:id="@+id/btnGetCoins"
         android:layout_width="170dp"
         android:layout_height="40dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="@dimen/app_margin"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:background="@color/white"
@@ -185,7 +184,7 @@
         android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="@dimen/app_margin"
         android:layout_marginEnd="@dimen/app_margin"
         android:layout_marginStart="@dimen/app_margin"
         android:gravity="center"
@@ -203,6 +202,7 @@
         android:layout_height="150dp"
         android:src="@drawable/multiple_coins"
         android:paddingTop="50dp"
+        android:layout_marginBottom="@dimen/app_margin"
         app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -221,6 +221,7 @@
           android:layout_height="wrap_content"
           android:layout_centerInParent="true"
           android:paddingLeft="@dimen/app_margin"
+          android:paddingRight="@dimen/app_margin"
           android:clipToPadding="false" />
 
        <Button
@@ -230,7 +231,7 @@
            android:background="@android:color/transparent"
            android:textAllCaps="true"
            android:textColor="@color/white"
-           android:textSize="@dimen/medium_text"
+           android:textSize="@dimen/medium_text2"
            android:textStyle="bold"
            android:text="close"
            android:layout_centerHorizontal="true"
