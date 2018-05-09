@@ -43,9 +43,10 @@ public class MatchesAdapter extends BaseAdapter {
     CountDownTimer mCountDownTimer;
 
     public MatchesAdapter(List<Match> root, Context context, PredictFragment predictFragment){
-        this.root        = root;
-        this.context     = context;
-        this.predictFragment     = predictFragment;
+        this.root = root;
+        this.context = context;
+        this.predictFragment = predictFragment;
+
         if(context != null){
             mInflater = LayoutInflater.from(context);
         }
@@ -116,14 +117,12 @@ public class MatchesAdapter extends BaseAdapter {
                 holder.viewAwayTeam.setEnabled(false);
                 holder.viewHomeTeam.setEnabled(false);
                 holder.viewExactScore.setEnabled(false);
-
-
                 holder.btnDraw.setClickable(false);
                 holder.btnDraw.setEnabled(false);
                 holder.viewConfirm.setClickable(false);
                 holder.viewConfirm.setEnabled(false);
                 holder.viewConfirm.setAlpha(1f);
-                holder.txtConfirm.setText("Confirmed!");
+                holder.txtConfirm.setText("Confirmed");
                 holder.txtConfirm.setTextColor(context.getResources().getColor(R.color.white));
                 holder.imgCheck.setColorFilter(ContextCompat.getColor(context, R.color.white), android.graphics.PorterDuff.Mode.SRC_IN);
 
@@ -141,7 +140,6 @@ public class MatchesAdapter extends BaseAdapter {
                     holder.imgHomeTeam.setBackgroundResource(R.drawable.selected_team_background);
                     holder.imgHomeTeam.setAlpha(1f);
                     holder.txtHomeTeam.setAlpha(1f);
-
                     holder.imgAwayTeam.setBackgroundResource(0);
                     holder.imgAwayTeam.setAlpha(0.5f);
                     holder.txtAwayTeam.setAlpha(0.5f);
@@ -153,7 +151,6 @@ public class MatchesAdapter extends BaseAdapter {
                     holder.imgAwayTeam.setBackgroundResource(R.drawable.selected_team_background);
                     holder.imgAwayTeam.setAlpha(1f);
                     holder.txtAwayTeam.setAlpha(1f);
-
                     holder.imgHomeTeam.setBackgroundResource(0);
                     holder.imgHomeTeam.setAlpha(0.5f);
                     holder.txtHomeTeam.setAlpha(0.5f);
@@ -165,14 +162,11 @@ public class MatchesAdapter extends BaseAdapter {
                     holder.imgAwayTeam.setBackgroundResource(0);
                     holder.imgAwayTeam.setAlpha(0.5f);
                     holder.txtAwayTeam.setAlpha(0.5f);
-
                     holder.imgHomeTeam.setBackgroundResource(0);
                     holder.imgHomeTeam.setAlpha(0.5f);
                     holder.txtHomeTeam.setAlpha(0.5f);
-
                     holder.viewConfirm.animate().alpha(1f).setDuration(600);
                     holder.viewConfirm.setClickable(true);
-
                     holder.txtConfirm.setTextColor(context.getResources().getColor(R.color.white));
                     holder.btnDraw.setBackgroundResource(R.color.appBlue);
                     holder.viewConfirm.setBackgroundResource(R.drawable.circle_shape_green);
@@ -205,7 +199,6 @@ public class MatchesAdapter extends BaseAdapter {
             mCountDownTimer = new CountDownTimer(milliseconds, 1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
-
                     startTime=startTime-1;
                     Long serverUptimeSeconds = (millisUntilFinished - startTime) / 1000;
 
@@ -222,7 +215,6 @@ public class MatchesAdapter extends BaseAdapter {
 
                 }
             }.start();
-
 
             holder.viewHomeTeam.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -242,7 +234,6 @@ public class MatchesAdapter extends BaseAdapter {
                         holder.imgHomeTeam.startAnimation(scale_up);
                         holder.imgHomeTeam.animate().alpha(1f).setDuration(600);
                         holder.txtHomeTeam.animate().alpha(1f).setDuration(600);
-
                         holder.imgAwayTeam.setBackgroundResource(0);
                         holder.imgAwayTeam.animate().alpha(0.5f).setDuration(600);
                         holder.txtAwayTeam.animate().alpha(0.5f).setDuration(600);
@@ -274,7 +265,6 @@ public class MatchesAdapter extends BaseAdapter {
                         holder.imgAwayTeam.startAnimation(scale_up);
                         holder.imgAwayTeam.animate().alpha(1f).setDuration(600);
                         holder.txtAwayTeam.animate().alpha(1f).setDuration(600);
-
                         holder.imgHomeTeam.setBackgroundResource(0);
                         holder.imgHomeTeam.animate().alpha(0.5f).setDuration(600);
                         holder.txtHomeTeam.animate().alpha(0.5f).setDuration(600);
@@ -295,23 +285,17 @@ public class MatchesAdapter extends BaseAdapter {
                     holder.imgAwayTeam.animate().alpha(0.5f).setDuration(600);
                     holder.txtAwayTeam.animate().alpha(0.5f).setDuration(600);
                     holder.imgAwayTeam.startAnimation(scale_down);
-
                     holder.imgHomeTeam.setBackgroundResource(0);
                     holder.imgHomeTeam.animate().alpha(0.5f).setDuration(600);
                     holder.txtHomeTeam.animate().alpha(0.5f).setDuration(600);
                     holder.imgHomeTeam.startAnimation(scale_down);
-
                     holder.viewConfirm.animate().alpha(1f).setDuration(600);
                     holder.viewConfirm.setClickable(true);
-
-
                     holder.btnDraw.setBackgroundResource(R.color.appBlue);
-
                     match.setAwayToWin(false);
                     match.setHomeToWin(false);
                 }
             });
-
 
             holder.viewConfirm.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -28,9 +28,8 @@
         android:id="@+id/viewTutorial"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/blackOpacityNew"
         android:layout_above="@+id/bottom_navigation"
-        >
+        android:background="@color/blackOpacityNew">
 
         <com.github.mmin18.widget.RealtimeBlurView
             android:id="@+id/viewToDismiss"
@@ -43,54 +42,46 @@
         <RelativeLayout
             android:id="@+id/viewWelcome"
             android:layout_width="match_parent"
-            android:layout_height="350dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/app_margin"
             android:layout_marginRight="@dimen/app_margin"
-            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
             android:background="@color/white"
-            android:visibility="gone"
-            >
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/txtTutorialTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/app_margin"
+                android:layout_marginTop="@dimen/app_margin"
                 android:text="welcome!"
+                android:textAllCaps="true"
                 android:textColor="@color/appBlue"
                 android:textSize="@dimen/xlarge_text"
-                android:textAllCaps="true"
-                android:textStyle="bold"
-                android:layout_marginTop="@dimen/app_margin"
-                android:layout_marginLeft="@dimen/app_margin"
-                />
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/txtTutorialText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/app_margin"
-                android:text="hello messi you are signed in to you account.
-this is your main prediction screen, we will now show you a few steps to help you get started!"
-                android:textAllCaps="true"
-                android:textSize="@dimen/medium_text"
-                android:textColor="@color/appBlue"
-                android:layout_marginRight="@dimen/app_margin"
-                android:layout_marginLeft="@dimen/app_margin"
                 android:layout_below="@+id/txtTutorialTitle"
-                />
+                android:layout_margin="@dimen/app_margin"
+                android:text=""
+                android:textColor="@color/appBlue"
+                android:textSize="@dimen/large_text" />
 
             <Button
                 android:id="@+id/btnStart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/txtTutorialText"
+                android:layout_centerHorizontal="true"
+                android:background="@android:color/transparent"
+                android:text="start the tutorial"
                 android:textAllCaps="true"
                 android:textColor="@color/appBlue"
-                android:background="@android:color/transparent"
-                android:layout_alignParentBottom="true"
-                android:text="start the tutorial"
-                android:textSize="@dimen/medium_text"
-                android:layout_centerHorizontal="true"
-                />
+                android:textSize="@dimen/large_text" />
 
         </RelativeLayout>
 
@@ -104,20 +95,16 @@ this is your main prediction screen, we will now show you a few steps to help yo
                 android:id="@+id/viewNotification"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginStart="@dimen/app_margin"
                 android:layout_marginTop="@dimen/app_margin"
-                >
+                android:orientation="horizontal">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/imgProfile"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:clickable="true"
                     android:src="@drawable/tab_profile"
-                    app:civ_border_color="@color/white"
-                    app:civ_border_overlay="true"
-                    app:civ_border_width="1dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -125,43 +112,40 @@ this is your main prediction screen, we will now show you a few steps to help yo
                     android:id="@+id/imgArrowNotification"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/arrow_helper"
+                    android:layout_marginLeft="5dp"
+                    android:padding="6dp"
                     android:rotation="180"
                     android:scaleType="centerCrop"
-                    android:padding="6dp"
-                    android:layout_marginLeft="5dp"
-                    />
+                    android:src="@drawable/arrow_helper" />
 
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/viewCoins"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/viewCoins"
-                android:orientation="horizontal"
-                android:gravity="center"
+                android:layout_alignParentRight="true"
                 android:layout_marginEnd="@dimen/app_margin"
                 android:layout_marginTop="@dimen/app_margin"
-                android:layout_alignParentRight="true"
-                >
+                android:gravity="center"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/imgArrowCoins"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/arrow_helper"
+                    android:layout_marginLeft="5dp"
+                    android:padding="6dp"
                     android:rotation="0"
                     android:scaleType="centerCrop"
-                    android:padding="6dp"
-                    android:layout_marginLeft="5dp"
-                    />
+                    android:src="@drawable/arrow_helper" />
 
                 <ImageView
                     android:id="@+id/imgCoins"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:padding="4dp"
                     android:clickable="true"
+                    android:padding="4dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/coin" />
 
@@ -171,34 +155,32 @@ this is your main prediction screen, we will now show you a few steps to help yo
                 android:id="@+id/viewRules"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="30dp"
-                android:layout_marginRight="@dimen/app_margin"
                 android:layout_alignParentRight="true"
                 android:layout_below="@+id/viewCoins"
-                >
+                android:layout_marginRight="@dimen/app_margin"
+                android:layout_marginTop="30dp"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/imgArrowRules"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/arrow_helper"
+                    android:layout_marginRight="5dp"
+                    android:padding="6dp"
                     android:rotation="0"
                     android:scaleType="centerCrop"
-                    android:padding="6dp"
-                    android:layout_marginRight="5dp"
-                    />
+                    android:src="@drawable/arrow_helper" />
 
                 <TextView
                     android:id="@+id/txtRules"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:background="@android:color/transparent"
+                    android:gravity="right|center"
                     android:text="view rules"
                     android:textAllCaps="true"
-                    android:gravity="right|center"
                     android:textColor="@color/white"
-                    android:textSize="12sp"/>
+                    android:textSize="@dimen/medium_text" />
 
             </LinearLayout>
 
@@ -206,50 +188,46 @@ this is your main prediction screen, we will now show you a few steps to help yo
                 android:id="@+id/viewTeam"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_below="@+id/viewCoins"
                 android:layout_marginLeft="@dimen/app_margin"
-                >
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:layout_marginTop="@dimen/app_margin"
-                    android:orientation="vertical"
                     android:clickable="true"
                     android:gravity="center"
-                    >
+                    android:orientation="vertical">
+
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/imgHomeTeam"
                         android:layout_width="90dp"
                         android:layout_height="90dp"
-                        android:scaleType="centerCrop"
                         android:padding="3dp"
-                        android:src="@drawable/brazil"
-                        />
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/brazil" />
 
                     <TextView
                         android:id="@+id/txtHomeTeam"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:textSize="@dimen/medium_text"
-                        android:textColor="@color/white"
                         android:text="Brazil"
                         android:textAllCaps="true"
-                        />
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/medium_text" />
 
                 </LinearLayout>
 
                 <ImageView
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/arrow_helper"
+                    android:layout_gravity="center"
+                    android:padding="6dp"
                     android:rotation="180"
                     android:scaleType="centerCrop"
-                    android:padding="6dp"
-                    android:layout_gravity="center"
-                    />
+                    android:src="@drawable/arrow_helper" />
 
             </LinearLayout>
 
@@ -257,34 +235,31 @@ this is your main prediction screen, we will now show you a few steps to help yo
                 android:id="@+id/viewTutorialText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_centerInParent="true"
                 android:gravity="center"
-                >
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/txtTutorialInTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/xlarge_text"
-                    android:textColor="@color/white"
-                    android:textAllCaps="true"
-                    android:textStyle="bold"
                     android:text="Notifications"
-                    />
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/xlarge_text"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/txtTutorialInDesc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/medium_text"
-                    android:textColor="@color/white"
-                    android:textAllCaps="true"
                     android:layout_marginLeft="30dp"
                     android:layout_marginRight="30dp"
                     android:gravity="center"
-                    android:text="Tap your image in top to access your notifications"
-                    />
+                    android:text="Tap your image on top to access your notifications"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/large_text" />
 
             </LinearLayout>
 
@@ -292,51 +267,45 @@ this is your main prediction screen, we will now show you a few steps to help yo
                 android:id="@+id/viewExactScore"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="@dimen/app_margin"
                 android:layout_below="@+id/viewTutorialText"
-                >
+                android:layout_marginTop="@dimen/app_margin"
+                android:orientation="vertical">
 
                 <ImageView
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/arrow_helper"
-                    android:rotation="90"
                     android:layout_gravity="center"
-                    android:scaleType="centerCrop"
-                    android:padding="6dp"
                     android:layout_marginLeft="5dp"
-                    />
+                    android:padding="6dp"
+                    android:rotation="90"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/arrow_helper" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:clickable="true"
                     android:layout_marginTop="@dimen/app_margin"
-                    android:layout_below="@+id/btnDraw"
                     android:background="@color/darkBlue"
-                    android:orientation="vertical"
+                    android:clickable="true"
                     android:gravity="center"
-                    >
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/small_text"
-                        android:textColor="@color/white"
                         android:layout_marginTop="5dp"
-                        android:textStyle="bold"
-                        android:text="predict the exact score"
+                        android:text="Predict the exact score"
                         android:textAllCaps="true"
-                        />
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/medium_text"
+                        android:textStyle="bold" />
 
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:src="@drawable/arrow_down"
-                        android:scaleType="centerCrop"
                         android:padding="6dp"
-                        />
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/arrow_down" />
 
                 </LinearLayout>
 
@@ -346,14 +315,13 @@ this is your main prediction screen, we will now show you a few steps to help yo
                 android:id="@+id/btnNextStep"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:background="@android:color/transparent"
+                android:text="Next Step"
                 android:textAllCaps="true"
                 android:textColor="@color/white"
-                android:background="@android:color/transparent"
-                android:layout_alignParentBottom="true"
-                android:text="Next Step"
-                android:textSize="@dimen/medium_text"
-                android:layout_centerHorizontal="true"
-                />
+                android:textSize="@dimen/large_text" />
 
         </RelativeLayout>
 

@@ -19,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.apploads.footwin.MainPageActivity;
 import com.apploads.footwin.ViewRulesActivity;
 import com.apploads.footwin.coins.CoinsActivity;
 import com.apploads.footwin.R;
@@ -47,7 +48,7 @@ public class PredictFragment extends Fragment {
     TextView txtRound, txtWinningCoinsTotal, txtCoinsTotal, txtNotificationTag, txtHomeTeam, txtAwayTeam;
     CircleImageView imgProfile, imgHomeTeam, imgAwayTeam;
     private View parentView;
-    RelativeLayout viewExactScore;
+    RelativeLayout viewExactScore, viewExactScoreParent, viewNotificationTag;
     ImageView imgCoins;
     ProgressBar progressBar;
     Animation bottom_to_top, top_to_bottom;
@@ -56,6 +57,8 @@ public class PredictFragment extends Fragment {
     private String homeScore = "-1";
     private String awayScore = "-1";
     Match selectedMatch;
+
+    MainPageActivity mainPageActivity;
 
     public static PredictFragment newInstance() {
         PredictFragment fragment = new PredictFragment();
@@ -84,6 +87,8 @@ public class PredictFragment extends Fragment {
         imgProfile = parentView.findViewById(R.id.imgProfile);
         progressBar = parentView.findViewById(R.id.spin_kit);
         viewExactScore = parentView.findViewById(R.id.viewExactScore);
+        viewExactScoreParent = parentView.findViewById(R.id.viewExactScoreParent);
+        viewNotificationTag = parentView.findViewById(R.id.viewNotificationTag);
         btnCancel = parentView.findViewById(R.id.btnCancel);
         btnConfirm = parentView.findViewById(R.id.btnConfirm);
         txtAwayScore = parentView.findViewById(R.id.txtAwayScore);
@@ -95,7 +100,7 @@ public class PredictFragment extends Fragment {
         DoubleBounce doubleBounce = new DoubleBounce();
         progressBar.setIndeterminateDrawable(doubleBounce);
 
-        viewExactScore.setVisibility(View.GONE);
+        viewExactScoreParent.setVisibility(View.GONE);
 
         Picasso.with(getActivity())
                 .load(StaticData.config.getMediaUrl() + StaticData.user.getAvatar())
@@ -108,11 +113,19 @@ public class PredictFragment extends Fragment {
         bottom_to_top = AnimationUtils.loadAnimation(getContext(), R.anim.bottom_to_top_wt);
         top_to_bottom = AnimationUtils.loadAnimation(getContext(), R.anim.top_to_bottom_wt);
 
+        if(txtNotificationTag.getText().toString().isEmpty()) {
+            viewNotificationTag.setVisibility(View.INVISIBLE);
+        }
+
+        if(getActivity().getClass().equals(MainPageActivity.class)) {
+            mainPageActivity = (MainPageActivity)getActivity();
+        }
+
         callMatchesService();
     }
 
     public void showExactScore(Match match) {
-        viewExactScore.setVisibility(View.VISIBLE);
+        viewExactScoreParent.setVisibility(View.VISIBLE);
         viewExactScore.startAnimation(bottom_to_top);
         selectedMatch = match;
 
@@ -126,6 +139,10 @@ public class PredictFragment extends Fragment {
         Picasso.with(getActivity())
                 .load(StaticData.config.getMediaUrl()+match.getAwayFlag())
                 .into(imgAwayTeam);
+
+        if(mainPageActivity != null) {
+            mainPageActivity.bottomNavigationView.setVisibility(View.GONE);
+        }
     }
 
     private void initListeners() {
@@ -141,7 +158,7 @@ public class PredictFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 viewExactScore.startAnimation(top_to_bottom);
-                viewExactScore.setVisibility(View.GONE);
+                viewExactScoreParent.setVisibility(View.GONE);
 
                 int homeScoreInt = 0;
                 int awayScoreInt = 0;
@@ -162,6 +179,10 @@ public class PredictFragment extends Fragment {
                     homeScore = txtHomeScore.getText().toString();
                     awayScore = txtAwayScore.getText().toString();
                 }
+
+                if(mainPageActivity != null) {
+                    mainPageActivity.bottomNavigationView.setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -169,7 +190,11 @@ public class PredictFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 viewExactScore.startAnimation(top_to_bottom);
-                viewExactScore.setVisibility(View.GONE);
+                viewExactScoreParent.setVisibility(View.GONE);
+
+                if(mainPageActivity != null) {
+                    mainPageActivity.bottomNavigationView.setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -219,7 +244,7 @@ public class PredictFragment extends Fragment {
             }
         }, false);
 
-        dialogClass.setTitle("Title");
+        dialogClass.setTitle("FOOTWIN");
         dialogClass.setMessage("Are you sure you want to confirm you prediction ?");
         dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialogClass.show();
@@ -232,15 +257,18 @@ public class PredictFragment extends Fragment {
                 if(response.isSuccessful()  && response.body() != null){
                     final Profile match = response.body();
 
+                    if(mainPageActivity != null) {
+                        Match currentMatch = match.getMatches().get(0);
+                        mainPageActivity.checkTutorial(currentMatch.getHomeName(), currentMatch.getHomeFlag());
+                    }
+
                     final Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-
                             matchesAdapter = new MatchesAdapter(match.getMatches(), getContext(), PredictFragment.this);
                             listMatches.setAdapter(matchesAdapter);
                             progressBar.setVisibility(View.GONE);
-
                         }
                     }, 2000);
                 }
