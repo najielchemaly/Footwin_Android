@@ -38,7 +38,8 @@ public class CoinsAdapter extends RecyclerView.Adapter<CoinsViewHolder> {
 
         holder.txtTitle.setText(aPackage.getTitle());
         holder.txtDesc.setText(aPackage.getDescription());
-        holder.txtCoins.setText(aPackage.getCoins());
+        holder.txtCoins.setText(aPackage.getCoins() + " COINS");
+        holder.txtPrice.setText(aPackage.getPrice() + " $");
 
     }
 
@@ -51,7 +52,7 @@ public class CoinsAdapter extends RecyclerView.Adapter<CoinsViewHolder> {
 
 class CoinsViewHolder extends RecyclerView.ViewHolder {
 
-    TextView txtTitle, txtDesc, txtCoins;
+    TextView txtTitle, txtDesc, txtCoins, txtPrice;
     Button btnGetCoins;
 
     public CoinsViewHolder(View itemLayoutView) {
@@ -60,6 +61,7 @@ class CoinsViewHolder extends RecyclerView.ViewHolder {
         txtTitle = itemLayoutView.findViewById(R.id.txtTitle);
         txtDesc = itemLayoutView.findViewById(R.id.txtDesc);
         txtCoins = itemLayoutView.findViewById(R.id.txtCoins);
+        txtPrice = itemLayoutView.findViewById(R.id.txtPrice);
         btnGetCoins = itemLayoutView.findViewById(R.id.btnGetCoins);
     }
 }

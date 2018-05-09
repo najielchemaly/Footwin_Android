@@ -39,13 +39,15 @@ public class MainPageActivity extends BaseActivity {
 
     Fragment selectedFragment;
     boolean doubleBackToExitPressedOnce;
-    TextView txtTutorialText, txtTutorialInTitle, txtTutorialInDesc;
+    TextView txtTutorialText, txtTutorialInTitle, txtTutorialInDesc, txtHomeTeam;
     Button btnStart,btnNextStep;
-    CircleImageView imgProfile;
+    CircleImageView imgProfile, imgHomeTeam;
     LinearLayout viewNotification, viewCoins, viewRules, viewTeam, viewExactScore;
     RelativeLayout viewTutorial, viewSteps, viewWelcome;
     public String selectedFragmentstr = "predict";
     int selectedView = 0;
+
+    public BottomNavigationView bottomNavigationView;
 
     @Override
     public int getContentViewId() {
@@ -55,7 +57,7 @@ public class MainPageActivity extends BaseActivity {
     @Override
     public void doOnCreate() {
         FirebaseMessaging.getInstance().subscribeToTopic("/topics/footwinnews");
-        BottomNavigationView bottomNavigationView = _findViewById(R.id.bottom_navigation);
+        bottomNavigationView = _findViewById(R.id.bottom_navigation);
         btnStart = _findViewById(R.id.btnStart);
         viewTutorial = _findViewById(R.id.viewTutorial);
         btnNextStep = _findViewById(R.id.btnNextStep);
@@ -70,7 +72,9 @@ public class MainPageActivity extends BaseActivity {
         viewExactScore = _findViewById(R.id.viewExactScore);
         txtTutorialInTitle = _findViewById(R.id.txtTutorialInTitle);
         txtTutorialInDesc = _findViewById(R.id.txtTutorialInDesc);
+        txtHomeTeam = _findViewById(R.id.txtHomeTeam);
         imgProfile = _findViewById(R.id.imgProfile);
+        imgHomeTeam = _findViewById(R.id.imgHomeTeam);
 
         Picasso.with(MainPageActivity.this)
                 .load(StaticData.config.getMediaUrl()+StaticData.user.getAvatar())
@@ -82,6 +86,7 @@ public class MainPageActivity extends BaseActivity {
         viewTeam.setAlpha(0f);
         viewExactScore.setAlpha(0f);
         viewWelcome.setVisibility(View.VISIBLE);
+        viewTutorial.setVisibility(View.GONE);
         viewSteps.setVisibility(View.GONE);
 
         BottomNavigationViewHelper.removeShiftMode(bottomNavigationView);
@@ -89,13 +94,10 @@ public class MainPageActivity extends BaseActivity {
         transaction.replace(R.id.frame_layout, PredictFragment.newInstance());
         transaction.commit();
 
-        txtTutorialText.setText(StaticData.config.getTutorialText());
-        if(AppUtils.isFirstLaunch(MainPageActivity.this)){
-            viewTutorial.setVisibility(View.GONE);
-        }else {
-            viewTutorial.setVisibility(View.VISIBLE);
-            AppUtils.setFirstLaunch(MainPageActivity.this);
-        }
+        String tutorialText = "Hello ".toUpperCase() +
+                StaticData.user.getUsername() + ", " +
+                StaticData.config.getTutorialText().toUpperCase();
+        txtTutorialText.setText(tutorialText);
 
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,6 +105,7 @@ public class MainPageActivity extends BaseActivity {
                 viewWelcome.setVisibility(View.GONE);
                 viewSteps.setVisibility(View.VISIBLE);
                 viewNotification.animate().alpha(1f).setDuration(500);
+                AppUtils.setFirstLaunch(MainPageActivity.this);
             }
         });
 
@@ -140,6 +143,7 @@ public class MainPageActivity extends BaseActivity {
                     selectedView = 4;
                 }else {
                     viewTutorial.setVisibility(View.GONE);
+                    bottomNavigationView.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -210,6 +214,22 @@ public class MainPageActivity extends BaseActivity {
                 Log.e("TOKEN ERROR: ", t.getMessage());
             }
         });
+    }
+
+    public void checkTutorial(String teamName, String teamFlag) {
+        if(AppUtils.isFirstLaunch(MainPageActivity.this)){
+            viewTutorial.setVisibility(View.GONE);
+            bottomNavigationView.setVisibility(View.VISIBLE);
+        }else {
+            viewTutorial.setVisibility(View.VISIBLE);
+            bottomNavigationView.setVisibility(View.GONE);
+
+            txtHomeTeam.setText(teamName);
+
+            Picasso.with(this)
+                    .load(StaticData.config.getMediaUrl()+teamFlag)
+                    .into(imgHomeTeam);
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)

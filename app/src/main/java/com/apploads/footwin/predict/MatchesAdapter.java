@@ -43,9 +43,10 @@ public class MatchesAdapter extends BaseAdapter {
     CountDownTimer mCountDownTimer;
 
     public MatchesAdapter(List<Match> root, Context context, PredictFragment predictFragment){
-        this.root        = root;
-        this.context     = context;
-        this.predictFragment     = predictFragment;
+        this.root = root;
+        this.context = context;
+        this.predictFragment = predictFragment;
+
         if(context != null){
             mInflater = LayoutInflater.from(context);
         }
@@ -116,14 +117,12 @@ public class MatchesAdapter extends BaseAdapter {
                 holder.viewAwayTeam.setEnabled(false);
                 holder.viewHomeTeam.setEnabled(false);
                 holder.viewExactScore.setEnabled(false);
-
-
                 holder.btnDraw.setClickable(false);
                 holder.btnDraw.setEnabled(false);
                 holder.viewConfirm.setClickable(false);
                 holder.viewConfirm.setEnabled(false);
                 holder.viewConfirm.setAlpha(1f);
-                holder.txtConfirm.setText("Confirmed!");
+                holder.txtConfirm.setText("Confirmed");
                 holder.txtConfirm.setTextColor(context.getResources().getColor(R.color.white));
                 holder.imgCheck.setColorFilter(ContextCompat.getColor(context, R.color.white), android.graphics.PorterDuff.Mode.SRC_IN);
 
@@ -141,7 +140,6 @@ public class MatchesAdapter extends BaseAdapter {
                     holder.imgHomeTeam.setBackgroundResource(R.drawable.selected_team_background);
                     holder.imgHomeTeam.setAlpha(1f);
                     holder.txtHomeTeam.setAlpha(1f);
-
                     holder.imgAwayTeam.setBackgroundResource(0);
                     holder.imgAwayTeam.setAlpha(0.5f);
                     holder.txtAwayTeam.setAlpha(0.5f);
@@ -153,7 +151,6 @@ public class MatchesAdapter extends BaseAdapter {
                     holder.imgAwayTeam.setBackgroundResource(R.drawable.selected_team_background);
                     holder.imgAwayTeam.setAlpha(1f);
                     holder.txtAwayTeam.setAlpha(1f);
-
                     holder.imgHomeTeam.setBackgroundResource(0);
                     holder.imgHomeTeam.setAlpha(0.5f);
                     holder.txtHomeTeam.setAlpha(0.5f);
@@ -165,14 +162,11 @@ public class MatchesAdapter extends BaseAdapter {
                     holder.imgAwayTeam.setBackgroundResource(0);
                     holder.imgAwayTeam.setAlpha(0.5f);
                     holder.txtAwayTeam.setAlpha(0.5f);
-
                     holder.imgHomeTeam.setBackgroundResource(0);
                     holder.imgHomeTeam.setAlpha(0.5f);
                     holder.txtHomeTeam.setAlpha(0.5f);
-
-                    holder.viewConfirm.animate().alpha(1f).setDuration(600);
+                    holder.viewConfirm.animate().alpha(1f).setDuration(300);
                     holder.viewConfirm.setClickable(true);
-
                     holder.txtConfirm.setTextColor(context.getResources().getColor(R.color.white));
                     holder.btnDraw.setBackgroundResource(R.color.appBlue);
                     holder.viewConfirm.setBackgroundResource(R.drawable.circle_shape_green);
@@ -180,8 +174,10 @@ public class MatchesAdapter extends BaseAdapter {
             }
 
             final Animation scale_up = AnimationUtils.loadAnimation(context, R.anim.scale_up);
+            final Animation scale_up_init = AnimationUtils.loadAnimation(context, R.anim.scale_up_init);
             final Animation scale_up_normal = AnimationUtils.loadAnimation(context, R.anim.scale_up_normal);
             final Animation scale_down = AnimationUtils.loadAnimation(context, R.anim.scale_down);
+            final Animation scale_down_init = AnimationUtils.loadAnimation(context, R.anim.scale_down_init);
             final Animation scale_down_normal = AnimationUtils.loadAnimation(context, R.anim.scale_down_normal);
 
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -205,7 +201,6 @@ public class MatchesAdapter extends BaseAdapter {
             mCountDownTimer = new CountDownTimer(milliseconds, 1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
-
                     startTime=startTime-1;
                     Long serverUptimeSeconds = (millisUntilFinished - startTime) / 1000;
 
@@ -223,34 +218,41 @@ public class MatchesAdapter extends BaseAdapter {
                 }
             }.start();
 
-
             holder.viewHomeTeam.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if(match.isHomeToWin()){
                         holder.imgHomeTeam.setBackgroundResource(0);
                         holder.imgHomeTeam.startAnimation(scale_down_normal);
-                        holder.imgAwayTeam.animate().alpha(1f).setDuration(600);
-                        holder.txtAwayTeam.animate().alpha(1f).setDuration(600);
-                        holder.viewConfirm.animate().alpha(0f).setDuration(600);
+                        holder.imgAwayTeam.animate().alpha(1f).setDuration(300);
+                        holder.txtAwayTeam.animate().alpha(1f).setDuration(300);
+                        holder.viewConfirm.animate().alpha(0f).setDuration(300);
                         holder.viewConfirm.setClickable(false);
                         holder.imgAwayTeam.startAnimation(scale_up_normal);
                         match.setHomeToWin(false);
                         match.setAwayToWin(false);
                     }else {
                         holder.imgHomeTeam.setBackgroundResource(R.drawable.selected_team_background);
-                        holder.imgHomeTeam.startAnimation(scale_up);
-                        holder.imgHomeTeam.animate().alpha(1f).setDuration(600);
-                        holder.txtHomeTeam.animate().alpha(1f).setDuration(600);
-
+                        if(match.isDraw()) {
+                            holder.imgHomeTeam.startAnimation(scale_up);
+                        } else if(match.isAwayToWin()) {
+                            holder.imgHomeTeam.startAnimation(scale_up);
+                            holder.imgAwayTeam.startAnimation(scale_down);
+                        } else {
+                            holder.imgHomeTeam.startAnimation(scale_up_init);
+                            holder.imgAwayTeam.startAnimation(scale_down_init);
+                        }
+                        holder.imgHomeTeam.animate().alpha(1f).setDuration(300);
+                        holder.txtHomeTeam.animate().alpha(1f).setDuration(300);
                         holder.imgAwayTeam.setBackgroundResource(0);
-                        holder.imgAwayTeam.animate().alpha(0.5f).setDuration(600);
-                        holder.txtAwayTeam.animate().alpha(0.5f).setDuration(600);
-                        holder.imgAwayTeam.startAnimation(scale_down);
-                        holder.viewConfirm.animate().alpha(1f).setDuration(600);
+                        holder.imgAwayTeam.animate().alpha(0.5f).setDuration(300);
+                        holder.txtAwayTeam.animate().alpha(0.5f).setDuration(300);
+                        holder.viewConfirm.animate().alpha(1f).setDuration(300);
                         holder.viewConfirm.setClickable(true);
+                        holder.btnDraw.setBackgroundResource(R.drawable.retangle_white_border);
                         match.setHomeToWin(true);
                         match.setAwayToWin(false);
+                        match.setDraw(false);
                     }
             }
             });
@@ -261,29 +263,36 @@ public class MatchesAdapter extends BaseAdapter {
                     if(match.isAwayToWin()){
                         holder.imgAwayTeam.setBackgroundResource(0);
                         holder.imgAwayTeam.startAnimation(scale_down_normal);
-                        holder.imgHomeTeam.animate().alpha(1f).setDuration(600);
-                        holder.txtHomeTeam.animate().alpha(1f).setDuration(600);
+                        holder.imgHomeTeam.animate().alpha(1f).setDuration(300);
+                        holder.txtHomeTeam.animate().alpha(1f).setDuration(300);
                         holder.imgHomeTeam.startAnimation(scale_up_normal);
-                        holder.viewConfirm.animate().alpha(0f).setDuration(600);
+                        holder.viewConfirm.animate().alpha(0f).setDuration(300);
                         holder.viewConfirm.setClickable(false);
                         holder.btnDraw.setBackgroundResource(R.drawable.retangle_white_border);
                         match.setAwayToWin(false);
                         match.setHomeToWin(false);
                     }else {
                         holder.imgAwayTeam.setBackgroundResource(R.drawable.selected_team_background);
-                        holder.imgAwayTeam.startAnimation(scale_up);
-                        holder.imgAwayTeam.animate().alpha(1f).setDuration(600);
-                        holder.txtAwayTeam.animate().alpha(1f).setDuration(600);
-
+                        if(match.isDraw()) {
+                            holder.imgAwayTeam.startAnimation(scale_up);
+                        } else if(match.isHomeToWin()) {
+                            holder.imgAwayTeam.startAnimation(scale_up);
+                            holder.imgHomeTeam.startAnimation(scale_down);
+                        } else {
+                            holder.imgAwayTeam.startAnimation(scale_up_init);
+                            holder.imgHomeTeam.startAnimation(scale_down_init);
+                        }
+                        holder.imgAwayTeam.animate().alpha(1f).setDuration(300);
+                        holder.txtAwayTeam.animate().alpha(1f).setDuration(300);
                         holder.imgHomeTeam.setBackgroundResource(0);
-                        holder.imgHomeTeam.animate().alpha(0.5f).setDuration(600);
-                        holder.txtHomeTeam.animate().alpha(0.5f).setDuration(600);
-                        holder.imgHomeTeam.startAnimation(scale_down);
-                        holder.viewConfirm.animate().alpha(1f).setDuration(600);
+                        holder.imgHomeTeam.animate().alpha(0.5f).setDuration(300);
+                        holder.txtHomeTeam.animate().alpha(0.5f).setDuration(300);
+                        holder.viewConfirm.animate().alpha(1f).setDuration(300);
                         holder.viewConfirm.setClickable(true);
                         holder.btnDraw.setBackgroundResource(R.drawable.retangle_white_border);
                         match.setAwayToWin(true);
                         match.setHomeToWin(false);
+                        match.setDraw(false);
                     }
                 }
             });
@@ -291,27 +300,45 @@ public class MatchesAdapter extends BaseAdapter {
             holder.btnDraw.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    holder.imgAwayTeam.setBackgroundResource(0);
-                    holder.imgAwayTeam.animate().alpha(0.5f).setDuration(600);
-                    holder.txtAwayTeam.animate().alpha(0.5f).setDuration(600);
-                    holder.imgAwayTeam.startAnimation(scale_down);
-
-                    holder.imgHomeTeam.setBackgroundResource(0);
-                    holder.imgHomeTeam.animate().alpha(0.5f).setDuration(600);
-                    holder.txtHomeTeam.animate().alpha(0.5f).setDuration(600);
-                    holder.imgHomeTeam.startAnimation(scale_down);
-
-                    holder.viewConfirm.animate().alpha(1f).setDuration(600);
-                    holder.viewConfirm.setClickable(true);
-
-
-                    holder.btnDraw.setBackgroundResource(R.color.appBlue);
-
-                    match.setAwayToWin(false);
-                    match.setHomeToWin(false);
+                    if(match.isDraw()) {
+                        holder.imgHomeTeam.setBackgroundResource(0);
+                        holder.imgHomeTeam.animate().alpha(1f).setDuration(300);
+                        holder.imgHomeTeam.animate().alpha(1f).setDuration(300);
+                        holder.imgHomeTeam.startAnimation(scale_up_normal);
+                        holder.imgAwayTeam.setBackgroundResource(0);
+                        holder.imgAwayTeam.animate().alpha(1f).setDuration(300);
+                        holder.txtAwayTeam.animate().alpha(1f).setDuration(300);
+                        holder.imgAwayTeam.startAnimation(scale_up_normal);
+                        holder.viewConfirm.animate().alpha(0f).setDuration(300);
+                        holder.viewConfirm.setClickable(false);
+                        holder.btnDraw.setBackgroundResource(R.drawable.retangle_white_border);
+                        match.setHomeToWin(false);
+                        match.setAwayToWin(false);
+                        match.setDraw(false);
+                    } else {
+                        holder.imgHomeTeam.setBackgroundResource(0);
+                        holder.imgHomeTeam.animate().alpha(0.5f).setDuration(300);
+                        holder.txtHomeTeam.animate().alpha(0.5f).setDuration(300);
+                        holder.imgAwayTeam.setBackgroundResource(0);
+                        holder.imgAwayTeam.animate().alpha(0.5f).setDuration(300);
+                        holder.txtAwayTeam.animate().alpha(0.5f).setDuration(300);
+                        holder.viewConfirm.animate().alpha(1f).setDuration(300);
+                        if(match.isHomeToWin()) {
+                            holder.imgHomeTeam.startAnimation(scale_down);
+                        } else if(match.isAwayToWin()) {
+                            holder.imgAwayTeam.startAnimation(scale_down);
+                        } else {
+                            holder.imgAwayTeam.startAnimation(scale_down_init);
+                            holder.imgHomeTeam.startAnimation(scale_down_init);
+                        }
+                        holder.viewConfirm.setClickable(true);
+                        holder.btnDraw.setBackgroundResource(R.color.appBlue);
+                        match.setAwayToWin(false);
+                        match.setHomeToWin(false);
+                        match.setDraw(true);
+                    }
                 }
             });
-
 
             holder.viewConfirm.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -321,7 +348,7 @@ public class MatchesAdapter extends BaseAdapter {
                     if(!match.isAwayToWin() && !match.isHomeToWin()){
                         predictFragment.showAlert(match,"0","");
                     }else {
-                        predictFragment.showAlert(match,winningTeamID,winningTeamName);
+                        predictFragment.showAlert(match, winningTeamID, winningTeamName);
                     }
                 }
             });

@@ -13,13 +13,9 @@
         <item name="android:listPreferredItemHeightSmall">0dp</item><!-- item size in menu-->
     </style>
 
-    <style name="Theme.Transparent" parent="android:Theme.Translucent.NoTitleBar.Fullscreen">
+    <style name="Theme.Transparent" parent="android:Theme.Translucent.NoTitleBar">
         <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowIsFloating">true</item>
-        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowBackground">@color/blackOpacityNew</item>
     </style>
 
     <style name="DialogAnimation">
