@@ -6,26 +6,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.apploads.footwin.helpers.BaseActivity;
 import com.apploads.footwin.R;
 import com.apploads.footwin.helpers.CustomDialogClass;
 import com.apploads.footwin.helpers.StaticData;
-import com.apploads.footwin.helpers.utils.AppUtils;
 import com.apploads.footwin.helpers.utils.StringUtils;
 import com.apploads.footwin.login.LoginActivity;
-import com.apploads.footwin.login.RetrievePasswordActivity;
-import com.apploads.footwin.model.UserResponse;
-import com.apploads.footwin.services.ApiManager;
+import com.apploads.footwin.model.User;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.ybs.countrypicker.CountryPicker;
 import com.ybs.countrypicker.CountryPickerListener;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 
 public class SignupStepTwo extends BaseActivity {
     Button btnCancel;
@@ -137,23 +128,21 @@ public class SignupStepTwo extends BaseActivity {
     }
 
     private void registerUser(){
-        ApiManager.getService(true).registerUser(txtFullname.getText().toString() ,txtUsername.getText().toString()
-                ,txtEmail.getText().toString(),txtPassword.getText().toString(),txtPhoneCode.getText().toString()
-                ,txtMobile.getText().toString(),spinnerGender.getText().toString().toLowerCase(),
-                 txtCountry.getText().toString(), StaticData.favTeam.getId()).enqueue(new Callback<UserResponse>() {
-            @Override
-            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
-                UserResponse userResponse = response.body();
-                StaticData.user = userResponse.getUser();
-                Intent intent = new Intent(getApplicationContext(), SignupStepThree.class);
-                startActivity(intent);
-            }
 
-            @Override
-            public void onFailure(Call<UserResponse> call, Throwable t) {
-                Toast.makeText(SignupStepTwo.this, "test", Toast.LENGTH_SHORT).show();
-            }
-        });
+        User user = new User();
+        user.setFullname(txtFullname.getText().toString());
+        user.setUsername(txtUsername.getText().toString());
+        user.setEmail(txtEmail.getText().toString());
+        user.setPhoneCode(txtPhoneCode.getText().toString());
+        user.setPhone(txtMobile.getText().toString());
+        user.setCountry(txtCountry.getText().toString());
+        user.setFavoriteTeam(StaticData.favTeam.getId());
+        user.setGender(spinnerGender.getText().toString().toLowerCase());
+
+        Intent intent = new Intent(getApplicationContext(), SignupStepThree.class);
+        intent.putExtra("password", txtPassword.getText().toString());
+        intent.putExtra("user", user);
+        startActivity(intent);
     }
 
     @Override

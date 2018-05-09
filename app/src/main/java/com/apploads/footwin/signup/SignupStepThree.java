@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
@@ -19,6 +20,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,13 +28,20 @@ import android.widget.Toast;
 import com.apploads.footwin.helpers.BaseActivity;
 import com.apploads.footwin.MainPageActivity;
 import com.apploads.footwin.R;
+import com.apploads.footwin.helpers.CustomDialogClass;
 import com.apploads.footwin.helpers.StaticData;
 import com.apploads.footwin.helpers.Utility;
 import com.apploads.footwin.helpers.utils.AppUtils;
 import com.apploads.footwin.login.LoginActivity;
+import com.apploads.footwin.login.RetrievePasswordActivity;
+import com.apploads.footwin.model.Article;
 import com.apploads.footwin.model.User;
+import com.apploads.footwin.model.UserResponse;
 import com.apploads.footwin.services.ApiManager;
+import com.budiyev.android.circularprogressbar.CircularProgressBar;
+import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.google.gson.internal.LinkedTreeMap;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -59,11 +68,15 @@ public class SignupStepThree extends BaseActivity {
     TextView txtBack;
     ImageView imgCamera;
     Bitmap bitmap;
+    User user = new User();
+    String password;
+    boolean isImageSet;
+    ProgressBar progressBar;
+    RelativeLayout viewLoading;
 
     private File destination = null;
     private InputStream inputStreamImg;
     private String imgPath = null;
-    public String userChoosenTask;
     private final int PICK_IMAGE_CAMERA = 1, PICK_IMAGE_GALLERY = 2, REQUEST_READ_EXTERNAL_STORAGE = 3;
 
     @Override
@@ -81,12 +94,28 @@ public class SignupStepThree extends BaseActivity {
      * initialize view
      */
     private void initView() {
+
+        Intent intent = getIntent();
+        Bundle b = intent.getExtras();
+
+        if (b != null) {
+            user = (User) b.getSerializable("user");
+            password = b.getString("password");
+        }
+
         viewContinue = _findViewById(R.id.viewContinue);
         imgAddImage = _findViewById(R.id.imgAddImage);
         txtBack = _findViewById(R.id.txtBack);
         btnCancel = _findViewById(R.id.btnCancel);
         imgCamera = _findViewById(R.id.imgCamera);
+        progressBar = _findViewById(R.id.spin_kit);
+        viewLoading = _findViewById(R.id.viewLoading);
         imgCamera.setVisibility(View.GONE);
+        viewLoading.setVisibility(View.GONE);
+
+        DoubleBounce doubleBounce = new DoubleBounce();
+        progressBar.setIndeterminateDrawable(doubleBounce);
+        progressBar.setVisibility(View.GONE);
 
         Animation scaleDown = AnimationUtils.loadAnimation(SignupStepThree.this, R.anim.scale_up);
         imgAddImage.startAnimation(scaleDown);
@@ -106,10 +135,26 @@ public class SignupStepThree extends BaseActivity {
         viewContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateAvatar();
-                Intent intent = new Intent(getApplicationContext(), MainPageActivity.class);
-                startActivity(intent);
-                finish();
+                if(isImageSet){
+                    progressBar.setVisibility(View.VISIBLE);
+                    registerUser();
+                }else {
+                    CustomDialogClass dialogClass = new CustomDialogClass(SignupStepThree.this, new CustomDialogClass.AbstractCustomDialogListener() {
+                        @Override
+                        public void onConfirm(CustomDialogClass.DialogResponse response) {
+                            response.getDialog().dismiss();
+                        }
+
+                        @Override
+                        public void onCancel(CustomDialogClass.DialogResponse dialogResponse) {
+                        }
+                    }, true);
+
+                    dialogClass.setTitle("Oops");
+                    dialogClass.setMessage("Make sure you enter a profile picture");
+                    dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                    dialogClass.show();
+                }
             }
         });
 
@@ -232,6 +277,7 @@ public class SignupStepThree extends BaseActivity {
 
                 imgPath = destination.getAbsolutePath();
                 imgAddImage.setImageBitmap(bitmap);
+                isImageSet = true;
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -247,11 +293,32 @@ public class SignupStepThree extends BaseActivity {
                     imgPath = getRealPathFromURI(selectedImage);
                     destination = new File(imgPath.toString());
                     imgAddImage.setImageBitmap(bitmap);
+                    isImageSet = true;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void registerUser(){
+        ApiManager.getService(true).registerUser(user.getFullname() ,user.getUsername()
+                ,user.getEmail(),password, user.getPhoneCode()
+                ,user.getPhone(),user.getGender(),
+               user.getCountry(), user.getFavoriteTeam()).enqueue(new Callback<UserResponse>() {
+            @Override
+            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                UserResponse userResponse = response.body();
+                StaticData.user = userResponse.getUser();
+                updateAvatar();
+            }
+
+            @Override
+            public void onFailure(Call<UserResponse> call, Throwable t) {
+                Toast.makeText(SignupStepThree.this, "Something went wrong! please try again later", Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
+            }
+        });
     }
 
     private void updateAvatar() {
@@ -267,6 +334,10 @@ public class SignupStepThree extends BaseActivity {
                     User user = StaticData.user;
                     user.setAvatar(avatar);
                     AppUtils.saveUser(SignupStepThree.this, user);
+                    progressBar.setVisibility(View.GONE);
+                    Intent intent = new Intent(getApplicationContext(), MainPageActivity.class);
+                    startActivity(intent);
+                    finish();
                 } catch (Exception ex) {
                     Log.d("", ex.getLocalizedMessage());
                 }
@@ -275,6 +346,7 @@ public class SignupStepThree extends BaseActivity {
             @Override
             public void onFailure(Call<Object> call, Throwable t) {
                 Log.d("", t.getMessage());
+                progressBar.setVisibility(View.GONE);
             }
         });
     }

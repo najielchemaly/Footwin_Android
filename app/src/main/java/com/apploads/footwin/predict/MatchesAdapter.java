@@ -319,7 +319,7 @@ public class MatchesAdapter extends BaseAdapter {
                     String winningTeamName =  match.isHomeToWin() ? match.getHomeName() : match.getAwayName();
                     String winningTeamID =  match.isHomeToWin() ? match.getHomeId() : match.getAwayId();
                     if(!match.isAwayToWin() && !match.isHomeToWin()){
-                        predictFragment.showAlert(match,"","");
+                        predictFragment.showAlert(match,"0","");
                     }else {
                         predictFragment.showAlert(match,winningTeamID,winningTeamName);
                     }
