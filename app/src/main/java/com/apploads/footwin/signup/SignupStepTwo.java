@@ -6,27 +6,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.apploads.footwin.helpers.BaseActivity;
 import com.apploads.footwin.R;
 import com.apploads.footwin.helpers.CustomDialogClass;
 import com.apploads.footwin.helpers.StaticData;
-import com.apploads.footwin.helpers.utils.AppUtils;
 import com.apploads.footwin.helpers.utils.StringUtils;
 import com.apploads.footwin.login.LoginActivity;
-import com.apploads.footwin.login.RetrievePasswordActivity;
 import com.apploads.footwin.model.User;
-import com.apploads.footwin.model.UserResponse;
-import com.apploads.footwin.services.ApiManager;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.ybs.countrypicker.CountryPicker;
 import com.ybs.countrypicker.CountryPickerListener;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 
 public class SignupStepTwo extends BaseActivity {
     Button btnCancel;
