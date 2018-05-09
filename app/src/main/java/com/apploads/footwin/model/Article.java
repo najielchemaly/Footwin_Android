@@ -1,12 +1,14 @@
 package com.apploads.footwin.model;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.Date;
 
-public class Article implements Serializable{
+public class Article implements Serializable, Comparable<Article>{
 
     @SerializedName("source")
     @Expose
@@ -86,4 +88,15 @@ public class Article implements Serializable{
         this.publishedAt = publishedAt;
     }
 
+    @Override
+    public int compareTo(@NonNull Article article) {
+
+        if(publishedAt.after(article.getPublishedAt())){
+            return 1;
+        }else if(publishedAt.before(article.getPublishedAt())){
+            return -1;
+        }else {
+            return 0;
+        }
+    }
 }

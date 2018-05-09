@@ -15,11 +15,13 @@ import android.widget.Toast;
 import com.apploads.footwin.NoDataView;
 import com.apploads.footwin.R;
 import com.apploads.footwin.helpers.StaticData;
+import com.apploads.footwin.model.Article;
 import com.apploads.footwin.model.News;
 import com.apploads.footwin.services.ApiManager;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import retrofit2.Call;
@@ -71,12 +73,13 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     private void callService(){
-        ApiManager.getService().getNews(StaticData.config.getNewsUrl()).enqueue(new Callback<News>() {
+        ApiManager.getService().getNews(StaticData.config.getNewsUrl() + StaticData.user.getFavoriteTeam()).enqueue(new Callback<News>() {
             @Override
             public void onResponse(Call<News> call, Response<News> response) {
                 if(response.isSuccessful()){
                     if(response.body().getArticles() != null){
                         News news = response.body();
+                        Collections.sort(news.getArticles(),Collections.<Article>reverseOrder());
                         newsAdapter = new NewsAdapter(news.getArticles(), getContext());
                         listNews.setAdapter(newsAdapter);
                         progressBar.setVisibility(View.GONE);
