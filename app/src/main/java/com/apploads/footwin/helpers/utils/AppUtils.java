@@ -61,6 +61,26 @@ public final class AppUtils {
         editor.apply();
     }
 
+    public static int getBadge(Context context) {
+        SharedPreferences settings;
+        settings = context.getSharedPreferences(StaticData.PREFS_NAME, Context.MODE_PRIVATE); //1
+
+        int badge;
+        badge = settings.getInt(StaticData.PREFS_BADGE, 0);
+        return badge;
+    }
+
+    public static void updateBadge(Context context, int badge) {
+
+        SharedPreferences settings;
+        SharedPreferences.Editor editor;
+        settings = context.getSharedPreferences(StaticData.PREFS_NAME, Context.MODE_PRIVATE);
+        editor = settings.edit();
+
+        editor.putInt(StaticData.PREFS_BADGE, badge);
+        editor.apply();
+    }
+
     public static void setFirstLaunch(Context context) {
         SharedPreferences.Editor editor = context.getSharedPreferences(StaticData.PREFS_NAME, Context.MODE_PRIVATE).edit();
         editor.putBoolean("firstLaunch", true);

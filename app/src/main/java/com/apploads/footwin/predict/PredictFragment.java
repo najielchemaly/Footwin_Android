@@ -26,6 +26,7 @@ import com.apploads.footwin.coins.CoinsActivity;
 import com.apploads.footwin.R;
 import com.apploads.footwin.helpers.CustomDialogClass;
 import com.apploads.footwin.helpers.StaticData;
+import com.apploads.footwin.helpers.utils.AppUtils;
 import com.apploads.footwin.helpers.utils.StringUtils;
 import com.apploads.footwin.login.LoginActivity;
 import com.apploads.footwin.model.BasicResponse;
@@ -41,6 +42,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
+
 public class PredictFragment extends Fragment {
 
     ListView listMatches;
@@ -55,6 +58,7 @@ public class PredictFragment extends Fragment {
     Animation bottom_to_top, top_to_bottom;
     MatchesAdapter matchesAdapter;
     SwipeRefreshLayout pullToRefresh;
+    int badge;
 
     private String homeScore = "-1";
     private String awayScore = "-1";
@@ -76,6 +80,12 @@ public class PredictFragment extends Fragment {
         initListeners();
 
         return parentView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateBadge();
     }
 
     private void initView() {
@@ -124,8 +134,29 @@ public class PredictFragment extends Fragment {
         if(getActivity().getClass().equals(MainPageActivity.class)) {
             mainPageActivity = (MainPageActivity)getActivity();
         }
-
         callMatchesService();
+    }
+
+    public void updateBadge(){
+        badge = AppUtils.getBadge(getActivity());
+
+        if(badge == 0){
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    viewNotificationTag.setVisibility(View.GONE);
+                    txtNotificationTag.setText("");
+                }
+            });
+        }else {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    viewNotificationTag.setVisibility(View.VISIBLE);
+                    txtNotificationTag.setText(String.valueOf(badge));
+                }
+            });
+        }
     }
 
     public void showExactScore(Match match) {

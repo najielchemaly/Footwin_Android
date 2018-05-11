@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.apploads.footwin.R;
 import com.apploads.footwin.helpers.BaseActivity;
 import com.apploads.footwin.helpers.CustomDialogClass;
+import com.apploads.footwin.helpers.utils.AppUtils;
 import com.apploads.footwin.login.LoginActivity;
 import com.apploads.footwin.model.Notification;
 import com.apploads.footwin.model.NotificationResponse;
@@ -65,19 +66,33 @@ public class NotificationsActivity extends BaseActivity {
     }
 
     private void getNotifications() {
+        progressBar.setVisibility(View.VISIBLE);
         ApiManager.getService().getNotifications().enqueue(new Callback<NotificationResponse>() {
             @Override
             public void onResponse(Call<NotificationResponse> call, Response<NotificationResponse> response) {
-                NotificationResponse notificationResponse = response.body();
+                if(response.isSuccessful() && response.body() != null){
+                    NotificationResponse notificationResponse = response.body();
 
-                notificationsAdapter = new NotificationsAdapter(notificationResponse.getNotifications(), NotificationsActivity.this);
-                listNotifications.setAdapter(notificationsAdapter);
-                progressBar.setVisibility(View.GONE);
+                    notificationsAdapter = new NotificationsAdapter(notificationResponse.getNotifications(), NotificationsActivity.this);
+                    listNotifications.setAdapter(notificationsAdapter);
+                    progressBar.setVisibility(View.GONE);
+
+                    AppUtils.updateBadge(getApplicationContext(), 0);
+                }
             }
 
             @Override
             public void onFailure(Call<NotificationResponse> call, Throwable t) {
                 progressBar.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    public void refreshList(){
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                getNotifications();
             }
         });
     }

@@ -2,6 +2,7 @@ package com.apploads.footwin.profile;
 
 
 import android.content.Context;
+import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,9 @@ import com.apploads.footwin.model.Prediction;
 import com.apploads.footwin.predict.PredictFragment;
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class MatchesResultAdapter extends BaseAdapter {
@@ -29,6 +33,9 @@ public class MatchesResultAdapter extends BaseAdapter {
     private List<Prediction> root;
     private Context context;
     LayoutInflater mInflater;
+    Date endDate;
+    long startTime, milliseconds, diff;
+    CountDownTimer mCountDownTimer;
 
     public MatchesResultAdapter(List<Prediction> root, Context context){
         this.root        = root;
@@ -94,7 +101,46 @@ public class MatchesResultAdapter extends BaseAdapter {
             holder.txtHomeTeam.setText(prediction.getHomeName());
             holder.txtAwayTeam.setText(prediction.getAwayName());
             holder.txtHeaderTite.setText(prediction.getTitle());
-            holder.txtHeaderDesc.setText(prediction.getDescription());
+
+            if(!prediction.getStatus().equals("pending")){
+                holder.txtHeaderDesc.setText(prediction.getDescription());
+            }else {
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                formatter.setLenient(false);
+                String endTime = prediction.getDate();
+                try {
+                    endDate = formatter.parse(endTime);
+                    milliseconds = endDate.getTime();
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                startTime = System.currentTimeMillis();
+
+                diff = milliseconds - startTime;
+
+                mCountDownTimer = new CountDownTimer(milliseconds, 1000) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                        startTime=startTime-1;
+                        Long serverUptimeSeconds = (millisUntilFinished - startTime) / 1000;
+
+                        String daysLeft = String.format("%d", serverUptimeSeconds / 86400);
+                        String hoursLeft = String.format("%d", (serverUptimeSeconds % 86400) / 3600);
+                        String minutesLeft = String.format("%d", ((serverUptimeSeconds % 86400) % 3600) / 60);
+                        String secondsLeft = String.format("%d", ((serverUptimeSeconds % 86400) % 3600) % 60);
+
+                        holder.txtHeaderDesc.setText(daysLeft+ " Days " + hoursLeft+ " Hours " + minutesLeft + " Mins " + secondsLeft+" Sec");
+                    }
+
+                    @Override
+                    public void onFinish() {
+
+                    }
+                }.start();
+            }
+
 
             if(prediction.getHomeScore().equals("-1") && prediction.getAwayScore().equals("-1")){
                 holder.txtScoreHome.setText("");

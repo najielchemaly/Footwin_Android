@@ -19,6 +19,7 @@ import com.apploads.footwin.helpers.StaticData;
 import com.apploads.footwin.helpers.utils.AppUtils;
 import com.apploads.footwin.login.LoginActivity;
 import com.apploads.footwin.R;
+import com.apploads.footwin.login.RetrievePasswordActivity;
 import com.apploads.footwin.model.Config;
 import com.apploads.footwin.model.User;
 import com.apploads.footwin.model.UserResponse;
@@ -53,7 +54,6 @@ public class LoadingActivity extends BaseActivity {
         imgBall = _findViewById(R.id.imgBall);
         rotateBall();
         callConfigService();
-
     }
 
     /**
@@ -93,10 +93,7 @@ public class LoadingActivity extends BaseActivity {
             @Override
             public void run() {
                 if(isAutoLogin()){
-                    StaticData.user = getUser(LoadingActivity.this);
-                    Intent intent = new Intent(getApplicationContext(), MainPageActivity.class);
-                    startActivity(intent);
-                    finish();
+                    callLoginService();
                 }else {
                     Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                     startActivity(intent);
@@ -118,6 +115,43 @@ public class LoadingActivity extends BaseActivity {
         }
     }
 
+    private void callLoginService(){
+        ApiManager.getService(true).loginToken(getUser(LoadingActivity.this).getAccess_token()).enqueue(new Callback<UserResponse>() {
+            @Override
+            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                if(response.isSuccessful() && response.body() != null){
+                    UserResponse userResponse = response.body();
+                    AppUtils.saveUser(LoadingActivity.this, userResponse.getUser());
+                    StaticData.user = userResponse.getUser();
+                    Intent intent = new Intent(getApplicationContext(), MainPageActivity.class);
+                    startActivity(intent);
+                    finish();
+                }else {
+                    CustomDialogClass dialogClass = new CustomDialogClass(LoadingActivity.this, new CustomDialogClass.AbstractCustomDialogListener() {
+                        @Override
+                        public void onConfirm(CustomDialogClass.DialogResponse response) {
+                            response.getDialog().dismiss();
+                        }
+
+                        @Override
+                        public void onCancel(CustomDialogClass.DialogResponse dialogResponse) {
+                        }
+                    }, true);
+
+                    dialogClass.setTitle("Oops");
+                    dialogClass.setMessage("Something went wrong please try again later");
+                    dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                    dialogClass.show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
     public User getUser(Context context) {
         SharedPreferences settings;
         String json;
@@ -127,34 +161,5 @@ public class LoadingActivity extends BaseActivity {
         json = settings.getString(StaticData.PREFS_USER, ""); //2
         User user = gson.fromJson(json, User.class);
         return user;
-    }
-
-    private void loginService(){ //TODO put real password
-        ApiManager.getService(true).login(getUser(LoadingActivity.this).getEmail(), "password").enqueue(new Callback<UserResponse>() {
-            @Override
-            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
-                if(response.isSuccessful()){
-                    if(response.body().getStatus() == 1){
-                        UserResponse userResponse = response.body();
-                        StaticData.user = userResponse.getUser();
-                        AppUtils.saveUser(LoadingActivity.this, userResponse.getUser());
-                        Intent intent = new Intent(getApplicationContext(), MainPageActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }else if(response.body().getStatus() == 0){
-                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                }else {
-                    Toast.makeText(LoadingActivity.this, "Check your internet connection and try again later", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<UserResponse> call, Throwable t) {
-                Toast.makeText(LoadingActivity.this, "Check your internet connection", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 }

@@ -1,5 +1,6 @@
 package com.apploads.footwin.firebase;
 
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -8,30 +9,47 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.apploads.footwin.MainPageActivity;
 import com.apploads.footwin.R;
-import com.apploads.footwin.login.LoginActivity;
+import com.apploads.footwin.helpers.StaticData;
+import com.apploads.footwin.helpers.utils.AppUtils;
 import com.apploads.footwin.notifications.NotificationsActivity;
+import com.apploads.footwin.predict.PredictFragment;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.Calendar;
 
+
 public class MyFirebaseMessagingSerivce extends FirebaseMessagingService {
     private static final String TAG = "FCM Service";
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        // TODO: Handle FCM messages here.
-        // If the application is in the foreground handle both data and notification messages here.
-        // Also if you intend on generating your own notifications as a result of a received FCM
-        // message, here is where that should be initiated.
-//        Log.d(TAG, "From: " + remoteMessage.getFrom());
 
         if(remoteMessage.getNotification() != null){
             createNotification(remoteMessage);
+        }
+
+        int badge = AppUtils.getBadge(getApplicationContext());
+        AppUtils.updateBadge(getApplicationContext(), ++badge);
+
+        if(StaticData.context.getClass() == MainPageActivity.class){
+            MainPageActivity myActivity = (MainPageActivity) StaticData.context;
+            FragmentManager fm = myActivity.getSupportFragmentManager();
+            Fragment fragment = fm.findFragmentById(R.id.frame_layout);
+            if (fragment instanceof PredictFragment){
+                ((PredictFragment) fragment).updateBadge();
+            }
+        }
+
+        if(StaticData.context.getClass() == NotificationsActivity.class){
+            ((NotificationsActivity) StaticData.context).refreshList();
         }
     }
 

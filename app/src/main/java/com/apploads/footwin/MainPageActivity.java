@@ -202,6 +202,12 @@ public class MainPageActivity extends BaseActivity {
                 });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        StaticData.context = MainPageActivity.this;
+    }
+
     private void sendRegistrationToServer(final String token) {
         ApiManager.getService().updateFirebaseToken(token).enqueue(new Callback<Object>() {
             @Override
