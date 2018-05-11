@@ -1,9 +1,11 @@
 package com.apploads.footwin.helpers.utils;
 
+import android.animation.ValueAnimator;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.widget.TextView;
 
 import com.apploads.footwin.helpers.StaticData;
 import com.apploads.footwin.model.User;
@@ -91,5 +93,16 @@ public final class AppUtils {
         SharedPreferences prefs = context.getSharedPreferences(StaticData.PREFS_NAME, context.MODE_PRIVATE);
         boolean isFirstLaunch = prefs.getBoolean("firstLaunch", false);
         return isFirstLaunch;
+    }
+
+    public static void startCountAnimation(final TextView textView, int fromNumber, int toNumber, long duration) {
+        ValueAnimator animator = ValueAnimator.ofInt(fromNumber, toNumber);
+        animator.setDuration(duration);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            public void onAnimationUpdate(ValueAnimator animation) {
+                textView.setText(animation.getAnimatedValue().toString());
+            }
+        });
+        animator.start();
     }
 }

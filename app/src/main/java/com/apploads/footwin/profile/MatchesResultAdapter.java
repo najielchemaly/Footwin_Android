@@ -1,6 +1,5 @@
 package com.apploads.footwin.profile;
 
-
 import android.content.Context;
 import android.os.CountDownTimer;
 import android.view.LayoutInflater;
@@ -13,6 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +27,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import static com.apploads.footwin.helpers.Constants.PENDING;
+import static com.apploads.footwin.helpers.Constants.LOSE;
+import static com.apploads.footwin.helpers.Constants.WON;
 
 public class MatchesResultAdapter extends BaseAdapter {
 
@@ -81,6 +84,7 @@ public class MatchesResultAdapter extends BaseAdapter {
 
             holder.txtHomeTeam = convertView.findViewById(R.id.txtHomeTeam);
             holder.txtAwayTeam = convertView.findViewById(R.id.txtAwayTeam);
+            holder.viewHeaderResult = convertView.findViewById(R.id.viewHeaderResult);
             holder.viewHomeTeam = convertView.findViewById(R.id.viewHomeTeam);
             holder.viewAwayTeam = convertView.findViewById(R.id.viewAwayTeam);
             holder.imgHomeTeam = convertView.findViewById(R.id.imgHomeTeam);
@@ -102,43 +106,54 @@ public class MatchesResultAdapter extends BaseAdapter {
             holder.txtAwayTeam.setText(prediction.getAwayName());
             holder.txtHeaderTite.setText(prediction.getTitle());
 
-            if(!prediction.getStatus().equals("pending")){
-                holder.txtHeaderDesc.setText(prediction.getDescription());
-            }else {
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                formatter.setLenient(false);
-                String endTime = prediction.getDate();
-                try {
-                    endDate = formatter.parse(endTime);
-                    milliseconds = endDate.getTime();
+            switch (prediction.getStatus()){
+                case PENDING :
+                    holder.viewHeaderResult.setBackgroundResource(R.drawable.myprediction_top_blue);
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                    formatter.setLenient(false);
+                    String endTime = prediction.getDate();
+                    try {
+                        endDate = formatter.parse(endTime);
+                        milliseconds = endDate.getTime();
 
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-                startTime = System.currentTimeMillis();
-
-                diff = milliseconds - startTime;
-
-                mCountDownTimer = new CountDownTimer(milliseconds, 1000) {
-                    @Override
-                    public void onTick(long millisUntilFinished) {
-                        startTime=startTime-1;
-                        Long serverUptimeSeconds = (millisUntilFinished - startTime) / 1000;
-
-                        String daysLeft = String.format("%d", serverUptimeSeconds / 86400);
-                        String hoursLeft = String.format("%d", (serverUptimeSeconds % 86400) / 3600);
-                        String minutesLeft = String.format("%d", ((serverUptimeSeconds % 86400) % 3600) / 60);
-                        String secondsLeft = String.format("%d", ((serverUptimeSeconds % 86400) % 3600) % 60);
-
-                        holder.txtHeaderDesc.setText(daysLeft+ " Days " + hoursLeft+ " Hours " + minutesLeft + " Mins " + secondsLeft+" Sec");
+                    } catch (ParseException e) {
+                        e.printStackTrace();
                     }
+                    startTime = System.currentTimeMillis();
+                    diff = milliseconds - startTime;
 
-                    @Override
-                    public void onFinish() {
+                    mCountDownTimer = new CountDownTimer(milliseconds, 1000) {
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+                            startTime=startTime-1;
+                            Long serverUptimeSeconds = (millisUntilFinished - startTime) / 1000;
 
-                    }
-                }.start();
+                            String daysLeft = String.format("%d", serverUptimeSeconds / 86400);
+                            String hoursLeft = String.format("%d", (serverUptimeSeconds % 86400) / 3600);
+                            String minutesLeft = String.format("%d", ((serverUptimeSeconds % 86400) % 3600) / 60);
+                            String secondsLeft = String.format("%d", ((serverUptimeSeconds % 86400) % 3600) % 60);
+
+                            holder.txtHeaderDesc.setText(daysLeft+ " Days " + hoursLeft+ " Hours " + minutesLeft + " Mins " + secondsLeft+" Sec");
+                        }
+
+                        @Override
+                        public void onFinish() {
+
+                        }
+                    }.start();
+                    break;
+                case WON :
+                    holder.viewHeaderResult.setBackgroundResource(R.drawable.myprediction_top_green);
+                    holder.txtHeaderDesc.setText(prediction.getDescription());
+                    break;
+
+                case LOSE :
+                    holder.viewHeaderResult.setBackgroundResource(R.drawable.myprediction_top_red);
+                    holder.txtHeaderDesc.setText(prediction.getDescription());
+                    break;
+
+                default:
+                    holder.txtHeaderDesc.setText(prediction.getDescription());
             }
 
 
@@ -211,6 +226,7 @@ public class MatchesResultAdapter extends BaseAdapter {
 
     public class Holder {
         TextView txtHomeTeam, txtAwayTeam, txtScoreHome, txtScoreAway, txtScoreSep, txtHeaderTite, txtHeaderDesc;
+        RelativeLayout viewHeaderResult;
         LinearLayout viewHomeTeam, viewAwayTeam, viewConfirm, viewScore, viewWinning;
         ImageView imgAwayTeam, imgHomeTeam;
         Button btnDraw;

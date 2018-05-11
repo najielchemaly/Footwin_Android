@@ -46,9 +46,15 @@ public class MyPredictionsActivity extends BaseActivity {
 
                 if(response.isSuccessful() && response.body() != null){
                     PredictionResponse predictionResponse = response.body();
-                    matchesResultAdapter = new MatchesResultAdapter(predictionResponse.getPredictions(), MyPredictionsActivity.this);
-                    listPredictions.setAdapter(matchesResultAdapter);
+                    if(predictionResponse.getPredictions().size() > 0){
+                        matchesResultAdapter = new MatchesResultAdapter(predictionResponse.getPredictions(), MyPredictionsActivity.this);
+                        listPredictions.setAdapter(matchesResultAdapter);
+                    }else {
+                        Toast.makeText(MyPredictionsActivity.this, "No predictions placed", Toast.LENGTH_SHORT).show();
+                    }
+
                 }else {
+                    //TODO SHOW NO PREDICTION SCREEN
                     Toast.makeText(MyPredictionsActivity.this, "Check your internet connection and try again later", Toast.LENGTH_SHORT).show();
                 }
                 progressBar.setVisibility(View.GONE);

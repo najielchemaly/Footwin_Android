@@ -34,6 +34,7 @@ import com.apploads.footwin.model.Match;
 import com.apploads.footwin.model.Profile;
 import com.apploads.footwin.notifications.NotificationsActivity;
 import com.apploads.footwin.services.ApiManager;
+import com.apploads.footwin.signup.SignupStepThree;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.squareup.picasso.Picasso;
 
@@ -121,8 +122,9 @@ public class PredictFragment extends Fragment {
                 .into(imgProfile);
 
         txtRound.setText(StaticData.config.getActiveRound().getTitle());
-        txtWinningCoinsTotal.setText(StaticData.user.getWinningCoins());
-        txtCoinsTotal.setText(StaticData.user.getCoins());
+
+        AppUtils.startCountAnimation(txtCoinsTotal,0, Integer.parseInt(StaticData.user.getCoins()),1500);
+        AppUtils.startCountAnimation(txtWinningCoinsTotal,0, Integer.parseInt(StaticData.user.getWinningCoins()),1500);
 
         bottom_to_top = AnimationUtils.loadAnimation(getContext(), R.anim.bottom_to_top_wt);
         top_to_bottom = AnimationUtils.loadAnimation(getContext(), R.anim.top_to_bottom_wt);
@@ -280,8 +282,26 @@ public class PredictFragment extends Fragment {
                     public void onResponse(Call<BasicResponse> call, Response<BasicResponse> response) {
                         BasicResponse basicResponse = response.body();
 
-                        match.setIsConfirmed("1");
-                        listMatches.setAdapter(matchesAdapter);
+                        if(basicResponse.getStatus() == 1){
+                            match.setIsConfirmed("1");
+                            listMatches.setAdapter(matchesAdapter);
+                        }else if(basicResponse.getStatus() == 0){
+                            CustomDialogClass dialogClass = new CustomDialogClass(getActivity(), new CustomDialogClass.AbstractCustomDialogListener() {
+                                @Override
+                                public void onConfirm(CustomDialogClass.DialogResponse response) {
+                                    response.getDialog().dismiss();
+                                }
+
+                                @Override
+                                public void onCancel(CustomDialogClass.DialogResponse dialogResponse) {
+                                }
+                            }, true);
+
+                            dialogClass.setTitle("Oops");
+                            dialogClass.setMessage(basicResponse.getMessage());
+                            dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                            dialogClass.show();
+                        }
                     }
 
                     @Override

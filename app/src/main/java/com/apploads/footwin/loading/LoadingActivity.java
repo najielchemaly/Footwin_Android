@@ -24,6 +24,7 @@ import com.apploads.footwin.model.Config;
 import com.apploads.footwin.model.User;
 import com.apploads.footwin.model.UserResponse;
 import com.apploads.footwin.services.ApiManager;
+import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -33,6 +34,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import static com.apploads.footwin.helpers.StaticData.config;
+import static com.apploads.footwin.helpers.Constants.ADDMOB_APP_ID;
 
 public class LoadingActivity extends BaseActivity {
     ImageView imgBall;
@@ -45,6 +47,7 @@ public class LoadingActivity extends BaseActivity {
     @Override
     public void doOnCreate(){
         initView();
+        initAds();
     }
 
     /**
@@ -113,6 +116,10 @@ public class LoadingActivity extends BaseActivity {
         }else {
             return true;
         }
+    }
+
+    private void initAds(){
+        MobileAds.initialize(this, ADDMOB_APP_ID);
     }
 
     private void callLoginService(){

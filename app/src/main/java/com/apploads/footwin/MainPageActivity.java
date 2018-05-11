@@ -2,6 +2,7 @@ package com.apploads.footwin;
 
 import android.os.Build;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
@@ -26,6 +27,9 @@ import com.apploads.footwin.news.NewsFragment;
 import com.apploads.footwin.predict.PredictFragment;
 import com.apploads.footwin.profile.ProfileFragment;
 import com.apploads.footwin.services.ApiManager;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Picasso;
@@ -46,6 +50,7 @@ public class MainPageActivity extends BaseActivity {
     RelativeLayout viewTutorial, viewSteps, viewWelcome;
     public String selectedFragmentstr = "predict";
     int selectedView = 0;
+    private AdView mAdView;
 
     public BottomNavigationView bottomNavigationView;
 
@@ -75,6 +80,10 @@ public class MainPageActivity extends BaseActivity {
         txtHomeTeam = _findViewById(R.id.txtHomeTeam);
         imgProfile = _findViewById(R.id.imgProfile);
         imgHomeTeam = _findViewById(R.id.imgHomeTeam);
+
+//        mAdView = findViewById(R.id.adView);
+//        AdRequest adRequest = new AdRequest.Builder().build();
+//        mAdView.loadAd(adRequest);
 
         Picasso.with(MainPageActivity.this)
                 .load(StaticData.config.getMediaUrl()+StaticData.user.getAvatar())
@@ -200,6 +209,37 @@ public class MainPageActivity extends BaseActivity {
                         return true;
                     }
                 });
+
+//        mAdView.setAdListener(new AdListener() {
+//            @Override
+//            public void onAdLoaded() {
+//                // Code to be executed when an ad finishes loading.
+//                Toast.makeText(MainPageActivity.this, "success", Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onAdFailedToLoad(int errorCode) {
+//                // Code to be executed when an ad request fails.
+//                Toast.makeText(MainPageActivity.this, "ERROR: " + errorCode, Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onAdOpened() {
+//                // Code to be executed when an ad opens an overlay that
+//                // covers the screen.
+//            }
+//
+//            @Override
+//            public void onAdLeftApplication() {
+//                // Code to be executed when the user has left the app.
+//            }
+//
+//            @Override
+//            public void onAdClosed() {
+//                // Code to be executed when when the user is about to return
+//                // to the app after tapping on an ad.
+//            }
+//        });
     }
 
     @Override
