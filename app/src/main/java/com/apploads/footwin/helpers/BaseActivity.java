@@ -26,6 +26,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        StaticData.context = this;
+    }
+
     /**
      * Retune the content view of the activity
      *

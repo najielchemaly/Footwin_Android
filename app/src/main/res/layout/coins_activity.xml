@@ -61,21 +61,18 @@
             android:id="@+id/progress_bar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:indeterminateRotationAnimationDuration="1200"
-            app:indeterminateSweepAnimationDuration="600"
-            app:foregroundStrokeColor="@color/lightText"
-            app:backgroundStrokeColor="@color/appBlue"
-            app:progressAnimationDuration="2000"
-            app:indeterminateMinimumAngle="45"
+            app:foregroundStrokeColor="@color/appBlue"
+            app:backgroundStrokeColor="@color/lightText"
             app:backgroundStrokeWidth="8dp"
             app:foregroundStrokeWidth="8dp"
             app:drawBackgroundStroke="true"
-            app:foregroundStrokeCap="butt"
-            app:animateProgress="true"
+            app:foregroundStrokeCap="round"
             app:indeterminate="false"
+            app:progressAnimationDuration="100"
             app:startAngle="270"
-            app:maximum="100"
-            app:progress="10" />
+            app:indeterminateRotationAnimationDuration="1200"
+            app:indeterminateSweepAnimationDuration="600"
+            app:indeterminateMinimumAngle="45" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -211,6 +208,7 @@
       android:id="@+id/viewBlackOpacity"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
+       android:visibility="gone"
       android:background="@color/blackOpacityNew"
       >
 

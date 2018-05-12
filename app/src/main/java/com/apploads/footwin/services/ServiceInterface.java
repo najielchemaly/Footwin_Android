@@ -68,6 +68,10 @@ public interface ServiceInterface {
     Call<UserResponse> login(@Field("email") String email, @Field("password") String password);
 
     @FormUrlEncoded
+    @POST("login/")
+    Call<UserResponse> loginToken(@Field("access_token") String token);
+
+    @FormUrlEncoded
     @POST("facebookLogin/")
     Call<UserResponse> facebookLogin(@Field("facebook_id") String facebook_id, @Field("facebook_token") String facebook_token
             , @Field("fullname") String fullname, @Field("email") String email

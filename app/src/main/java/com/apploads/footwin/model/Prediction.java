@@ -65,6 +65,10 @@ public class Prediction {
     @SerializedName("actual_winning_team")
     @Expose
     private String actualWinningTeam;
+    @SerializedName("winning_coins")
+    @Expose
+    private String winning_coins;
+
 
     public String getId() {
         return id;
@@ -226,4 +230,11 @@ public class Prediction {
         this.actualWinningTeam = actualWinningTeam;
     }
 
+    public String getWinning_coins() {
+        return winning_coins;
+    }
+
+    public void setWinning_coins(String winning_coins) {
+        this.winning_coins = winning_coins;
+    }
 }

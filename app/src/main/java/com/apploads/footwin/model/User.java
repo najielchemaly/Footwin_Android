@@ -67,6 +67,9 @@ public class User implements Serializable{
     @SerializedName("favorite_team")
     @Expose
     private String favoriteTeam;
+    @SerializedName("access_token")
+    @Expose
+    private String access_token;
 
     public String getId() {
         return id;
@@ -228,4 +231,11 @@ public class User implements Serializable{
         this.favoriteTeam = favoriteTeam;
     }
 
+    public String getAccess_token() {
+        return access_token;
+    }
+
+    public void setAccess_token(String access_token) {
+        this.access_token = access_token;
+    }
 }

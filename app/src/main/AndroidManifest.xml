@@ -25,6 +25,10 @@
             </intent-filter>
         </activity>
 
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
         <service android:name=".firebase.MyFirebaseMessagingSerivce">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -42,7 +46,6 @@
         <activity android:name=".login.RetrievePasswordActivity" />
         <activity android:name=".notifications.NotificationsActivity" />
         <activity android:name=".coins.CoinsActivity" />
-        <!--<activity android:name=".ViewRulesActivity" />-->
         <activity android:name=".signup.SignupStepOne" />
         <activity android:name=".signup.SignupStepTwo" />
         <activity android:name=".signup.SignupStepThree" />
@@ -50,6 +53,7 @@
         <activity android:name=".profile.MyPredictionsActivity" />
         <activity android:name=".profile.ChangePasswordActivity" />
         <activity android:name=".profile.EditProfileActivity" />
+        <activity android:name=".profile.TermsAndConditionsActivity" />
         <activity
             android:name=".ViewRulesActivity"
             android:theme="@style/Theme.Transparent" />

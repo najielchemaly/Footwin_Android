@@ -26,6 +26,7 @@ import com.apploads.footwin.coins.CoinsActivity;
 import com.apploads.footwin.R;
 import com.apploads.footwin.helpers.CustomDialogClass;
 import com.apploads.footwin.helpers.StaticData;
+import com.apploads.footwin.helpers.utils.AppUtils;
 import com.apploads.footwin.helpers.utils.StringUtils;
 import com.apploads.footwin.login.LoginActivity;
 import com.apploads.footwin.model.BasicResponse;
@@ -33,6 +34,7 @@ import com.apploads.footwin.model.Match;
 import com.apploads.footwin.model.Profile;
 import com.apploads.footwin.notifications.NotificationsActivity;
 import com.apploads.footwin.services.ApiManager;
+import com.apploads.footwin.signup.SignupStepThree;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.squareup.picasso.Picasso;
 
@@ -40,6 +42,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class PredictFragment extends Fragment {
 
@@ -55,6 +59,7 @@ public class PredictFragment extends Fragment {
     Animation bottom_to_top, top_to_bottom;
     MatchesAdapter matchesAdapter;
     SwipeRefreshLayout pullToRefresh;
+    int badge;
 
     private String homeScore = "-1";
     private String awayScore = "-1";
@@ -76,6 +81,12 @@ public class PredictFragment extends Fragment {
         initListeners();
 
         return parentView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateBadge();
     }
 
     private void initView() {
@@ -111,8 +122,9 @@ public class PredictFragment extends Fragment {
                 .into(imgProfile);
 
         txtRound.setText(StaticData.config.getActiveRound().getTitle());
-        txtWinningCoinsTotal.setText(StaticData.user.getWinningCoins());
-        txtCoinsTotal.setText(StaticData.user.getCoins());
+
+        AppUtils.startCountAnimation(txtCoinsTotal,0, Integer.parseInt(StaticData.user.getCoins()),1500);
+        AppUtils.startCountAnimation(txtWinningCoinsTotal,0, Integer.parseInt(StaticData.user.getWinningCoins()),1500);
 
         bottom_to_top = AnimationUtils.loadAnimation(getContext(), R.anim.bottom_to_top_wt);
         top_to_bottom = AnimationUtils.loadAnimation(getContext(), R.anim.top_to_bottom_wt);
@@ -124,8 +136,29 @@ public class PredictFragment extends Fragment {
         if(getActivity().getClass().equals(MainPageActivity.class)) {
             mainPageActivity = (MainPageActivity)getActivity();
         }
-
         callMatchesService();
+    }
+
+    public void updateBadge(){
+        badge = AppUtils.getBadge(getActivity());
+
+        if(badge == 0){
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    viewNotificationTag.setVisibility(View.GONE);
+                    txtNotificationTag.setText("");
+                }
+            });
+        }else {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    viewNotificationTag.setVisibility(View.VISIBLE);
+                    txtNotificationTag.setText(String.valueOf(badge));
+                }
+            });
+        }
     }
 
     public void showExactScore(Match match) {
@@ -249,8 +282,26 @@ public class PredictFragment extends Fragment {
                     public void onResponse(Call<BasicResponse> call, Response<BasicResponse> response) {
                         BasicResponse basicResponse = response.body();
 
-                        match.setIsConfirmed("1");
-                        listMatches.setAdapter(matchesAdapter);
+                        if(basicResponse.getStatus() == 1){
+                            match.setIsConfirmed("1");
+                            listMatches.setAdapter(matchesAdapter);
+                        }else if(basicResponse.getStatus() == 0){
+                            CustomDialogClass dialogClass = new CustomDialogClass(getActivity(), new CustomDialogClass.AbstractCustomDialogListener() {
+                                @Override
+                                public void onConfirm(CustomDialogClass.DialogResponse response) {
+                                    response.getDialog().dismiss();
+                                }
+
+                                @Override
+                                public void onCancel(CustomDialogClass.DialogResponse dialogResponse) {
+                                }
+                            }, true);
+
+                            dialogClass.setTitle("Oops");
+                            dialogClass.setMessage(basicResponse.getMessage());
+                            dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                            dialogClass.show();
+                        }
                     }
 
                     @Override
@@ -283,24 +334,26 @@ public class PredictFragment extends Fragment {
                 if(response.isSuccessful()  && response.body() != null){
                     final Profile match = response.body();
 
-                    if(mainPageActivity != null) {
-                        Match currentMatch = match.getMatches().get(0);
-                        mainPageActivity.checkTutorial(currentMatch.getHomeName(), currentMatch.getHomeFlag());
-                    }
-
-                    if(isRefreshing) {
-                        pullToRefresh.setRefreshing(false);
-                    }
-
-                    final Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            matchesAdapter = new MatchesAdapter(match.getMatches(), getContext(), PredictFragment.this);
-                            listMatches.setAdapter(matchesAdapter);
-                            progressBar.setVisibility(View.GONE);
+                    if(match.getMatches().size() > 0){
+                        if(mainPageActivity != null) {
+                            Match currentMatch = match.getMatches().get(0);
+                            mainPageActivity.checkTutorial(currentMatch.getHomeName(), currentMatch.getHomeFlag());
                         }
-                    }, 2000);
+
+                        if(isRefreshing) {
+                            pullToRefresh.setRefreshing(false);
+                        }
+
+                        final Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                matchesAdapter = new MatchesAdapter(match.getMatches(), getContext(), PredictFragment.this);
+                                listMatches.setAdapter(matchesAdapter);
+                                progressBar.setVisibility(View.GONE);
+                            }
+                        }, 2000);
+                    }
                 }
             }
 

@@ -1,9 +1,11 @@
 package com.apploads.footwin.helpers.utils;
 
+import android.animation.ValueAnimator;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.widget.TextView;
 
 import com.apploads.footwin.helpers.StaticData;
 import com.apploads.footwin.model.User;
@@ -61,6 +63,26 @@ public final class AppUtils {
         editor.apply();
     }
 
+    public static int getBadge(Context context) {
+        SharedPreferences settings;
+        settings = context.getSharedPreferences(StaticData.PREFS_NAME, Context.MODE_PRIVATE); //1
+
+        int badge;
+        badge = settings.getInt(StaticData.PREFS_BADGE, 0);
+        return badge;
+    }
+
+    public static void updateBadge(Context context, int badge) {
+
+        SharedPreferences settings;
+        SharedPreferences.Editor editor;
+        settings = context.getSharedPreferences(StaticData.PREFS_NAME, Context.MODE_PRIVATE);
+        editor = settings.edit();
+
+        editor.putInt(StaticData.PREFS_BADGE, badge);
+        editor.apply();
+    }
+
     public static void setFirstLaunch(Context context) {
         SharedPreferences.Editor editor = context.getSharedPreferences(StaticData.PREFS_NAME, Context.MODE_PRIVATE).edit();
         editor.putBoolean("firstLaunch", true);
@@ -71,5 +93,16 @@ public final class AppUtils {
         SharedPreferences prefs = context.getSharedPreferences(StaticData.PREFS_NAME, context.MODE_PRIVATE);
         boolean isFirstLaunch = prefs.getBoolean("firstLaunch", false);
         return isFirstLaunch;
+    }
+
+    public static void startCountAnimation(final TextView textView, int fromNumber, int toNumber, long duration) {
+        ValueAnimator animator = ValueAnimator.ofInt(fromNumber, toNumber);
+        animator.setDuration(duration);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            public void onAnimationUpdate(ValueAnimator animation) {
+                textView.setText(animation.getAnimatedValue().toString());
+            }
+        });
+        animator.start();
     }
 }

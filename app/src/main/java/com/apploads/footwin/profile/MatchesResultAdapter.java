@@ -1,7 +1,7 @@
 package com.apploads.footwin.profile;
 
-
 import android.content.Context;
+import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,13 +23,20 @@ import com.apploads.footwin.model.Prediction;
 import com.apploads.footwin.predict.PredictFragment;
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import static com.apploads.footwin.helpers.Constants.*;
 
 public class MatchesResultAdapter extends BaseAdapter {
 
     private List<Prediction> root;
     private Context context;
     LayoutInflater mInflater;
+    Date endDate;
+    long startTime, milliseconds, diff;
+    CountDownTimer mCountDownTimer;
 
     public MatchesResultAdapter(List<Prediction> root, Context context){
         this.root        = root;
@@ -74,8 +82,10 @@ public class MatchesResultAdapter extends BaseAdapter {
 
             holder.txtHomeTeam = convertView.findViewById(R.id.txtHomeTeam);
             holder.txtAwayTeam = convertView.findViewById(R.id.txtAwayTeam);
+            holder.viewHeaderResult = convertView.findViewById(R.id.viewHeaderResult);
             holder.viewHomeTeam = convertView.findViewById(R.id.viewHomeTeam);
             holder.viewAwayTeam = convertView.findViewById(R.id.viewAwayTeam);
+            holder.txtWinningCoins = convertView.findViewById(R.id.txtWinningCoins);
             holder.imgHomeTeam = convertView.findViewById(R.id.imgHomeTeam);
             holder.imgAwayTeam = convertView.findViewById(R.id.imgAwayTeam);
             holder.viewConfirm = convertView.findViewById(R.id.viewConfirm);
@@ -94,7 +104,66 @@ public class MatchesResultAdapter extends BaseAdapter {
             holder.txtHomeTeam.setText(prediction.getHomeName());
             holder.txtAwayTeam.setText(prediction.getAwayName());
             holder.txtHeaderTite.setText(prediction.getTitle());
-            holder.txtHeaderDesc.setText(prediction.getDescription());
+
+            switch (prediction.getStatus()){
+                case PENDING :
+                    holder.viewHeaderResult.setBackgroundResource(R.drawable.myprediction_top_blue);
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                    formatter.setLenient(false);
+                    String endTime = prediction.getDate();
+                    try {
+                        endDate = formatter.parse(endTime);
+                        milliseconds = endDate.getTime();
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    startTime = System.currentTimeMillis();
+                    diff = milliseconds - startTime;
+
+                    mCountDownTimer = new CountDownTimer(milliseconds, 1000) {
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+                            startTime=startTime-1;
+                            Long serverUptimeSeconds = (millisUntilFinished - startTime) / 1000;
+
+                            String daysLeft = String.format("%d", serverUptimeSeconds / 86400);
+                            String hoursLeft = String.format("%d", (serverUptimeSeconds % 86400) / 3600);
+                            String minutesLeft = String.format("%d", ((serverUptimeSeconds % 86400) % 3600) / 60);
+                            String secondsLeft = String.format("%d", ((serverUptimeSeconds % 86400) % 3600) % 60);
+
+                            holder.txtHeaderDesc.setText(daysLeft+ " Days " + hoursLeft+ " Hours " + minutesLeft + " Mins " + secondsLeft+" Sec");
+                        }
+
+                        @Override
+                        public void onFinish() {
+
+                        }
+                    }.start();
+                    break;
+                case WON :
+                    holder.viewHeaderResult.setBackgroundResource(R.drawable.myprediction_top_green);
+                    holder.txtHeaderDesc.setText(prediction.getDescription());
+                    holder.viewWinning.setVisibility(View.VISIBLE);
+                    holder.txtWinningCoins.setText("+" + prediction.getWinning_coins());
+                    break;
+
+                case WON_EXACT_SCORE:
+                    holder.viewHeaderResult.setBackgroundResource(R.drawable.myprediction_top_green);
+                    holder.txtHeaderDesc.setText(prediction.getDescription());
+                    holder.viewWinning.setVisibility(View.VISIBLE);
+                    holder.txtWinningCoins.setText("+" + prediction.getWinning_coins());
+                    break;
+
+                case LOSE :
+                    holder.viewHeaderResult.setBackgroundResource(R.drawable.myprediction_top_red);
+                    holder.txtHeaderDesc.setText(prediction.getDescription());
+                    break;
+
+                default:
+                    holder.txtHeaderDesc.setText(prediction.getDescription());
+            }
+
 
             if(prediction.getHomeScore().equals("-1") && prediction.getAwayScore().equals("-1")){
                 holder.txtScoreHome.setText("");
@@ -164,7 +233,8 @@ public class MatchesResultAdapter extends BaseAdapter {
     }
 
     public class Holder {
-        TextView txtHomeTeam, txtAwayTeam, txtScoreHome, txtScoreAway, txtScoreSep, txtHeaderTite, txtHeaderDesc;
+        TextView txtHomeTeam, txtAwayTeam, txtScoreHome, txtScoreAway, txtScoreSep, txtHeaderTite, txtHeaderDesc, txtWinningCoins;
+        RelativeLayout viewHeaderResult;
         LinearLayout viewHomeTeam, viewAwayTeam, viewConfirm, viewScore, viewWinning;
         ImageView imgAwayTeam, imgHomeTeam;
         Button btnDraw;
