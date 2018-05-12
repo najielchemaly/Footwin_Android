@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.apploads.footwin.R;
 import com.apploads.footwin.helpers.BaseActivity;
 import com.apploads.footwin.helpers.StaticData;
+import com.apploads.footwin.helpers.utils.AppUtils;
 import com.apploads.footwin.model.Package;
 import com.apploads.footwin.model.PackageResponse;
 import com.apploads.footwin.services.ApiManager;
@@ -59,7 +60,14 @@ public class CoinsActivity extends BaseActivity {
 
         txtCoinsTotal.setText(StaticData.user.getCoins());
         txtWinningCoinsTotal.setText(StaticData.user.getWinningCoins());
-        circularProgressBar.setProgress(30f);
+        txtNextRoundCoins.setText(StaticData.config.getActiveRound().getMinimumAmount());
+        AppUtils.startCountAnimation(txtWinningCoinsTotal,0, Integer.parseInt(StaticData.user.getWinningCoins()),1500);
+
+        circularProgressBar.setAnimateProgress(true);
+        circularProgressBar.setProgressAnimationDuration(1500);
+        circularProgressBar.setMaximum(Float.parseFloat(StaticData.config.getActiveRound().getMinimumAmount()));
+        circularProgressBar.setProgress(Float.parseFloat(StaticData.user.getWinningCoins()));
+        circularProgressBar.animate();
     }
 
     private void initCarousel() {

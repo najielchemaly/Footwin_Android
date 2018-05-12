@@ -50,7 +50,7 @@ public class ProfileFragment extends Fragment {
         imgProfile = parentView.findViewById(R.id.imgProfile);
         viewLogout = parentView.findViewById(R.id.viewLogout);
 
-        txtName.setText(StaticData.user.getUsername());
+        txtName.setText(StaticData.user.getFullname());
         Picasso.with(getActivity())
                 .load(StaticData.config.getMediaUrl() + StaticData.user.getAvatar())
                 .into(imgProfile);
@@ -82,7 +82,8 @@ public class ProfileFragment extends Fragment {
         txtTerms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(getActivity(), TermsAndConditionsActivity.class);
+                startActivity(intent);
             }
         });
 

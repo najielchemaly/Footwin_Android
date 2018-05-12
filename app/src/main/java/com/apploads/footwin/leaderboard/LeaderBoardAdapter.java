@@ -10,9 +10,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.apploads.footwin.R;
+import com.apploads.footwin.helpers.StaticData;
 import com.apploads.footwin.model.Leaderboard;
 import com.apploads.footwin.model.News;
 import com.apploads.footwin.news.NewsDetailsActivity;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -58,8 +60,12 @@ public class LeaderBoardAdapter extends BaseAdapter {
         CircleImageView imgProfile = convertView.findViewById(R.id.imgProfile);
 
         txtName.setText(leaderboard.getFullname());
-        txtRank.setText(String.valueOf(position));
+        txtRank.setText(String.valueOf(position+2));
         txtCoins.setText(String.valueOf(leaderboard.getCoins()));
+
+        Picasso.with(context)
+                .load(StaticData.config.getMediaUrl()+leaderboard.getAvatar())
+                .into(imgProfile);
 
         return convertView;
     }

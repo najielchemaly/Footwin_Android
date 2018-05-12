@@ -136,7 +136,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/white"
                         android:textAllCaps="true"
-                        android:textSize="@dimen/xsmall_text"
+                        android:textSize="8sp"
                         android:textStyle="bold"
                         android:text="confirmed"
                         />

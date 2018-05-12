@@ -93,9 +93,12 @@ public class LeaderboardFragment extends Fragment {
             public void onResponse(Call<LeaderboardResponse> call, Response<LeaderboardResponse> response) {
                 LeaderboardResponse leaderboardResponse = response.body();
                 firstPlaceUser = leaderboardResponse.getLeaderboard().get(0);
+                leaderboards = leaderboardResponse.getLeaderboard();
+                
+                leaderboardResponse.getLeaderboard().remove(0);
                 leaderBoardAdapter = new LeaderBoardAdapter(leaderboardResponse.getLeaderboard(), getContext());
                 listLeaderboard.setAdapter(leaderBoardAdapter);
-                leaderboards = leaderboardResponse.getLeaderboard();
+
 
                 progressBar.setVisibility(View.GONE);
                 txtUserNameRank1.setText(firstPlaceUser.getFullname());

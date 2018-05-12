@@ -27,9 +27,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import static com.apploads.footwin.helpers.Constants.PENDING;
-import static com.apploads.footwin.helpers.Constants.LOSE;
-import static com.apploads.footwin.helpers.Constants.WON;
+import static com.apploads.footwin.helpers.Constants.*;
 
 public class MatchesResultAdapter extends BaseAdapter {
 
@@ -87,6 +85,7 @@ public class MatchesResultAdapter extends BaseAdapter {
             holder.viewHeaderResult = convertView.findViewById(R.id.viewHeaderResult);
             holder.viewHomeTeam = convertView.findViewById(R.id.viewHomeTeam);
             holder.viewAwayTeam = convertView.findViewById(R.id.viewAwayTeam);
+            holder.txtWinningCoins = convertView.findViewById(R.id.txtWinningCoins);
             holder.imgHomeTeam = convertView.findViewById(R.id.imgHomeTeam);
             holder.imgAwayTeam = convertView.findViewById(R.id.imgAwayTeam);
             holder.viewConfirm = convertView.findViewById(R.id.viewConfirm);
@@ -145,6 +144,15 @@ public class MatchesResultAdapter extends BaseAdapter {
                 case WON :
                     holder.viewHeaderResult.setBackgroundResource(R.drawable.myprediction_top_green);
                     holder.txtHeaderDesc.setText(prediction.getDescription());
+                    holder.viewWinning.setVisibility(View.VISIBLE);
+                    holder.txtWinningCoins.setText("+" + prediction.getWinning_coins());
+                    break;
+
+                case WON_EXACT_SCORE:
+                    holder.viewHeaderResult.setBackgroundResource(R.drawable.myprediction_top_green);
+                    holder.txtHeaderDesc.setText(prediction.getDescription());
+                    holder.viewWinning.setVisibility(View.VISIBLE);
+                    holder.txtWinningCoins.setText("+" + prediction.getWinning_coins());
                     break;
 
                 case LOSE :
@@ -225,7 +233,7 @@ public class MatchesResultAdapter extends BaseAdapter {
     }
 
     public class Holder {
-        TextView txtHomeTeam, txtAwayTeam, txtScoreHome, txtScoreAway, txtScoreSep, txtHeaderTite, txtHeaderDesc;
+        TextView txtHomeTeam, txtAwayTeam, txtScoreHome, txtScoreAway, txtScoreSep, txtHeaderTite, txtHeaderDesc, txtWinningCoins;
         RelativeLayout viewHeaderResult;
         LinearLayout viewHomeTeam, viewAwayTeam, viewConfirm, viewScore, viewWinning;
         ImageView imgAwayTeam, imgHomeTeam;

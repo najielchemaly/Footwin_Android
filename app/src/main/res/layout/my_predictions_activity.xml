@@ -49,4 +49,13 @@
         android:layout_width="70dp"
         android:layout_height="70dp" />
 
+    <RelativeLayout
+        android:id="@+id/viewNoData"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/txtMyPredictions"
+        android:layout_marginBottom="45dp"
+        android:visibility="gone"
+        />
+
 </RelativeLayout>

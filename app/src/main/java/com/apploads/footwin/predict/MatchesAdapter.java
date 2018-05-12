@@ -144,6 +144,12 @@ public class MatchesAdapter extends BaseAdapter {
                     holder.imgAwayTeam.setAlpha(0.5f);
                     holder.txtAwayTeam.setAlpha(0.5f);
                     holder.btnDraw.setAlpha(0.5f);
+
+                    holder.imgHomeTeam.setScaleX(1.2f);
+                    holder.imgHomeTeam.setScaleY(1.2f);
+                    holder.imgAwayTeam.setScaleX(0.8f);
+                    holder.imgAwayTeam.setScaleY(0.8f);
+
                     holder.txtConfirm.setTextColor(context.getResources().getColor(R.color.white));
                     holder.imgCheck.setColorFilter(ContextCompat.getColor(context, R.color.white), android.graphics.PorterDuff.Mode.SRC_IN);
                     holder.viewConfirm.setBackgroundResource(R.drawable.circle_shape_green);
@@ -154,6 +160,12 @@ public class MatchesAdapter extends BaseAdapter {
                     holder.imgHomeTeam.setBackgroundResource(0);
                     holder.imgHomeTeam.setAlpha(0.5f);
                     holder.txtHomeTeam.setAlpha(0.5f);
+
+                    holder.imgAwayTeam.setScaleX(1.2f);
+                    holder.imgAwayTeam.setScaleY(1.2f);
+                    holder.imgHomeTeam.setScaleX(0.8f);
+                    holder.imgHomeTeam.setScaleY(0.8f);
+
                     holder.btnDraw.setAlpha(0.5f);
                     holder.txtConfirm.setTextColor(context.getResources().getColor(R.color.white));
                     holder.imgCheck.setColorFilter(ContextCompat.getColor(context, R.color.white), android.graphics.PorterDuff.Mode.SRC_IN);
@@ -165,6 +177,12 @@ public class MatchesAdapter extends BaseAdapter {
                     holder.imgHomeTeam.setBackgroundResource(0);
                     holder.imgHomeTeam.setAlpha(0.5f);
                     holder.txtHomeTeam.setAlpha(0.5f);
+
+                    holder.imgAwayTeam.setScaleX(0.8f);
+                    holder.imgAwayTeam.setScaleY(0.8f);
+                    holder.imgHomeTeam.setScaleX(0.8f);
+                    holder.imgHomeTeam.setScaleY(0.8f);
+
                     holder.viewConfirm.animate().alpha(1f).setDuration(300);
                     holder.viewConfirm.setClickable(true);
                     holder.txtConfirm.setTextColor(context.getResources().getColor(R.color.white));
@@ -184,7 +202,6 @@ public class MatchesAdapter extends BaseAdapter {
             formatter.setLenient(false);
 
             String endTime = match.getDate();
-//            String endTime = "27.04.2018, 15:05:36";
 
             try {
                 endDate = formatter.parse(endTime);
@@ -229,6 +246,7 @@ public class MatchesAdapter extends BaseAdapter {
                         holder.viewConfirm.animate().alpha(0f).setDuration(300);
                         holder.viewConfirm.setClickable(false);
                         holder.imgAwayTeam.startAnimation(scale_up_normal);
+
                         match.setHomeToWin(false);
                         match.setAwayToWin(false);
                     }else {
@@ -249,6 +267,7 @@ public class MatchesAdapter extends BaseAdapter {
                         holder.txtAwayTeam.animate().alpha(0.5f).setDuration(300);
                         holder.viewConfirm.animate().alpha(1f).setDuration(300);
                         holder.viewConfirm.setClickable(true);
+
                         holder.btnDraw.setBackgroundResource(R.drawable.retangle_white_border);
                         match.setHomeToWin(true);
                         match.setAwayToWin(false);
@@ -269,6 +288,7 @@ public class MatchesAdapter extends BaseAdapter {
                         holder.viewConfirm.animate().alpha(0f).setDuration(300);
                         holder.viewConfirm.setClickable(false);
                         holder.btnDraw.setBackgroundResource(R.drawable.retangle_white_border);
+
                         match.setAwayToWin(false);
                         match.setHomeToWin(false);
                     }else {
@@ -290,6 +310,7 @@ public class MatchesAdapter extends BaseAdapter {
                         holder.viewConfirm.animate().alpha(1f).setDuration(300);
                         holder.viewConfirm.setClickable(true);
                         holder.btnDraw.setBackgroundResource(R.drawable.retangle_white_border);
+
                         match.setAwayToWin(true);
                         match.setHomeToWin(false);
                         match.setDraw(false);

@@ -334,24 +334,26 @@ public class PredictFragment extends Fragment {
                 if(response.isSuccessful()  && response.body() != null){
                     final Profile match = response.body();
 
-                    if(mainPageActivity != null) {
-                        Match currentMatch = match.getMatches().get(0);
-                        mainPageActivity.checkTutorial(currentMatch.getHomeName(), currentMatch.getHomeFlag());
-                    }
-
-                    if(isRefreshing) {
-                        pullToRefresh.setRefreshing(false);
-                    }
-
-                    final Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            matchesAdapter = new MatchesAdapter(match.getMatches(), getContext(), PredictFragment.this);
-                            listMatches.setAdapter(matchesAdapter);
-                            progressBar.setVisibility(View.GONE);
+                    if(match.getMatches().size() > 0){
+                        if(mainPageActivity != null) {
+                            Match currentMatch = match.getMatches().get(0);
+                            mainPageActivity.checkTutorial(currentMatch.getHomeName(), currentMatch.getHomeFlag());
                         }
-                    }, 2000);
+
+                        if(isRefreshing) {
+                            pullToRefresh.setRefreshing(false);
+                        }
+
+                        final Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                matchesAdapter = new MatchesAdapter(match.getMatches(), getContext(), PredictFragment.this);
+                                listMatches.setAdapter(matchesAdapter);
+                                progressBar.setVisibility(View.GONE);
+                            }
+                        }, 2000);
+                    }
                 }
             }
 

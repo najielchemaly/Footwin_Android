@@ -26,7 +26,7 @@ public class EditProfileActivity extends BaseActivity {
     Button btnSave;
     EditText txtFullname, txtEmail, txtMobile;
     MaterialSpinner spinnerGender;
-    TextView txtCountry, txtPhoneCode;
+    TextView txtCountry, txtPhoneCode, txtBack;
 
     @Override
     public int getContentViewId() {
@@ -47,6 +47,7 @@ public class EditProfileActivity extends BaseActivity {
         spinnerGender = _findViewById(R.id.spinnerGender);
         txtCountry = _findViewById(R.id.txtCountry);
         txtPhoneCode = _findViewById(R.id.txtPhoneCode);
+        txtBack = _findViewById(R.id.txtBack);
         spinnerGender.setItems("Male", "FEMALE");
 
         txtFullname.setText(StaticData.user.getFullname());
@@ -79,6 +80,13 @@ public class EditProfileActivity extends BaseActivity {
                 if(validateView()){
                     editUserService();
                 }
+            }
+        });
+
+        txtBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
     }

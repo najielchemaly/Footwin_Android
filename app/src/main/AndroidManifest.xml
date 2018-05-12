@@ -46,7 +46,6 @@
         <activity android:name=".login.RetrievePasswordActivity" />
         <activity android:name=".notifications.NotificationsActivity" />
         <activity android:name=".coins.CoinsActivity" />
-        <!--<activity android:name=".ViewRulesActivity" />-->
         <activity android:name=".signup.SignupStepOne" />
         <activity android:name=".signup.SignupStepTwo" />
         <activity android:name=".signup.SignupStepThree" />
@@ -54,6 +53,7 @@
         <activity android:name=".profile.MyPredictionsActivity" />
         <activity android:name=".profile.ChangePasswordActivity" />
         <activity android:name=".profile.EditProfileActivity" />
+        <activity android:name=".profile.TermsAndConditionsActivity" />
         <activity
             android:name=".ViewRulesActivity"
             android:theme="@style/Theme.Transparent" />

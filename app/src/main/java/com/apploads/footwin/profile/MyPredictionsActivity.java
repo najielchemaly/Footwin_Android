@@ -1,11 +1,15 @@
 package com.apploads.footwin.profile;
 
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.apploads.footwin.NoDataView;
 import com.apploads.footwin.R;
 import com.apploads.footwin.helpers.BaseActivity;
 import com.apploads.footwin.model.Match;
@@ -25,6 +29,8 @@ public class MyPredictionsActivity extends BaseActivity {
     Button btnClose;
     MatchesResultAdapter matchesResultAdapter;
     ProgressBar progressBar;
+    RelativeLayout viewNoData;
+    NoDataView noDataView;
 
     @Override
     public int getContentViewId() {
@@ -36,9 +42,9 @@ public class MyPredictionsActivity extends BaseActivity {
         listPredictions = _findViewById(R.id.listPredictions);
         btnClose = _findViewById(R.id.btnClose);
         progressBar = _findViewById(R.id.spin_kit);
+        viewNoData = _findViewById(R.id.viewNoData);
         DoubleBounce doubleBounce = new DoubleBounce();
         progressBar.setIndeterminateDrawable(doubleBounce);
-
 
         ApiManager.getService().getPredictions().enqueue(new Callback<PredictionResponse>() {
             @Override
@@ -49,12 +55,17 @@ public class MyPredictionsActivity extends BaseActivity {
                     if(predictionResponse.getPredictions().size() > 0){
                         matchesResultAdapter = new MatchesResultAdapter(predictionResponse.getPredictions(), MyPredictionsActivity.this);
                         listPredictions.setAdapter(matchesResultAdapter);
+                        viewNoData.setVisibility(View.GONE);
                     }else {
-                        Toast.makeText(MyPredictionsActivity.this, "No predictions placed", Toast.LENGTH_SHORT).show();
+                        noDataView = new NoDataView(MyPredictionsActivity.this,"YOU DONT HAVE ANY PREDICTIONS YET");
+                        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                        viewNoData.addView(noDataView, lp);
+                        viewNoData.setVisibility(View.VISIBLE);
                     }
 
                 }else {
                     //TODO SHOW NO PREDICTION SCREEN
+                    viewNoData.setVisibility(View.GONE);
                     Toast.makeText(MyPredictionsActivity.this, "Check your internet connection and try again later", Toast.LENGTH_SHORT).show();
                 }
                 progressBar.setVisibility(View.GONE);
