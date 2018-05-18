@@ -70,9 +70,10 @@ public class LoadingActivity extends BaseActivity {
 
     /**
      * Api request for getting the config and saving them in the config Object
+     * http://config.foot-win.com
      */
     private void callConfigService(){
-        ApiManager.getService(true).getConfig("http://config.foot-win.com").enqueue(new Callback<Config>() {
+        ApiManager.getService(true).getConfig("http://test.config.foot-win.com/").enqueue(new Callback<Config>() {
             @Override
             public void onResponse(Call<Config> call, Response<Config> response) {
                 config = response.body();

@@ -30,6 +30,10 @@ import com.apploads.footwin.services.ApiManager;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.reward.RewardItem;
+import com.google.android.gms.ads.reward.RewardedVideoAd;
+import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Picasso;
@@ -51,6 +55,7 @@ public class MainPageActivity extends BaseActivity {
     public String selectedFragmentstr = "predict";
     int selectedView = 0;
     private AdView mAdView;
+    RewardedVideoAd mRewardedVideoAd;
 
     public BottomNavigationView bottomNavigationView;
 
@@ -84,6 +89,52 @@ public class MainPageActivity extends BaseActivity {
 //        mAdView = findViewById(R.id.adView);
 //        AdRequest adRequest = new AdRequest.Builder().build();
 //        mAdView.loadAd(adRequest);
+
+        mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this);
+        mRewardedVideoAd.setRewardedVideoAdListener(new RewardedVideoAdListener() {
+            @Override
+            public void onRewardedVideoAdLoaded() {
+                mRewardedVideoAd.show();
+            }
+
+            @Override
+            public void onRewardedVideoAdOpened() {
+
+            }
+
+            @Override
+            public void onRewardedVideoStarted() {
+
+            }
+
+            @Override
+            public void onRewardedVideoAdClosed() {
+
+            }
+
+            @Override
+            public void onRewarded(RewardItem rewardItem) {
+                Toast.makeText(MainPageActivity.this, "onRewarded! currency: " + rewardItem.getType() + "  amount: " +
+                        rewardItem.getAmount(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onRewardedVideoAdLeftApplication() {
+
+            }
+
+            @Override
+            public void onRewardedVideoAdFailedToLoad(int i) {
+                Toast.makeText(MainPageActivity.this, "error", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onRewardedVideoCompleted() {
+
+            }
+        });
+
+        loadRewardedVideoAd();
 
         Picasso.with(MainPageActivity.this)
                 .load(StaticData.config.getMediaUrl()+StaticData.user.getAvatar())
@@ -242,10 +293,28 @@ public class MainPageActivity extends BaseActivity {
 //        });
     }
 
+    private void loadRewardedVideoAd() {
+        mRewardedVideoAd.loadAd("ca-app-pub-3940256099942544/5224354917",
+                new AdRequest.Builder().build());
+    }
+
     @Override
     protected void onResume() {
+        mRewardedVideoAd.resume(this);
         super.onResume();
         StaticData.context = MainPageActivity.this;
+    }
+
+    @Override
+    public void onPause() {
+        mRewardedVideoAd.pause(this);
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        mRewardedVideoAd.destroy(this);
+        super.onDestroy();
     }
 
     private void sendRegistrationToServer(final String token) {
