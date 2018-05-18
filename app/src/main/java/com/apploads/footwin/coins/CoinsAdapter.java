@@ -18,10 +18,12 @@ public class CoinsAdapter extends RecyclerView.Adapter<CoinsViewHolder> {
 
     private List<Package> coinList;
     private Context context;
+    private CoinsActivity activity;
 
-    public CoinsAdapter(List<Package> coinList, Context context) {
+    public CoinsAdapter(List<Package> coinList, Context context, CoinsActivity activity) {
         this.coinList = coinList;
         this.context = context;
+        this.activity = activity;
     }
 
     @Override
@@ -41,6 +43,13 @@ public class CoinsAdapter extends RecyclerView.Adapter<CoinsViewHolder> {
         holder.txtCoins.setText(aPackage.getCoins() + " COINS");
         holder.txtPrice.setText(aPackage.getPrice() + " $");
 
+        holder.btnPurchase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                activity.purchaseProduct(aPackage);
+            }
+        });
+
     }
 
     @Override
@@ -53,7 +62,7 @@ public class CoinsAdapter extends RecyclerView.Adapter<CoinsViewHolder> {
 class CoinsViewHolder extends RecyclerView.ViewHolder {
 
     TextView txtTitle, txtDesc, txtCoins, txtPrice;
-    Button btnGetCoins;
+    Button btnPurchase;
 
     public CoinsViewHolder(View itemLayoutView) {
         super(itemLayoutView);
@@ -62,6 +71,6 @@ class CoinsViewHolder extends RecyclerView.ViewHolder {
         txtDesc = itemLayoutView.findViewById(R.id.txtDesc);
         txtCoins = itemLayoutView.findViewById(R.id.txtCoins);
         txtPrice = itemLayoutView.findViewById(R.id.txtPrice);
-        btnGetCoins = itemLayoutView.findViewById(R.id.btnGetCoins);
+        btnPurchase = itemLayoutView.findViewById(R.id.btnPurchase);
     }
 }

@@ -283,7 +283,10 @@ public class PredictFragment extends Fragment {
                         BasicResponse basicResponse = response.body();
 
                         if(basicResponse.getStatus() == 1){
+                            txtCoinsTotal.setText(basicResponse.getCoins());
                             match.setIsConfirmed("1");
+                            StaticData.user.setCoins(basicResponse.getCoins());
+                            AppUtils.startCountAnimation(txtCoinsTotal,0,Integer.parseInt(basicResponse.getCoins()),1500);
                             listMatches.setAdapter(matchesAdapter);
                         }else if(basicResponse.getStatus() == 0){
                             CustomDialogClass dialogClass = new CustomDialogClass(getActivity(), new CustomDialogClass.AbstractCustomDialogListener() {
@@ -332,11 +335,11 @@ public class PredictFragment extends Fragment {
             @Override
             public void onResponse(Call<Profile> call, final Response<Profile> response) {
                 if(response.isSuccessful()  && response.body() != null){
-                    final Profile match = response.body();
+                    final Profile profile = response.body();
 
-                    if(match.getMatches().size() > 0){
+                    if(profile.getMatches().size() > 0){
                         if(mainPageActivity != null) {
-                            Match currentMatch = match.getMatches().get(0);
+                            Match currentMatch = profile.getMatches().get(0);
                             mainPageActivity.checkTutorial(currentMatch.getHomeName(), currentMatch.getHomeFlag());
                         }
 
@@ -348,7 +351,7 @@ public class PredictFragment extends Fragment {
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                matchesAdapter = new MatchesAdapter(match.getMatches(), getContext(), PredictFragment.this);
+                                matchesAdapter = new MatchesAdapter(profile.getMatches(), getContext(), PredictFragment.this);
                                 listMatches.setAdapter(matchesAdapter);
                                 progressBar.setVisibility(View.GONE);
                             }

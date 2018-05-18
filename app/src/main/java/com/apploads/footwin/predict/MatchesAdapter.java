@@ -387,8 +387,11 @@ public class MatchesAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void setHomeToWin(){
-
+    public void scaleImage(ImageView imageView, float newSize){
+        imageView.animate().
+                scaleX(newSize).
+                scaleY(newSize).
+                setDuration(300).start();
     }
 
     public class Holder {

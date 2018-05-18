@@ -12,6 +12,10 @@ public class BasicResponse {
     @Expose
     private String message;
 
+    @SerializedName("coins")
+    @Expose
+    private String coins;
+
     public String getFields() {
         return fields;
     }
@@ -40,4 +44,11 @@ public class BasicResponse {
         this.message = message;
     }
 
+    public String getCoins() {
+        return coins;
+    }
+
+    public void setCoins(String coins) {
+        this.coins = coins;
+    }
 }
