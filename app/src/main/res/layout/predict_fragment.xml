@@ -15,7 +15,8 @@
         android:layout_marginTop="@dimen/app_margin"
         android:src="@drawable/tab_profile"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/circle_shape_white"/>
 
     <RelativeLayout
         android:id="@+id/viewNotificationTag"

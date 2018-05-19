@@ -117,9 +117,16 @@ public class PredictFragment extends Fragment {
 
         viewExactScoreParent.setVisibility(View.GONE);
 
-        Picasso.with(getActivity())
-                .load(StaticData.config.getMediaUrl() + StaticData.user.getAvatar())
-                .into(imgProfile);
+        if(StaticData.user.getAvatar() != null && !StaticData.user.getAvatar().isEmpty()) {
+            Picasso.with(getActivity())
+                    .load(StaticData.config.getMediaUrl() + StaticData.user.getAvatar())
+                    .into(imgProfile);
+        } else {
+            imgProfile.setImageResource(R.drawable.avatar_male);
+            if(StaticData.user.getGender() == "female") {
+                imgProfile.setImageResource(R.drawable.avatar_female);
+            }
+        }
 
         txtRound.setText(StaticData.config.getActiveRound().getTitle());
 
@@ -300,7 +307,7 @@ public class PredictFragment extends Fragment {
                                 }
                             }, true);
 
-                            dialogClass.setTitle("Oops");
+                            dialogClass.setTitle("FOOTWIN");
                             dialogClass.setMessage(basicResponse.getMessage());
                             dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
                             dialogClass.show();
@@ -336,26 +343,29 @@ public class PredictFragment extends Fragment {
             public void onResponse(Call<Profile> call, final Response<Profile> response) {
                 if(response.isSuccessful()  && response.body() != null){
                     final Profile profile = response.body();
-
-                    if(profile.getMatches().size() > 0){
-                        if(mainPageActivity != null) {
-                            Match currentMatch = profile.getMatches().get(0);
-                            mainPageActivity.checkTutorial(currentMatch.getHomeName(), currentMatch.getHomeFlag());
-                        }
-
-                        if(isRefreshing) {
-                            pullToRefresh.setRefreshing(false);
-                        }
-
-                        final Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                matchesAdapter = new MatchesAdapter(profile.getMatches(), getContext(), PredictFragment.this);
-                                listMatches.setAdapter(matchesAdapter);
-                                progressBar.setVisibility(View.GONE);
+                    if(profile.getStatus() == 1) {
+                        if (profile.getMatches() != null && profile.getMatches().size() > 0) {
+                            if (mainPageActivity != null) {
+                                Match currentMatch = profile.getMatches().get(0);
+                                mainPageActivity.checkTutorial(currentMatch.getHomeName(), currentMatch.getHomeFlag());
                             }
-                        }, 2000);
+
+                            if (isRefreshing) {
+                                pullToRefresh.setRefreshing(false);
+                            }
+
+                            final Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    matchesAdapter = new MatchesAdapter(profile.getMatches(), getContext(), PredictFragment.this);
+                                    listMatches.setAdapter(matchesAdapter);
+                                    progressBar.setVisibility(View.GONE);
+                                }
+                            }, 2000);
+                        }
+                    } else if(profile.getMessage() != null) {
+                        AppUtils.showAlert(getContext(), profile.getMessage());
                     }
                 }
             }

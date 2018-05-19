@@ -1,5 +1,6 @@
 package com.apploads.footwin;
 
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.provider.Settings;
@@ -136,9 +137,16 @@ public class MainPageActivity extends BaseActivity {
 
         loadRewardedVideoAd();
 
-        Picasso.with(MainPageActivity.this)
-                .load(StaticData.config.getMediaUrl()+StaticData.user.getAvatar())
-                .into(imgProfile);
+        if(StaticData.user.getAvatar() != null && !StaticData.user.getAvatar().isEmpty()) {
+            Picasso.with(MainPageActivity.this)
+                    .load(StaticData.config.getMediaUrl() + StaticData.user.getAvatar())
+                    .into(imgProfile);
+        } else {
+            imgProfile.setImageResource(R.drawable.avatar_male);
+            if(StaticData.user.getGender() == "female") {
+                imgProfile.setImageResource(R.drawable.avatar_female);
+            }
+        }
 
         viewNotification.setAlpha(0f);
         viewCoins.setAlpha(0f);

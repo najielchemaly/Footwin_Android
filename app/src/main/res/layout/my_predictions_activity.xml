@@ -55,6 +55,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/txtMyPredictions"
         android:layout_marginBottom="45dp"
+        android:layout_marginTop="@dimen/app_margin"
         android:visibility="gone"
         />
 

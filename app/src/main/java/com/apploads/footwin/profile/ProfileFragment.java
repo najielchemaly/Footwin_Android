@@ -51,9 +51,17 @@ public class ProfileFragment extends Fragment {
         viewLogout = parentView.findViewById(R.id.viewLogout);
 
         txtName.setText(StaticData.user.getFullname());
-        Picasso.with(getActivity())
-                .load(StaticData.config.getMediaUrl() + StaticData.user.getAvatar())
-                .into(imgProfile);
+
+        if(StaticData.user.getAvatar() != null && !StaticData.user.getAvatar().isEmpty()) {
+            Picasso.with(getActivity())
+                    .load(StaticData.config.getMediaUrl() + StaticData.user.getAvatar())
+                    .into(imgProfile);
+        } else {
+            imgProfile.setImageResource(R.drawable.avatar_male);
+            if(StaticData.user.getGender() == "female") {
+                imgProfile.setImageResource(R.drawable.avatar_female);
+            }
+        }
 
         txtMyPredictions.setOnClickListener(new View.OnClickListener() {
             @Override

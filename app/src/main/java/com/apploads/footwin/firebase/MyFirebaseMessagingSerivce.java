@@ -53,6 +53,11 @@ public class MyFirebaseMessagingSerivce extends FirebaseMessagingService {
         }
     }
 
+    @Override
+    public void onRebind(Intent intent) {
+        super.onRebind(intent);
+    }
+
     private void createNotification(RemoteMessage remoteMessage){
         Intent intent = new Intent(this, NotificationsActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

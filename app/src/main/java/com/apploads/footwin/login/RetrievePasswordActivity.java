@@ -70,8 +70,8 @@ public class RetrievePasswordActivity extends BaseActivity {
                         }
                     }, true);
 
-                    dialogClass.setTitle("Oops");
-                    dialogClass.setMessage("Make sure you fill your email before proceeding");
+                    dialogClass.setTitle("FOOTWIN");
+                    dialogClass.setMessage("YOU MUST ENTER A VALID EMAIL");
                     dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
                     dialogClass.show();
                 }

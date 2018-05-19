@@ -91,7 +91,6 @@ public class LoginActivity extends BaseActivity {
      * initialize listeners
      */
     private void initListeners() {
-
         imgFB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -144,32 +143,35 @@ public class LoginActivity extends BaseActivity {
                 new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
-                        // App code
+                        progressBar.setVisibility(View.VISIBLE);
                         GraphRequest request = GraphRequest.newMeRequest(
                                 loginResult.getAccessToken(),
                                 new GraphRequest.GraphJSONObjectCallback() {
                                     @Override
                                     public void onCompleted(JSONObject object, GraphResponse response) {
-                                        Log.v("LoginActivity", response.toString());
-
                                         try {
-                                            String email = object.getString("email");
-                                            String birthday = object.getString("birthday"); // 01/31/1980 format
+                                            String gender = object.has("gender") ? object.getString("gender") : "";
+                                            String id = object.has("id") ? object.getString("id") : "";
+                                            String name = object.has("name") ? object.getString("name") : "";
+                                            String email = object.has("email") ? object.getString("email") : "";
+                                            String token = AccessToken.getCurrentAccessToken() != null ?
+                                                    AccessToken.getCurrentAccessToken().getToken() : "";
+
+                                            callFacebookLoginService(id, token, name.replace(" ", "").toLowerCase(), name, email, gender);
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
                                     }
                                 });
                         Bundle parameters = new Bundle();
-                        parameters.putString("fields", "id,name,email,gender,birthday");
+                        parameters.putString("fields", "id, name, email, gender, birthday");
                         request.setParameters(parameters);
                         request.executeAsync();
                     }
 
                     @Override
                     public void onCancel() {
-                        // App code
-
+                        progressBar.setVisibility(View.GONE);
                         Toast.makeText(LoginActivity.this, "error", Toast.LENGTH_SHORT).show();
                     }
 
@@ -179,11 +181,6 @@ public class LoginActivity extends BaseActivity {
                         Toast.makeText(LoginActivity.this, "error" + exception.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
-
-        // This to check if you are already logged in
-//        AccessToken accessToken = AccessToken.getCurrentAccessToken();
-//        boolean isLoggedIn = accessToken == null;
-//        boolean isExpired = accessToken.isExpired();
     }
 
     @Override
@@ -199,7 +196,7 @@ public class LoginActivity extends BaseActivity {
      * this function is for validating the email and password fields before proceeding
      */
     private boolean validateFields() {
-        if (!StringUtils.isValid(txtEmail.getText()) || !StringUtils.isValid(txtPassword.getText())) {
+        if (!AppUtils.isEmailValid(txtEmail.getText().toString())) {
             CustomDialogClass dialogClass = new CustomDialogClass(LoginActivity.this, new CustomDialogClass.AbstractCustomDialogListener() {
                 @Override
                 public void onConfirm(CustomDialogClass.DialogResponse response) {
@@ -213,35 +210,34 @@ public class LoginActivity extends BaseActivity {
                 }
             }, true);
 
-            dialogClass.setTitle("Oops");
-            dialogClass.setMessage("Make sure you fill both fields to continue");
+            dialogClass.setTitle("FOOTWIN");
+            dialogClass.setMessage("YOU MUST ENTER A VALID EMAIL");
             dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
             dialogClass.show();
             return false;
-        } else {
-            if (!AppUtils.isEmailValid(txtEmail.getText().toString())) {
-                CustomDialogClass dialogClass = new CustomDialogClass(LoginActivity.this, new CustomDialogClass.AbstractCustomDialogListener() {
-                    @Override
-                    public void onConfirm(CustomDialogClass.DialogResponse response) {
-                        response.getDialog().dismiss();
-                        txtEmail.setText("");
-                        txtPassword.setText("");
-                    }
-
-                    @Override
-                    public void onCancel(CustomDialogClass.DialogResponse dialogResponse) {
-                    }
-                }, true);
-
-                dialogClass.setTitle("Oops");
-                dialogClass.setMessage("Make sure you enter a valid email address");
-                dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-                dialogClass.show();
-                return false;
-            } else {
-                return true;
-            }
         }
+        if (!StringUtils.isValid(txtPassword.getText())) {
+            CustomDialogClass dialogClass = new CustomDialogClass(LoginActivity.this, new CustomDialogClass.AbstractCustomDialogListener() {
+                @Override
+                public void onConfirm(CustomDialogClass.DialogResponse response) {
+                    response.getDialog().dismiss();
+                    txtEmail.setText("");
+                    txtPassword.setText("");
+                }
+
+                @Override
+                public void onCancel(CustomDialogClass.DialogResponse dialogResponse) {
+                }
+            }, true);
+
+            dialogClass.setTitle("FOOTWIN");
+            dialogClass.setMessage("PASSWORD CANNOT BE EMPTY!");
+            dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+            dialogClass.show();
+            return false;
+        }
+
+        return true;
     }
 
     private void callLoginService() {
@@ -279,6 +275,53 @@ public class LoginActivity extends BaseActivity {
                         dialogClass.show();
                     }
                 }else {
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(LoginActivity.this, "Check your internet connection and try again later", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserResponse> call, Throwable t) {
+                Toast.makeText(LoginActivity.this, "Check your internet connection", Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    private void callFacebookLoginService(String facebook_id, String facebook_token, String username, String fullname, String email, String gender) {
+        ApiManager.getService(true).facebookLogin(facebook_id, facebook_token, username, fullname, email, gender).enqueue(new Callback<UserResponse>() {
+            @Override
+            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                if (response.isSuccessful()) {
+                    if (response.body().getStatus() == 1) {
+                        UserResponse userResponse = response.body();
+                        StaticData.user = userResponse.getUser();
+                        AppUtils.saveUser(LoginActivity.this, userResponse.getUser());
+                        Intent intent = new Intent(getApplicationContext(), MainPageActivity.class);
+                        startActivity(intent);
+                        finish();
+                        progressBar.setVisibility(View.GONE);
+                    } else if (response.body().getStatus() == 0) {
+                        progressBar.setVisibility(View.GONE);
+                        CustomDialogClass dialogClass = new CustomDialogClass(LoginActivity.this, new CustomDialogClass.AbstractCustomDialogListener() {
+                            @Override
+                            public void onConfirm(CustomDialogClass.DialogResponse response) {
+                                response.getDialog().dismiss();
+                                txtEmail.setText("");
+                                txtPassword.setText("");
+                            }
+
+                            @Override
+                            public void onCancel(CustomDialogClass.DialogResponse dialogResponse) {
+                            }
+                        }, true);
+
+                        dialogClass.setTitle("Oops");
+                        dialogClass.setMessage("An erro has occured, please try again!");
+                        dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                        dialogClass.show();
+                    }
+                } else {
                     progressBar.setVisibility(View.GONE);
                     Toast.makeText(LoginActivity.this, "Check your internet connection and try again later", Toast.LENGTH_SHORT).show();
                 }
