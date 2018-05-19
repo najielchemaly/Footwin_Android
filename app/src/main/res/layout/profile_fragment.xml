@@ -12,7 +12,7 @@
         android:layout_height="100dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
-        android:src="@drawable/brazil"
+        android:background="@drawable/circle_shape_white"
         />
 
     <ImageButton
@@ -36,7 +36,6 @@
         android:textAllCaps="true"
         android:textSize="@dimen/large_text"
         android:textStyle="bold"
-        android:text="Messi"
         android:layout_below="@+id/imgProfile"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
@@ -63,7 +62,7 @@
             android:textAllCaps="true"
             android:layout_gravity="center"
             android:layout_marginTop="30dp"
-            android:textSize="@dimen/medium_text"
+            android:textSize="@dimen/large_text"
             android:padding="5dp"
             android:text="My Predictions"
             />
@@ -86,7 +85,7 @@
             android:padding="5dp"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/app_margin"
-            android:textSize="@dimen/medium_text"
+            android:textSize="@dimen/large_text"
             android:text="edit my profile"
             />
 
@@ -108,7 +107,7 @@
             android:textAllCaps="true"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/app_margin"
-            android:textSize="@dimen/medium_text"
+            android:textSize="@dimen/large_text"
             android:text="change password"
             />
 
@@ -130,8 +129,8 @@
             android:textAllCaps="true"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/app_margin"
-            android:textSize="@dimen/medium_text"
-            android:text="terms conditions"
+            android:textSize="@dimen/large_text"
+            android:text="terms and conditions"
             />
     </LinearLayout>
 

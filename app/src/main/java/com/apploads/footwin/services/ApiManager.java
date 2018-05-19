@@ -16,11 +16,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public final class ApiManager {
 
-    private static final String API_URL = "http://api.foot-win.com/";
+    private static String API_URL = "http://test.api.foot-win.com/";
 
     private static Retrofit retrofit = null;
     private static boolean disbaleHeader;
-
 
     public static Retrofit getClient() {
 
@@ -37,7 +36,6 @@ public final class ApiManager {
                     requestBuilder = original.newBuilder().header("ID", "1");
                 } else {
                     //LoadingActivity.appConfig.getTOKEN()
-
                     requestBuilder = original.newBuilder().header("User-Id",StaticData.user.getId());
                 }
 
@@ -75,6 +73,10 @@ public final class ApiManager {
 
     public static String getApiUrl() {
         return API_URL;
+    }
+
+    public static void setApiUrl(String url) {
+        API_URL = url;
     }
 
 }

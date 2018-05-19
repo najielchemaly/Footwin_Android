@@ -84,16 +84,22 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                         listNews.setAdapter(newsAdapter);
                         progressBar.setVisibility(View.GONE);
                     }else {
-                        noDataView = new NoDataView(getActivity(),"test");
-                        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                        viewNoData.addView(noDataView, lp);
+                        if(noDataView == null) {
+                            noDataView = new NoDataView(getActivity(), "IT SEEMS THERE ARE NO NEWS YET!!");
+                            FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                            viewNoData.addView(noDataView, lp);
+                        }
+
                         viewNoData.setVisibility(View.VISIBLE);
                         progressBar.setVisibility(View.GONE);
                     }
                 }else {
-                    noDataView = new NoDataView(getActivity(),"test");
-                    FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                    viewNoData.addView(noDataView, lp);
+                    if(noDataView == null) {
+                        noDataView = new NoDataView(getActivity(), "IT SEEMS THERE ARE NO NEWS YET!!");
+                        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                        viewNoData.addView(noDataView, lp);
+                    }
+
                     viewNoData.setVisibility(View.VISIBLE);
                     progressBar.setVisibility(View.GONE);
                 }

@@ -3,6 +3,7 @@ package com.apploads.footwin.profile;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.apploads.footwin.R;
@@ -15,6 +16,7 @@ import com.apploads.footwin.login.LoginActivity;
 import com.apploads.footwin.model.UserResponse;
 import com.apploads.footwin.services.ApiManager;
 import com.jaredrummler.materialspinner.MaterialSpinner;
+import com.squareup.picasso.Picasso;
 import com.ybs.countrypicker.CountryPicker;
 import com.ybs.countrypicker.CountryPickerListener;
 
@@ -27,6 +29,7 @@ public class EditProfileActivity extends BaseActivity {
     EditText txtFullname, txtEmail, txtMobile;
     MaterialSpinner spinnerGender;
     TextView txtCountry, txtPhoneCode, txtBack;
+    ImageView imgProfile;
 
     @Override
     public int getContentViewId() {
@@ -48,6 +51,8 @@ public class EditProfileActivity extends BaseActivity {
         txtCountry = _findViewById(R.id.txtCountry);
         txtPhoneCode = _findViewById(R.id.txtPhoneCode);
         txtBack = _findViewById(R.id.txtBack);
+        imgProfile = _findViewById(R.id.imgProfile);
+
         spinnerGender.setItems("Male", "FEMALE");
 
         txtFullname.setText(StaticData.user.getFullname());
@@ -55,6 +60,17 @@ public class EditProfileActivity extends BaseActivity {
         txtEmail.setText(StaticData.user.getEmail());
         txtMobile.setText(StaticData.user.getPhone());
         txtPhoneCode.setText(StaticData.user.getPhoneCode());
+
+        if(StaticData.user.getAvatar() != null && !StaticData.user.getAvatar().isEmpty()) {
+            Picasso.with(this)
+                    .load(StaticData.config.getMediaUrl() + StaticData.user.getAvatar())
+                    .into(imgProfile);
+        } else {
+            imgProfile.setImageResource(R.drawable.avatar_male);
+            if(StaticData.user.getGender() == "female") {
+                imgProfile.setImageResource(R.drawable.avatar_female);
+            }
+        }
     }
 
     private void initListeners(){

@@ -104,9 +104,16 @@ public class LeaderboardFragment extends Fragment {
                 txtUserNameRank1.setText(firstPlaceUser.getFullname());
                 txtCoinsRank1.setText(firstPlaceUser.getCoins());
 
-                Picasso.with(getContext())
-                        .load(StaticData.config.getMediaUrl()+ firstPlaceUser.getAvatar())
-                        .into(imgRank1);
+                if(firstPlaceUser.getAvatar() != null && !firstPlaceUser.getAvatar().isEmpty()) {
+                    Picasso.with(getActivity())
+                            .load(StaticData.config.getMediaUrl() + firstPlaceUser.getAvatar())
+                            .into(imgRank1);
+                } else {
+                    imgRank1.setImageResource(R.drawable.avatar_male);
+                    if(StaticData.user.getGender() == "female") {
+                        imgRank1.setImageResource(R.drawable.avatar_female);
+                    }
+                }
             }
 
             @Override

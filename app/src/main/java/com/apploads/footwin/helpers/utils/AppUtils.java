@@ -32,10 +32,15 @@ public final class AppUtils {
     /**
      * for showing a native alertview with custom title and message
      *
-     * @param context do not user getapplication context , user ActivityName.this
-     * @param title   title of the dialogue
-     * @param message message of the dialogue
+//     * @param context do not user getapplication context , user ActivityName.this
+//     * @param title   title of the dialogue
+//     * @param message message of the dialogue
      */
+
+    public static void showAlert(Context context, String message) {
+        showAlert(context, "FOOTWIN", message);
+    }
+
     public static void showAlert(Context context, String title, String message) {
         AlertDialog alertDialog = new AlertDialog.Builder(context).create();
         alertDialog.setTitle(title);

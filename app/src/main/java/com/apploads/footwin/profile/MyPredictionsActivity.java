@@ -57,12 +57,14 @@ public class MyPredictionsActivity extends BaseActivity {
                         listPredictions.setAdapter(matchesResultAdapter);
                         viewNoData.setVisibility(View.GONE);
                     }else {
-                        noDataView = new NoDataView(MyPredictionsActivity.this,"YOU DONT HAVE ANY PREDICTIONS YET");
-                        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                        viewNoData.addView(noDataView, lp);
+                        if(noDataView == null) {
+                            noDataView = new NoDataView(MyPredictionsActivity.this, "NOTHING TO SHOW YET!\\nSTART WINNING PREDICTIONS, HIT THE FIRST PLACE IN THE LEADERBOARD AND WIN A SPECIAL TRIP TO YOUR FAVORITE TEAM'S COUNTRY!");
+                            FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                            viewNoData.addView(noDataView, lp);
+                        }
+
                         viewNoData.setVisibility(View.VISIBLE);
                     }
-
                 }else {
                     //TODO SHOW NO PREDICTION SCREEN
                     viewNoData.setVisibility(View.GONE);

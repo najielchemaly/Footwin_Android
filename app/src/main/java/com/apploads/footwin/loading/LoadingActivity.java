@@ -77,6 +77,7 @@ public class LoadingActivity extends BaseActivity {
             @Override
             public void onResponse(Call<Config> call, Response<Config> response) {
                 config = response.body();
+                ApiManager.setApiUrl(config.getBaseUrl());
                 IntentToLoginWithDuration(2000);
             }
 

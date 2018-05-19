@@ -17,14 +17,23 @@
         android:textSize="@dimen/xlarge_text"
         android:textStyle="bold" />
 
-    <ListView
-        android:id="@+id/listNotifications"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/pullToRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:dividerHeight="0dp"
-        android:divider="@null"
         android:layout_below="@+id/lblNotifications"
-        android:layout_marginBottom="50dp" />
+        android:layout_above="@id/btnClose"
+        android:layout_marginTop="@dimen/app_margin">
+
+        <ListView
+            android:id="@+id/listNotifications"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:dividerHeight="0dp"
+            android:divider="@null"
+            android:layout_marginBottom="50dp" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <Button
         android:id="@+id/btnClose"

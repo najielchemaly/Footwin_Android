@@ -63,9 +63,16 @@ public class LeaderBoardAdapter extends BaseAdapter {
         txtRank.setText(String.valueOf(position+2));
         txtCoins.setText(String.valueOf(leaderboard.getCoins()));
 
-        Picasso.with(context)
-                .load(StaticData.config.getMediaUrl()+leaderboard.getAvatar())
-                .into(imgProfile);
+        if(leaderboard.getAvatar() != null && !leaderboard.getAvatar().isEmpty()) {
+            Picasso.with(context)
+                    .load(StaticData.config.getMediaUrl() + leaderboard.getAvatar())
+                    .into(imgProfile);
+        } else {
+            imgProfile.setImageResource(R.drawable.avatar_male);
+            if(StaticData.user.getGender() == "female") {
+                imgProfile.setImageResource(R.drawable.avatar_female);
+            }
+        }
 
         return convertView;
     }

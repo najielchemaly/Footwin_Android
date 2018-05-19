@@ -74,7 +74,7 @@ public interface ServiceInterface {
     @FormUrlEncoded
     @POST("facebookLogin/")
     Call<UserResponse> facebookLogin(@Field("facebook_id") String facebook_id, @Field("facebook_token") String facebook_token
-            , @Field("fullname") String fullname, @Field("email") String email
+            , @Field("username") String username, @Field("fullname") String fullname, @Field("email") String email
             , @Field("gender") String gender);
 
     @Headers({

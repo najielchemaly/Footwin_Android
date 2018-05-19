@@ -13,7 +13,7 @@ public final class StringUtils {
     }
 
     public static boolean isValid(String str){
-        return !isNull(str)&& !isEmpty(str);
+        return !isNull(str) && !isEmpty(str);
     }
 
     public static boolean isValid(Object obj){
