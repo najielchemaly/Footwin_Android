@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.apploads.footwin.R;
+import com.apploads.footwin.helpers.utils.StringUtils;
 
 public class CustomDialogClass extends Dialog {
 
@@ -20,6 +21,7 @@ public class CustomDialogClass extends Dialog {
     private TextView txtMessage;
     private boolean isSingleButton;
     private AbstractCustomDialogListener listener;
+    String btnYesTitle, btnNoTitle;
 
     public CustomDialogClass(Activity a, AbstractCustomDialogListener listener, boolean isSingleButton) {
         super(a);
@@ -29,6 +31,19 @@ public class CustomDialogClass extends Dialog {
         this.listener = listener;
         this.listener.setDialog(this);
         this.listener.setDialog(this);
+    }
+
+    public CustomDialogClass(Activity a, AbstractCustomDialogListener listener, boolean isSingleButton, String btnYes, String btnNo) {
+        super(a);
+        // TODO Auto-generated constructor stub
+        this.c = a;
+        this.isSingleButton = isSingleButton;
+        this.listener = listener;
+        this.btnYesTitle = btnYes;
+        this.btnNoTitle = btnNo;
+        this.listener.setDialog(this);
+        this.listener.setDialog(this);
+
     }
 
     @Override
@@ -50,6 +65,11 @@ public class CustomDialogClass extends Dialog {
         if(isSingleButton){
             no.setVisibility(View.GONE);
             yes.setText("DONE");
+        }
+
+        if(StringUtils.isValid(btnYesTitle) && StringUtils.isValid(btnNoTitle)){
+            yes.setText(btnYesTitle);
+            no.setText(btnNoTitle);
         }
     }
 

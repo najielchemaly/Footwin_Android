@@ -1,6 +1,7 @@
 package com.apploads.footwin.news;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -18,9 +19,10 @@ import java.text.SimpleDateFormat;
 public class NewsDetailsActivity extends BaseActivity {
 
     Article article;
-    TextView txtDesc, txtTitle, txtDate;
+    TextView txtDesc, txtTitle, txtDate, txtUrl;
     Button btnClose;
     ImageView imgNews;
+    String newURL;
 
     @Override
     public int getContentViewId() {
@@ -38,6 +40,7 @@ public class NewsDetailsActivity extends BaseActivity {
         txtDate = _findViewById(R.id.txtDate);
         txtTitle = _findViewById(R.id.txtTitle);
         btnClose = _findViewById(R.id.btnClose);
+        txtUrl = _findViewById(R.id.txtUrl);
         imgNews = _findViewById(R.id.imgNews);
 
         Intent intent = getIntent();
@@ -50,6 +53,7 @@ public class NewsDetailsActivity extends BaseActivity {
             txtDate.setText(simpleDateFormat.format(article.getPublishedAt()));
             txtTitle.setText(article.getTitle());
             txtDesc.setText(article.getDescription());
+            newURL = article.getUrl();
 
             Picasso.with(this)
                     .load(article.getUrlToImage())
@@ -62,6 +66,15 @@ public class NewsDetailsActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 finish();
+            }
+        });
+
+        txtUrl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(newURL));
+                startActivity(i);
             }
         });
     }

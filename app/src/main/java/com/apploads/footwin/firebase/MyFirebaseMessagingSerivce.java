@@ -36,6 +36,11 @@ public class MyFirebaseMessagingSerivce extends FirebaseMessagingService {
             createNotification(remoteMessage);
         }
 
+        if(remoteMessage.getData() != null) {
+            String total_winning_coins = remoteMessage.getData().get("total_winning_coins");
+            StaticData.user.setWinningCoins(total_winning_coins);
+        }
+
         int badge = AppUtils.getBadge(getApplicationContext());
         AppUtils.updateBadge(getApplicationContext(), ++badge);
 
@@ -45,6 +50,7 @@ public class MyFirebaseMessagingSerivce extends FirebaseMessagingService {
             Fragment fragment = fm.findFragmentById(R.id.frame_layout);
             if (fragment instanceof PredictFragment){
                 ((PredictFragment) fragment).updateBadge();
+                ((PredictFragment) fragment).updateWinningCoins();
             }
         }
 

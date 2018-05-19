@@ -91,27 +91,31 @@ public class LeaderboardFragment extends Fragment {
         ApiManager.getService().getLeaderBoard().enqueue(new Callback<LeaderboardResponse>() {
             @Override
             public void onResponse(Call<LeaderboardResponse> call, Response<LeaderboardResponse> response) {
-                LeaderboardResponse leaderboardResponse = response.body();
-                firstPlaceUser = leaderboardResponse.getLeaderboard().get(0);
-                leaderboards = leaderboardResponse.getLeaderboard();
-                
-                leaderboardResponse.getLeaderboard().remove(0);
-                leaderBoardAdapter = new LeaderBoardAdapter(leaderboardResponse.getLeaderboard(), getContext());
-                listLeaderboard.setAdapter(leaderBoardAdapter);
+                if(response.isSuccessful() && response.body().getStatus() == 1){
+                    LeaderboardResponse leaderboardResponse = response.body();
+                    if(leaderboardResponse.getLeaderboard() != null){
+                        firstPlaceUser = leaderboardResponse.getLeaderboard().get(0);
+                        leaderboards = leaderboardResponse.getLeaderboard();
+
+                        leaderboardResponse.getLeaderboard().remove(0);
+                        leaderBoardAdapter = new LeaderBoardAdapter(leaderboardResponse.getLeaderboard(), getContext());
+                        listLeaderboard.setAdapter(leaderBoardAdapter);
 
 
-                progressBar.setVisibility(View.GONE);
-                txtUserNameRank1.setText(firstPlaceUser.getFullname());
-                txtCoinsRank1.setText(firstPlaceUser.getCoins());
+                        progressBar.setVisibility(View.GONE);
+                        txtUserNameRank1.setText(firstPlaceUser.getFullname());
+                        txtCoinsRank1.setText(firstPlaceUser.getCoins());
 
-                if(firstPlaceUser.getAvatar() != null && !firstPlaceUser.getAvatar().isEmpty()) {
-                    Picasso.with(getActivity())
-                            .load(StaticData.config.getMediaUrl() + firstPlaceUser.getAvatar())
-                            .into(imgRank1);
-                } else {
-                    imgRank1.setImageResource(R.drawable.avatar_male);
-                    if(StaticData.user.getGender() == "female") {
-                        imgRank1.setImageResource(R.drawable.avatar_female);
+                        if(firstPlaceUser.getAvatar() != null && !firstPlaceUser.getAvatar().isEmpty()) {
+                            Picasso.with(getActivity())
+                                    .load(StaticData.config.getMediaUrl() + firstPlaceUser.getAvatar())
+                                    .into(imgRank1);
+                        } else {
+                            imgRank1.setImageResource(R.drawable.avatar_male);
+                            if(StaticData.user.getGender() == "female") {
+                                imgRank1.setImageResource(R.drawable.avatar_female);
+                            }
+                        }
                     }
                 }
             }

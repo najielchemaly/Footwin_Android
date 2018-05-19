@@ -87,10 +87,6 @@ public class MainPageActivity extends BaseActivity {
         imgProfile = _findViewById(R.id.imgProfile);
         imgHomeTeam = _findViewById(R.id.imgHomeTeam);
 
-//        mAdView = findViewById(R.id.adView);
-//        AdRequest adRequest = new AdRequest.Builder().build();
-//        mAdView.loadAd(adRequest);
-
         mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this);
         mRewardedVideoAd.setRewardedVideoAdListener(new RewardedVideoAdListener() {
             @Override
