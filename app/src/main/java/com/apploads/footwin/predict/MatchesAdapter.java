@@ -120,6 +120,7 @@ public class MatchesAdapter extends BaseAdapter {
                 holder.btnDraw.setEnabled(false);
                 holder.viewConfirm.setClickable(false);
                 holder.viewConfirm.setEnabled(false);
+                holder.viewExactScore.setAlpha(0.5f);
                 holder.viewConfirm.setAlpha(1f);
                 holder.txtConfirm.setText("Confirmed");
                 holder.txtConfirm.setTextColor(context.getResources().getColor(R.color.white));
@@ -190,12 +191,12 @@ public class MatchesAdapter extends BaseAdapter {
                 }
             }
 
-            final Animation scale_up = AnimationUtils.loadAnimation(context, R.anim.scale_up);
-            final Animation scale_up_init = AnimationUtils.loadAnimation(context, R.anim.scale_up_init);
-            final Animation scale_up_normal = AnimationUtils.loadAnimation(context, R.anim.scale_up_normal);
-            final Animation scale_down = AnimationUtils.loadAnimation(context, R.anim.scale_down);
-            final Animation scale_down_init = AnimationUtils.loadAnimation(context, R.anim.scale_down_init);
-            final Animation scale_down_normal = AnimationUtils.loadAnimation(context, R.anim.scale_down_normal);
+//            final Animation scale_up = AnimationUtils.loadAnimation(context, R.anim.scale_up);
+//            final Animation scale_up_init = AnimationUtils.loadAnimation(context, R.anim.scale_up_init);
+//            final Animation scale_up_normal = AnimationUtils.loadAnimation(context, R.anim.scale_up_normal);
+//            final Animation scale_down = AnimationUtils.loadAnimation(context, R.anim.scale_down);
+//            final Animation scale_down_init = AnimationUtils.loadAnimation(context, R.anim.scale_down_init);
+//            final Animation scale_down_normal = AnimationUtils.loadAnimation(context, R.anim.scale_down_normal);
 
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             formatter.setLenient(false);
@@ -239,25 +240,25 @@ public class MatchesAdapter extends BaseAdapter {
                 public void onClick(View view) {
                     if(match.isHomeToWin()){
                         holder.imgHomeTeam.setBackgroundResource(0);
-                        holder.imgHomeTeam.startAnimation(scale_down_normal);
+                        scaleImage(holder.imgHomeTeam, 1f);
                         holder.imgAwayTeam.animate().alpha(1f).setDuration(300);
                         holder.txtAwayTeam.animate().alpha(1f).setDuration(300);
                         holder.viewConfirm.animate().alpha(0f).setDuration(300);
                         holder.viewConfirm.setClickable(false);
-                        holder.imgAwayTeam.startAnimation(scale_up_normal);
+                        scaleImage(holder.imgAwayTeam, 1f);
 
                         match.setHomeToWin(false);
                         match.setAwayToWin(false);
                     }else {
                         holder.imgHomeTeam.setBackgroundResource(R.drawable.selected_team_background);
                         if(match.isDraw()) {
-                            holder.imgHomeTeam.startAnimation(scale_up);
+                            scaleImage(holder.imgHomeTeam, 1.2f);
                         } else if(match.isAwayToWin()) {
-                            holder.imgHomeTeam.startAnimation(scale_up);
-                            holder.imgAwayTeam.startAnimation(scale_down);
+                            scaleImage(holder.imgHomeTeam, 1.2f);
+                            scaleImage(holder.imgAwayTeam, 0.8f);
                         } else {
-                            holder.imgHomeTeam.startAnimation(scale_up_init);
-                            holder.imgAwayTeam.startAnimation(scale_down_init);
+                            scaleImage(holder.imgHomeTeam, 1.2f);
+                            scaleImage(holder.imgAwayTeam, 0.8f);
                         }
                         holder.imgHomeTeam.animate().alpha(1f).setDuration(300);
                         holder.txtHomeTeam.animate().alpha(1f).setDuration(300);
@@ -280,10 +281,10 @@ public class MatchesAdapter extends BaseAdapter {
                 public void onClick(View view) {
                     if(match.isAwayToWin()){
                         holder.imgAwayTeam.setBackgroundResource(0);
-                        holder.imgAwayTeam.startAnimation(scale_down_normal);
+                        scaleImage(holder.imgAwayTeam, 1f);
                         holder.imgHomeTeam.animate().alpha(1f).setDuration(300);
                         holder.txtHomeTeam.animate().alpha(1f).setDuration(300);
-                        holder.imgHomeTeam.startAnimation(scale_up_normal);
+                        scaleImage(holder.imgHomeTeam, 1f);
                         holder.viewConfirm.animate().alpha(0f).setDuration(300);
                         holder.viewConfirm.setClickable(false);
                         holder.btnDraw.setBackgroundResource(R.drawable.retangle_white_border);
@@ -293,13 +294,13 @@ public class MatchesAdapter extends BaseAdapter {
                     }else {
                         holder.imgAwayTeam.setBackgroundResource(R.drawable.selected_team_background);
                         if(match.isDraw()) {
-                            holder.imgAwayTeam.startAnimation(scale_up);
+                            scaleImage(holder.imgAwayTeam, 1.2f);
                         } else if(match.isHomeToWin()) {
-                            holder.imgAwayTeam.startAnimation(scale_up);
-                            holder.imgHomeTeam.startAnimation(scale_down);
+                            scaleImage(holder.imgAwayTeam, 1.2f);
+                            scaleImage(holder.imgHomeTeam, 0.8f);
                         } else {
-                            holder.imgAwayTeam.startAnimation(scale_up_init);
-                            holder.imgHomeTeam.startAnimation(scale_down_init);
+                            scaleImage(holder.imgAwayTeam, 1.2f);
+                            scaleImage(holder.imgHomeTeam, 0.8f);
                         }
                         holder.imgAwayTeam.animate().alpha(1f).setDuration(300);
                         holder.txtAwayTeam.animate().alpha(1f).setDuration(300);
@@ -324,11 +325,11 @@ public class MatchesAdapter extends BaseAdapter {
                         holder.imgHomeTeam.setBackgroundResource(0);
                         holder.imgHomeTeam.animate().alpha(1f).setDuration(300);
                         holder.imgHomeTeam.animate().alpha(1f).setDuration(300);
-                        holder.imgHomeTeam.startAnimation(scale_up_normal);
+                        scaleImage(holder.imgHomeTeam, 1f);
                         holder.imgAwayTeam.setBackgroundResource(0);
                         holder.imgAwayTeam.animate().alpha(1f).setDuration(300);
                         holder.txtAwayTeam.animate().alpha(1f).setDuration(300);
-                        holder.imgAwayTeam.startAnimation(scale_up_normal);
+                        scaleImage(holder.imgAwayTeam, 1f);
                         holder.viewConfirm.animate().alpha(0f).setDuration(300);
                         holder.viewConfirm.setClickable(false);
                         holder.btnDraw.setBackgroundResource(R.drawable.retangle_white_border);
@@ -344,12 +345,12 @@ public class MatchesAdapter extends BaseAdapter {
                         holder.txtAwayTeam.animate().alpha(0.5f).setDuration(300);
                         holder.viewConfirm.animate().alpha(1f).setDuration(300);
                         if(match.isHomeToWin()) {
-                            holder.imgHomeTeam.startAnimation(scale_down);
-                        } else if(match.isAwayToWin()) {
-                            holder.imgAwayTeam.startAnimation(scale_down);
+                            scaleImage(holder.imgHomeTeam, 0.8f);
+                        } else if(match.isAwayToWin()) {;
+                            scaleImage(holder.imgAwayTeam, 0.8f);
                         } else {
-                            holder.imgAwayTeam.startAnimation(scale_down_init);
-                            holder.imgHomeTeam.startAnimation(scale_down_init);
+                            scaleImage(holder.imgHomeTeam, 0.8f);
+                            scaleImage(holder.imgAwayTeam, 0.8f);
                         }
                         holder.viewConfirm.setClickable(true);
                         holder.btnDraw.setBackgroundResource(R.color.appBlue);

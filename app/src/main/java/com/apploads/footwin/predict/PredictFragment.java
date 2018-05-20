@@ -170,6 +170,10 @@ public class PredictFragment extends Fragment {
         }
     }
 
+    public void updateWinningCoins(){
+        txtWinningCoinsTotal.setText(StaticData.user.getWinningCoins());
+    }
+
     public void showExactScore(Match match) {
         viewExactScoreParent.setVisibility(View.VISIBLE);
         btnRules.setAlpha(0.5f);
@@ -210,7 +214,26 @@ public class PredictFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 viewExactScore.startAnimation(top_to_bottom);
-                viewExactScoreParent.setVisibility(View.GONE);
+                top_to_bottom.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        viewExactScoreParent.setVisibility(View.GONE);
+                        if(mainPageActivity != null) {
+                            mainPageActivity.bottomNavigationView.setVisibility(View.VISIBLE);
+                        }
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+
                 btnRules.setAlpha(1f);
                 btnRules.setClickable(true);
 
@@ -258,13 +281,29 @@ public class PredictFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 viewExactScore.startAnimation(top_to_bottom);
-                viewExactScoreParent.setVisibility(View.GONE);
+                top_to_bottom.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        viewExactScoreParent.setVisibility(View.GONE);
+                        if(mainPageActivity != null) {
+                            mainPageActivity.bottomNavigationView.setVisibility(View.VISIBLE);
+                        }
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+
                 btnRules.setAlpha(1f);
                 btnRules.setClickable(true);
 
-                if(mainPageActivity != null) {
-                    mainPageActivity.bottomNavigationView.setVisibility(View.VISIBLE);
-                }
             }
         });
 
@@ -345,10 +384,14 @@ public class PredictFragment extends Fragment {
             public void onCancel(CustomDialogClass.DialogResponse dialogResponse) {
                 dialogResponse.getDialog().dismiss();
             }
-        }, false);
+        }, false, "CONFIRM", "EDIT");
 
         dialogClass.setTitle("FOOTWIN");
-        dialogClass.setMessage("Are you sure you want to confirm you prediction ?");
+        if(!StringUtils.isValid(winningTeamName)){
+            dialogClass.setMessage("ARE YOU SURE YOU WANT TO CONFIRM YOUR DRAW PREDICTION? ONCE CONFIRMED YOU CANNOT EDIT IT!!");
+        }else {
+            dialogClass.setMessage("ARE YOU SURE YOU WANT TO PREDICT " + winningTeamName + " AS THE WINNING TEAM? ONCE CONFIRMED YOU CANNOT EDIT IT!!");
+        }
         dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialogClass.show();
     }

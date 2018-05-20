@@ -1,5 +1,6 @@
 package com.apploads.footwin.profile;
 
+import android.graphics.Color;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.Button;
@@ -29,6 +30,7 @@ public class TermsAndConditionsActivity extends BaseActivity {
         webViewTerms.getSettings().setJavaScriptEnabled(true);
         String customHtml = "<html><body><h1>Hello, WebView</h1></body></html>";
         webViewTerms.loadData(customHtml, "text/html", "UTF-8");
+        webViewTerms.setBackgroundColor(Color.TRANSPARENT);
     }
 
     private void initListeners(){

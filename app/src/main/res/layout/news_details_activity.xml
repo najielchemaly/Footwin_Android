@@ -76,6 +76,19 @@
                     android:textColor="@color/darkText"
                     />
 
+                <TextView
+                    android:id="@+id/txtUrl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/medium_text"
+                    android:textColor="@color/darkBlue"
+                    android:text="READ MORE"
+                    android:clickable="true"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/app_margin"
+                    />
+
             </LinearLayout>
 
         </ScrollView>
