@@ -237,27 +237,27 @@ public class PredictFragment extends Fragment {
                 btnRules.setAlpha(1f);
                 btnRules.setClickable(true);
 
-                int homeScoreInt = 0;
-                int awayScoreInt = 0;
+                int homeScoreInt = -1;
+                int awayScoreInt = -1;
                 if(!txtHomeScore.getText().toString().isEmpty() && !txtAwayScore.getText().toString().isEmpty()){
                      homeScoreInt = Integer.parseInt(txtHomeScore.getText().toString());
                      awayScoreInt = Integer.parseInt(txtAwayScore.getText().toString());
-                }
 
-                if(homeScoreInt > awayScoreInt && matches.get(selectedMatchIndex).isAwayToWin()){
-                    matches.get(selectedMatchIndex).setHomeToWin(true);
-                    matches.get(selectedMatchIndex).setAwayToWin(false);
-                    matches.get(selectedMatchIndex).setDraw(false);
-                }
-                else if(homeScoreInt < awayScoreInt && matches.get(selectedMatchIndex).isHomeToWin()){
-                    matches.get(selectedMatchIndex).setHomeToWin(false);
-                    matches.get(selectedMatchIndex).setAwayToWin(true);
-                    matches.get(selectedMatchIndex).setDraw(false);
-                }
-                else if(homeScoreInt == awayScoreInt && !matches.get(selectedMatchIndex).isAwayToWin()){
-                    matches.get(selectedMatchIndex).setHomeToWin(false);
-                    matches.get(selectedMatchIndex).setAwayToWin(false);
-                    matches.get(selectedMatchIndex).setDraw(true);
+                    if(homeScoreInt > awayScoreInt && !matches.get(selectedMatchIndex).isHomeToWin()){
+                        matches.get(selectedMatchIndex).setHomeToWin(true);
+                        matches.get(selectedMatchIndex).setAwayToWin(false);
+                        matches.get(selectedMatchIndex).setDraw(false);
+                    }
+                    else if(homeScoreInt < awayScoreInt && !matches.get(selectedMatchIndex).isAwayToWin()){
+                        matches.get(selectedMatchIndex).setHomeToWin(false);
+                        matches.get(selectedMatchIndex).setAwayToWin(true);
+                        matches.get(selectedMatchIndex).setDraw(false);
+                    }
+                    else if(homeScoreInt == awayScoreInt && !matches.get(selectedMatchIndex).isDraw()){
+                        matches.get(selectedMatchIndex).setHomeToWin(false);
+                        matches.get(selectedMatchIndex).setAwayToWin(false);
+                        matches.get(selectedMatchIndex).setDraw(true);
+                    }
                 }
 
                 if(StringUtils.isValid(txtAwayScore.getText()) || StringUtils.isValid(txtHomeScore)){
@@ -266,10 +266,6 @@ public class PredictFragment extends Fragment {
                 } else {
                     matches.get(selectedMatchIndex).setHomeScore("-1");
                     matches.get(selectedMatchIndex).setAwayScore("-1");
-                }
-
-                if(mainPageActivity != null) {
-                    mainPageActivity.bottomNavigationView.setVisibility(View.VISIBLE);
                 }
 
                 matchesAdapter.setRoot(matches);
@@ -303,7 +299,6 @@ public class PredictFragment extends Fragment {
 
                 btnRules.setAlpha(1f);
                 btnRules.setClickable(true);
-
             }
         });
 
