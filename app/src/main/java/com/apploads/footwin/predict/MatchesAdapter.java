@@ -33,14 +33,13 @@ import java.util.Date;
 import java.util.List;
 
 public class MatchesAdapter extends BaseAdapter {
-
     private List<Match> root;
     private Context context;
-    LayoutInflater mInflater;
+    private LayoutInflater mInflater;
     private PredictFragment predictFragment;
-    Date endDate;
-    long startTime, milliseconds, diff;
-    CountDownTimer mCountDownTimer;
+    private Date endDate;
+    private long startTime, milliseconds, diff;
+    private CountDownTimer mCountDownTimer;
 
     public MatchesAdapter(List<Match> root, Context context, PredictFragment predictFragment){
         this.root = root;
@@ -366,10 +365,12 @@ public class MatchesAdapter extends BaseAdapter {
                 public void onClick(View view) {
                     String winningTeamName =  match.isHomeToWin() ? match.getHomeName() : match.getAwayName();
                     String winningTeamID =  match.isHomeToWin() ? match.getHomeId() : match.getAwayId();
+                    String homeScore = match.getHomeScore();
+                    String awayScore = match.getAwayScore();
                     if(!match.isAwayToWin() && !match.isHomeToWin()){
-                        predictFragment.showAlert(match,"0","");
+                        predictFragment.showAlert(match,"0","", homeScore, awayScore);
                     }else {
-                        predictFragment.showAlert(match, winningTeamID, winningTeamName);
+                        predictFragment.showAlert(match, winningTeamID, winningTeamName, homeScore, awayScore);
                     }
                 }
             });
@@ -399,6 +400,10 @@ public class MatchesAdapter extends BaseAdapter {
         LinearLayout viewHomeTeam, viewAwayTeam, viewConfirm, viewExactScore;
         ImageView imgAwayTeam, imgHomeTeam, imgCheck;
         Button btnDraw;
+    }
+
+    public void setRoot(List<Match> root) {
+        this.root = root;
     }
 
 }
