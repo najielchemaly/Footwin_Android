@@ -38,6 +38,9 @@ import com.apploads.footwin.signup.SignupStepThree;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -61,9 +64,8 @@ public class PredictFragment extends Fragment {
     SwipeRefreshLayout pullToRefresh;
     int badge;
 
-    private String homeScore = "-1";
-    private String awayScore = "-1";
-    Match selectedMatch;
+    List<Match> matches = new ArrayList<>();
+    int selectedMatchIndex;
 
     MainPageActivity mainPageActivity;
 
@@ -177,10 +179,14 @@ public class PredictFragment extends Fragment {
         btnRules.setAlpha(0.5f);
         btnRules.setClickable(false);
         viewExactScore.startAnimation(bottom_to_top);
-        selectedMatch = match;
+
+        selectedMatchIndex = matches.indexOf(match);
 
         txtHomeTeam.setText(match.getHomeName());
         txtAwayTeam.setText(match.getAwayName());
+
+        txtHomeScore.setText(match.getHomeScore());
+        txtAwayScore.setText(match.getAwayScore());
 
         Picasso.with(getActivity())
                 .load(StaticData.config.getMediaUrl()+match.getHomeFlag())
@@ -233,23 +239,37 @@ public class PredictFragment extends Fragment {
 
                 int homeScoreInt = -1;
                 int awayScoreInt = -1;
-                if(!txtHomeScore.getText().toString().equals("") && !txtAwayScore.getText().toString().equals("")){
+                if(!txtHomeScore.getText().toString().isEmpty() && !txtAwayScore.getText().toString().isEmpty()){
                      homeScoreInt = Integer.parseInt(txtHomeScore.getText().toString());
                      awayScoreInt = Integer.parseInt(txtAwayScore.getText().toString());
+
+                    if(homeScoreInt > awayScoreInt && !matches.get(selectedMatchIndex).isHomeToWin()){
+                        matches.get(selectedMatchIndex).setHomeToWin(true);
+                        matches.get(selectedMatchIndex).setAwayToWin(false);
+                        matches.get(selectedMatchIndex).setDraw(false);
+                    }
+                    else if(homeScoreInt < awayScoreInt && !matches.get(selectedMatchIndex).isAwayToWin()){
+                        matches.get(selectedMatchIndex).setHomeToWin(false);
+                        matches.get(selectedMatchIndex).setAwayToWin(true);
+                        matches.get(selectedMatchIndex).setDraw(false);
+                    }
+                    else if(homeScoreInt == awayScoreInt && !matches.get(selectedMatchIndex).isDraw()){
+                        matches.get(selectedMatchIndex).setHomeToWin(false);
+                        matches.get(selectedMatchIndex).setAwayToWin(false);
+                        matches.get(selectedMatchIndex).setDraw(true);
+                    }
                 }
 
-                if(homeScoreInt > awayScoreInt && selectedMatch.isAwayToWin()){
-                    Toast.makeText(getActivity(), "You entered a score that is conficting with your prediction, set home to win", Toast.LENGTH_SHORT).show();
+                if(StringUtils.isValid(txtAwayScore.getText()) || StringUtils.isValid(txtHomeScore)){
+                    matches.get(selectedMatchIndex).setHomeScore(txtHomeScore.getText().toString());
+                    matches.get(selectedMatchIndex).setAwayScore(txtAwayScore.getText().toString());
+                } else {
+                    matches.get(selectedMatchIndex).setHomeScore("-1");
+                    matches.get(selectedMatchIndex).setAwayScore("-1");
                 }
 
-                if(homeScoreInt < awayScoreInt && selectedMatch.isHomeToWin()){
-                    Toast.makeText(getActivity(), "You entered a score that is conficting with your prediction, set away to win", Toast.LENGTH_SHORT).show();
-                }
-
-                if(StringUtils.isValid(txtAwayScore.getText()) || StringUtils.isValid(txtHomeScore.getText())){
-                    homeScore = txtHomeScore.getText().toString();
-                    awayScore = txtAwayScore.getText().toString();
-                }
+                matchesAdapter.setRoot(matches);
+                matchesAdapter.notifyDataSetChanged();
             }
         });
 
@@ -279,7 +299,6 @@ public class PredictFragment extends Fragment {
 
                 btnRules.setAlpha(1f);
                 btnRules.setClickable(true);
-
             }
         });
 
@@ -312,14 +331,14 @@ public class PredictFragment extends Fragment {
         callMatchesService(true);
     }
 
-    public void showAlert(final Match match, final String winningTeamID, final String winningTeamName){
+    public void showAlert(final Match match, final String winningTeamID, final String winningTeamName, final String homeScore, final String awayScore){
         CustomDialogClass dialogClass = new CustomDialogClass(getActivity(), new CustomDialogClass.AbstractCustomDialogListener() {
             @Override
             public void onConfirm(CustomDialogClass.DialogResponse response) {
                 response.getDialog().dismiss();
 
                 ApiManager.getService().sendPredictions(StaticData.user.getId(), match.getId(), winningTeamID, homeScore
-                        , awayScore ,"1", winningTeamName,match.getDate()).enqueue(new Callback<BasicResponse>() {
+                        , awayScore,"1", winningTeamName, match.getDate()).enqueue(new Callback<BasicResponse>() {
                     @Override
                     public void onResponse(Call<BasicResponse> call, Response<BasicResponse> response) {
                         BasicResponse basicResponse = response.body();
@@ -384,8 +403,9 @@ public class PredictFragment extends Fragment {
                     final Profile profile = response.body();
                     if(profile.getStatus() == 1) {
                         if (profile.getMatches() != null && profile.getMatches().size() > 0) {
+                            matches = profile.getMatches();
                             if (mainPageActivity != null) {
-                                Match currentMatch = profile.getMatches().get(0);
+                                Match currentMatch = matches.get(0);
                                 mainPageActivity.checkTutorial(currentMatch.getHomeName(), currentMatch.getHomeFlag());
                             }
 
@@ -397,7 +417,7 @@ public class PredictFragment extends Fragment {
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    matchesAdapter = new MatchesAdapter(profile.getMatches(), getContext(), PredictFragment.this);
+                                    matchesAdapter = new MatchesAdapter(matches, getContext(), PredictFragment.this);
                                     listMatches.setAdapter(matchesAdapter);
                                     progressBar.setVisibility(View.GONE);
                                 }

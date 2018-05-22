@@ -290,8 +290,9 @@
                     android:lines="1"
                     android:maxLength="2"
                     android:textColor="@color/darkText"
-                    android:textSize="@dimen/large_text"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/large_text2"
+                    android:textStyle="bold"
+                    android:hint="0"/>
 
                 <ImageView
                     android:layout_width="45dp"
@@ -313,8 +314,9 @@
                     android:lines="1"
                     android:maxLength="2"
                     android:textColor="@color/darkText"
-                    android:textSize="@dimen/large_text"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/large_text2"
+                    android:textStyle="bold"
+                    android:hint="0"/>
 
             </LinearLayout>
 
