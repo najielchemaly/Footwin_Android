@@ -16,6 +16,9 @@ public class Config {
     @SerializedName("active_round")
     @Expose
     private ActiveRound activeRound;
+    @SerializedName("active_reward")
+    @Expose
+    private ActiveReward activeReward;
     @SerializedName("base_url")
     @Expose
     private String baseUrl;
@@ -138,5 +141,29 @@ public class Config {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public ActiveReward getActiveReward() {
+        return activeReward;
+    }
+
+    public void setActiveReward(ActiveReward activeReward) {
+        this.activeReward = activeReward;
+    }
+
+    public Boolean getReview() {
+        return isReview;
+    }
+
+    public void setReview(Boolean review) {
+        isReview = review;
+    }
+
+    public Boolean getAppActive() {
+        return isAppActive;
+    }
+
+    public void setAppActive(Boolean appActive) {
+        isAppActive = appActive;
     }
 }

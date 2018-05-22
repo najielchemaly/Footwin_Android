@@ -516,5 +516,4 @@ public class MatchesAdapter extends BaseAdapter {
     public void setRoot(List<Match> root) {
         this.root = root;
     }
-
 }

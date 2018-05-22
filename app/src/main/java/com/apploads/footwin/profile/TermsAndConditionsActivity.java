@@ -3,6 +3,7 @@ package com.apploads.footwin.profile;
 import android.graphics.Color;
 import android.view.View;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 
 import com.apploads.footwin.R;
@@ -28,8 +29,8 @@ public class TermsAndConditionsActivity extends BaseActivity {
         btnClose = _findViewById(R.id.btnClose);
         webViewTerms = _findViewById(R.id.webViewTerms);
         webViewTerms.getSettings().setJavaScriptEnabled(true);
-        String customHtml = "<html><body><h1>Hello, WebView</h1></body></html>";
-        webViewTerms.loadData(customHtml, "text/html", "UTF-8");
+        webViewTerms.setWebViewClient(new WebViewClient());
+        webViewTerms.loadUrl("http://foot-win.com/terms");
         webViewTerms.setBackgroundColor(Color.TRANSPARENT);
     }
 
