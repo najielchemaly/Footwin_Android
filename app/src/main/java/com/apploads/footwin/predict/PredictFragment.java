@@ -36,6 +36,9 @@ import com.apploads.footwin.notifications.NotificationsActivity;
 import com.apploads.footwin.services.ApiManager;
 import com.apploads.footwin.signup.SignupStepThree;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -62,6 +65,7 @@ public class PredictFragment extends Fragment {
     Animation bottom_to_top, top_to_bottom;
     MatchesAdapter matchesAdapter;
     SwipeRefreshLayout pullToRefresh;
+    private InterstitialAd mInterstitialAd;;
     int badge;
 
     List<Match> matches = new ArrayList<>();
@@ -88,6 +92,8 @@ public class PredictFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        AppUtils.startCountAnimation(txtCoinsTotal,0, Integer.parseInt(StaticData.user.getCoins()),1500);
+        AppUtils.startCountAnimation(txtWinningCoinsTotal,0, Integer.parseInt(StaticData.user.getWinningCoins()),1500);
         updateBadge();
     }
 
@@ -114,6 +120,40 @@ public class PredictFragment extends Fragment {
         imgAwayTeam = parentView.findViewById(R.id.imgAwayTeam);
         pullToRefresh = parentView.findViewById(R.id.pullToRefresh);
 
+        mInterstitialAd = new InterstitialAd(getActivity());
+        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                // Code to be executed when an ad finishes loading.
+                if(mInterstitialAd.isLoaded()){
+                    mInterstitialAd.show();
+                }
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                // Code to be executed when an ad request fails.
+                 Toast.makeText(mainPageActivity, "error : "+ errorCode, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when the ad is displayed.
+               Toast.makeText(mainPageActivity, "opened", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                // Code to be executed when the user has left the app.
+            }
+
+            @Override
+            public void onAdClosed() {
+                // Code to be executed when when the interstitial ad is closed.
+            }
+        });
+
         DoubleBounce doubleBounce = new DoubleBounce();
         progressBar.setIndeterminateDrawable(doubleBounce);
 
@@ -132,8 +172,8 @@ public class PredictFragment extends Fragment {
 
         txtRound.setText(StaticData.config.getActiveRound().getTitle());
 
-        AppUtils.startCountAnimation(txtCoinsTotal,0, Integer.parseInt(StaticData.user.getCoins()),1500);
-        AppUtils.startCountAnimation(txtWinningCoinsTotal,0, Integer.parseInt(StaticData.user.getWinningCoins()),1500);
+//        AppUtils.startCountAnimation(txtCoinsTotal,0, Integer.parseInt(StaticData.user.getCoins()),1500);
+//        AppUtils.startCountAnimation(txtWinningCoinsTotal,0, Integer.parseInt(StaticData.user.getWinningCoins()),1500);
 
         bottom_to_top = AnimationUtils.loadAnimation(getContext(), R.anim.bottom_to_top_wt);
         top_to_bottom = AnimationUtils.loadAnimation(getContext(), R.anim.top_to_bottom_wt);
@@ -344,6 +384,12 @@ public class PredictFragment extends Fragment {
                         BasicResponse basicResponse = response.body();
 
                         if(basicResponse.getStatus() == 1){
+                            int predCount = AppUtils.getPredictionsCount(getActivity());
+
+                            if(predCount%5 == 0){
+                                mInterstitialAd.loadAd(new AdRequest.Builder().build());
+                            }
+                            AppUtils.updatePredictionsCount(getActivity(), predCount + 1);
                             txtCoinsTotal.setText(basicResponse.getCoins());
                             match.setIsConfirmed("1");
                             StaticData.user.setCoins(basicResponse.getCoins());

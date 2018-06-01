@@ -54,6 +54,7 @@
         <activity android:name=".profile.ChangePasswordActivity" />
         <activity android:name=".profile.EditProfileActivity" />
         <activity android:name=".profile.TermsAndConditionsActivity" />
+        <activity android:name=".loading.CountdownActivity" />
         <activity
             android:name=".ViewRulesActivity"
             android:theme="@style/Theme.Transparent" />

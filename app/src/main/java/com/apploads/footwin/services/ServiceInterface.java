@@ -10,6 +10,7 @@ import com.apploads.footwin.model.NotificationResponse;
 import com.apploads.footwin.model.PackageResponse;
 import com.apploads.footwin.model.PredictionResponse;
 import com.apploads.footwin.model.Profile;
+import com.apploads.footwin.model.Reward;
 import com.apploads.footwin.model.UserResponse;
 
 import okhttp3.MultipartBody;
@@ -113,13 +114,6 @@ public interface ServiceInterface {
     @POST("updateAvatar/")
     Call<Object> updateAvatar(@Part MultipartBody.Part file);
 
-//    @FormUrlEncoded
-//    @POST("sendPredictions/")
-//    Call<BasicResponse> sendPredictions(@Field("user_id") String user_id, @Field("match_id") String match_id,
-//                                 @Field("winning_team") String winning_team, @Field("home_score") String home_score,
-//                                 @Field("away_score") String away_score, @Field("status") String status,
-//                                 @Field("selected_team") String selected_team, @Field("date") String date);
-
     @FormUrlEncoded
     @POST("sendPredictions/")
     Call<BasicResponse> sendPredictions(@Field("user_id") String user_id, @Field("match_id") String match_id, @Field("winning_team") String winning_team
@@ -129,12 +123,23 @@ public interface ServiceInterface {
 
     @FormUrlEncoded
     @POST("updateFirebaseToken/")
-    Call<Object> updateFirebaseToken(@Field("firebase_token") String firebase_token); // TODO change the response object
+    Call<Object> updateFirebaseToken(@Field("firebase_token") String firebase_token);
 
     @Headers({
             "Content-Type: application/json"
     })
     @POST("updateNotification/")
     Call<Object> updateNotification(@Field("id") String id); // TODO change the response object
+
+    @FormUrlEncoded
+    @POST("getReward/")
+    Call<Reward> getReward(@Field("reward_id") String reward_id, @Field("reward_amount") String reward_amount);
+
+    @FormUrlEncoded
+    @Headers({
+            "Content-Type: application/json"
+    })
+    @POST("purchaseCoins/")
+    Call<Object> purchaseCoins(@Field("package_id") String package_id, @Field("package_amount") String package_amount);
 
 }

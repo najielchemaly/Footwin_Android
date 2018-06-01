@@ -1,34 +1,18 @@
 package com.apploads.footwin.model;
-
-import android.support.annotation.Nullable;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class BasicResponse {
+public class Reward {
 
     @SerializedName("status")
     @Expose
     private Integer status;
-    @SerializedName("message")
-    @Expose
-    private String message;
-
     @SerializedName("coins")
     @Expose
     private String coins;
-
-    public String getFields() {
-        return fields;
-    }
-
-    public void setFields(String fields) {
-        this.fields = fields;
-    }
-
-    @SerializedName("fields")
+    @SerializedName("message")
     @Expose
-    private String fields;
+    private String message;
 
     public Integer getStatus() {
         return status;
@@ -36,6 +20,14 @@ public class BasicResponse {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getCoins() {
+        return coins;
+    }
+
+    public void setCoins(String coins) {
+        this.coins = coins;
     }
 
     public String getMessage() {
@@ -46,11 +38,4 @@ public class BasicResponse {
         this.message = message;
     }
 
-    public String getCoins() {
-        return coins;
-    }
-
-    public void setCoins(String coins) {
-        this.coins = coins;
-    }
 }

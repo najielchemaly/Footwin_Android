@@ -19,8 +19,10 @@ import com.apploads.footwin.helpers.BaseActivity;
 import com.apploads.footwin.helpers.Constants;
 import com.apploads.footwin.helpers.StaticData;
 import com.apploads.footwin.helpers.utils.AppUtils;
+import com.apploads.footwin.model.BasicResponse;
 import com.apploads.footwin.model.Package;
 import com.apploads.footwin.model.PackageResponse;
+import com.apploads.footwin.model.Reward;
 import com.apploads.footwin.services.ApiManager;
 import com.budiyev.android.circularprogressbar.CircularProgressBar;
 import com.google.android.gms.ads.AdRequest;
@@ -53,6 +55,7 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
         initCarousel();
         initListeners();
     }
+
 
     private void initView(){
         bp = new BillingProcessor(this, Constants.GOOGLE_LICENSE_KEY, this);
@@ -89,6 +92,7 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
             public void onRewardedVideoAdLoaded() {
                 if(mRewardedVideoAd.isLoaded()){
                     mRewardedVideoAd.show();
+                    circularProgressBar.setVisibility(View.GONE);
                 }
             }
 
@@ -109,8 +113,24 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
 
             @Override
             public void onRewarded(RewardItem rewardItem) {
-                Toast.makeText(CoinsActivity.this, "onRewarded! currency: " + rewardItem.getType() + "  amount: " +
-                        rewardItem.getAmount(), Toast.LENGTH_SHORT).show();
+                circularProgressBar.setVisibility(View.VISIBLE);
+                ApiManager.getService().getReward(StaticData.config.getActiveReward().getId(),
+                        StaticData.config.getActiveReward().getAmount()).enqueue(new Callback<Reward>() {
+                    @Override
+                    public void onResponse(Call<Reward> call, Response<Reward> response) {
+                        Reward reward = response.body();
+                        if(reward.getStatus() == 1){
+                            StaticData.user.setCoins(reward.getCoins());
+                            AppUtils.saveUser(CoinsActivity.this, StaticData.user);
+                        }
+                        circularProgressBar.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onFailure(Call<Reward> call, Throwable t) {
+                        circularProgressBar.setVisibility(View.GONE);
+                    }
+                });
             }
 
             @Override
@@ -169,6 +189,7 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
         btnWatchVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                circularProgressBar.setVisibility(View.VISIBLE);
                 loadRewardedVideoAd();
             }
         });
@@ -224,6 +245,7 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
     protected void onResume() {
         mRewardedVideoAd.resume(this);
         super.onResume();
+        txtCoinsTotal.setText(StaticData.user.getCoins());
         StaticData.context = CoinsActivity.this;
     }
 
