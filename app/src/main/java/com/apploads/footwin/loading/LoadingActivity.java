@@ -73,7 +73,7 @@ public class LoadingActivity extends BaseActivity {
      * http://config.foot-win.com
      */
     private void callConfigService(){
-        ApiManager.getService(true).getConfig("http://test.config.foot-win.com/").enqueue(new Callback<Config>() {
+        ApiManager.getService(true).getConfig("http://config.foot-win.com/").enqueue(new Callback<Config>() {
             @Override
             public void onResponse(Call<Config> call, Response<Config> response) {
                 config = response.body();
