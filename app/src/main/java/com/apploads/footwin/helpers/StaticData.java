@@ -11,6 +11,7 @@ public class StaticData {
     public static final String PREFS_NAME = "FOOTWIN_PREFS";
     public static final String PREFS_USER = "user";
     public static final String PREFS_BADGE = "badge";
+    public static final String PREFS_COUNT = "predictionsCount";
     public static final String PREFS_LANG = "lang";
 
     public static Config config;

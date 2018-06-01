@@ -55,8 +55,6 @@ public class MainPageActivity extends BaseActivity {
     RelativeLayout viewTutorial, viewSteps, viewWelcome;
     public String selectedFragmentstr = "predict";
     int selectedView = 0;
-    private AdView mAdView;
-    RewardedVideoAd mRewardedVideoAd;
 
     public BottomNavigationView bottomNavigationView;
 
@@ -86,52 +84,6 @@ public class MainPageActivity extends BaseActivity {
         txtHomeTeam = _findViewById(R.id.txtHomeTeam);
         imgProfile = _findViewById(R.id.imgProfile);
         imgHomeTeam = _findViewById(R.id.imgHomeTeam);
-
-        mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this);
-        mRewardedVideoAd.setRewardedVideoAdListener(new RewardedVideoAdListener() {
-            @Override
-            public void onRewardedVideoAdLoaded() {
-                mRewardedVideoAd.show();
-            }
-
-            @Override
-            public void onRewardedVideoAdOpened() {
-
-            }
-
-            @Override
-            public void onRewardedVideoStarted() {
-
-            }
-
-            @Override
-            public void onRewardedVideoAdClosed() {
-
-            }
-
-            @Override
-            public void onRewarded(RewardItem rewardItem) {
-                Toast.makeText(MainPageActivity.this, "onRewarded! currency: " + rewardItem.getType() + "  amount: " +
-                        rewardItem.getAmount(), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onRewardedVideoAdLeftApplication() {
-
-            }
-
-            @Override
-            public void onRewardedVideoAdFailedToLoad(int i) {
-                Toast.makeText(MainPageActivity.this, "error", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onRewardedVideoCompleted() {
-
-            }
-        });
-
-        loadRewardedVideoAd();
 
         if(StaticData.user.getAvatar() != null && !StaticData.user.getAvatar().isEmpty()) {
             Picasso.with(MainPageActivity.this)
@@ -264,60 +216,21 @@ public class MainPageActivity extends BaseActivity {
                         return true;
                     }
                 });
-
-//        mAdView.setAdListener(new AdListener() {
-//            @Override
-//            public void onAdLoaded() {
-//                // Code to be executed when an ad finishes loading.
-//                Toast.makeText(MainPageActivity.this, "success", Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onAdFailedToLoad(int errorCode) {
-//                // Code to be executed when an ad request fails.
-//                Toast.makeText(MainPageActivity.this, "ERROR: " + errorCode, Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onAdOpened() {
-//                // Code to be executed when an ad opens an overlay that
-//                // covers the screen.
-//            }
-//
-//            @Override
-//            public void onAdLeftApplication() {
-//                // Code to be executed when the user has left the app.
-//            }
-//
-//            @Override
-//            public void onAdClosed() {
-//                // Code to be executed when when the user is about to return
-//                // to the app after tapping on an ad.
-//            }
-//        });
-    }
-
-    private void loadRewardedVideoAd() {
-        mRewardedVideoAd.loadAd("ca-app-pub-3940256099942544/5224354917",
-                new AdRequest.Builder().build());
     }
 
     @Override
     protected void onResume() {
-        mRewardedVideoAd.resume(this);
         super.onResume();
         StaticData.context = MainPageActivity.this;
     }
 
     @Override
     public void onPause() {
-        mRewardedVideoAd.pause(this);
         super.onPause();
     }
 
     @Override
     public void onDestroy() {
-        mRewardedVideoAd.destroy(this);
         super.onDestroy();
     }
 

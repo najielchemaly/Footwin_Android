@@ -77,8 +77,12 @@ public class LoadingActivity extends BaseActivity {
             @Override
             public void onResponse(Call<Config> call, Response<Config> response) {
                 config = response.body();
-                ApiManager.setApiUrl(config.getBaseUrl());
-                IntentToLoginWithDuration(2000);
+                if(config.getIsAppActive()){
+                    ApiManager.setApiUrl(config.getBaseUrl());
+                    IntentToLoginWithDuration(2000);
+                }else {
+                    IntentToTimerWithDuration(2000);
+                }
             }
 
             @Override
@@ -104,6 +108,22 @@ public class LoadingActivity extends BaseActivity {
                     startActivity(intent);
                     finish();
                 }
+            }
+        }, delay);
+    }
+
+    /**
+     * This function is for navigating to the next page with a delay
+     * @param delay time before navigating to login page
+     */
+    private void IntentToTimerWithDuration(long delay){
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(getApplicationContext(), CountdownActivity.class);
+                startActivity(intent);
+                finish();
             }
         }, delay);
     }

@@ -13,15 +13,23 @@ import android.widget.Toast;
 
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.TransactionDetails;
+import com.apploads.footwin.MainPageActivity;
 import com.apploads.footwin.R;
 import com.apploads.footwin.helpers.BaseActivity;
 import com.apploads.footwin.helpers.Constants;
 import com.apploads.footwin.helpers.StaticData;
 import com.apploads.footwin.helpers.utils.AppUtils;
+import com.apploads.footwin.model.BasicResponse;
 import com.apploads.footwin.model.Package;
 import com.apploads.footwin.model.PackageResponse;
+import com.apploads.footwin.model.Reward;
 import com.apploads.footwin.services.ApiManager;
 import com.budiyev.android.circularprogressbar.CircularProgressBar;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.reward.RewardItem;
+import com.google.android.gms.ads.reward.RewardedVideoAd;
+import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,11 +37,12 @@ import retrofit2.Response;
 
 public class CoinsActivity extends BaseActivity implements BillingProcessor.IBillingHandler{
     CircularProgressBar circularProgressBar;
-    Button btnClose, btnGetCoins, btnClosePackages;
+    Button btnClose, btnGetCoins, btnClosePackages, btnWatchVideo;
     TextView txtCoinsTotal, txtWinningCoinsTotal, txtNextRoundCoins;
     RelativeLayout viewBlackOpacity;
     RecyclerView listPackages;
     BillingProcessor bp;
+    RewardedVideoAd mRewardedVideoAd;
 
     @Override
     public int getContentViewId() {
@@ -47,6 +56,7 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
         initListeners();
     }
 
+
     private void initView(){
         bp = new BillingProcessor(this, Constants.GOOGLE_LICENSE_KEY, this);
 
@@ -59,6 +69,7 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
         listPackages = _findViewById(R.id.listPackages);
         viewBlackOpacity = _findViewById(R.id.viewBlackOpacity);
         btnClosePackages = _findViewById(R.id.btnClosePackages);
+        btnWatchVideo = _findViewById(R.id.btnWatchVideo);
 
         viewBlackOpacity.setVisibility(View.GONE);
         viewBlackOpacity.setAlpha(0f);
@@ -74,10 +85,77 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
         circularProgressBar.setMaximum(Float.parseFloat(StaticData.config.getActiveRound().getMinimumAmount()));
         circularProgressBar.setProgress(Float.parseFloat(StaticData.user.getWinningCoins()));
         circularProgressBar.animate();
+
+        mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this);
+        mRewardedVideoAd.setRewardedVideoAdListener(new RewardedVideoAdListener() {
+            @Override
+            public void onRewardedVideoAdLoaded() {
+                if(mRewardedVideoAd.isLoaded()){
+                    mRewardedVideoAd.show();
+                    circularProgressBar.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onRewardedVideoAdOpened() {
+
+            }
+
+            @Override
+            public void onRewardedVideoStarted() {
+
+            }
+
+            @Override
+            public void onRewardedVideoAdClosed() {
+
+            }
+
+            @Override
+            public void onRewarded(RewardItem rewardItem) {
+                circularProgressBar.setVisibility(View.VISIBLE);
+                ApiManager.getService().getReward(StaticData.config.getActiveReward().getId(),
+                        StaticData.config.getActiveReward().getAmount()).enqueue(new Callback<Reward>() {
+                    @Override
+                    public void onResponse(Call<Reward> call, Response<Reward> response) {
+                        Reward reward = response.body();
+                        if(reward.getStatus() == 1){
+                            StaticData.user.setCoins(reward.getCoins());
+                            AppUtils.saveUser(CoinsActivity.this, StaticData.user);
+                        }
+                        circularProgressBar.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onFailure(Call<Reward> call, Throwable t) {
+                        circularProgressBar.setVisibility(View.GONE);
+                    }
+                });
+            }
+
+            @Override
+            public void onRewardedVideoAdLeftApplication() {
+
+            }
+
+            @Override
+            public void onRewardedVideoAdFailedToLoad(int i) {
+                Toast.makeText(CoinsActivity.this, "error", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onRewardedVideoCompleted() {
+
+            }
+        });
+    }
+
+    private void loadRewardedVideoAd() {
+        mRewardedVideoAd.loadAd("ca-app-pub-3940256099942544/5224354917",
+                new AdRequest.Builder().build());
     }
 
     private void initCarousel() {
-        // vertical and cycle layout
         listPackages.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         getPackages();
     }
@@ -105,6 +183,14 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
             @Override
             public void onClick(View view) {
                 showPackages(false);
+            }
+        });
+
+        btnWatchVideo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                circularProgressBar.setVisibility(View.VISIBLE);
+                loadRewardedVideoAd();
             }
         });
     }
@@ -151,8 +237,24 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
         if (bp != null) {
             bp.release();
         }
+        mRewardedVideoAd.destroy(this);
         super.onDestroy();
     }
+
+    @Override
+    protected void onResume() {
+        mRewardedVideoAd.resume(this);
+        super.onResume();
+        txtCoinsTotal.setText(StaticData.user.getCoins());
+        StaticData.context = CoinsActivity.this;
+    }
+
+    @Override
+    public void onPause() {
+        mRewardedVideoAd.pause(this);
+        super.onPause();
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

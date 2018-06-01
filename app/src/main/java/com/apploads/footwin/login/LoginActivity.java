@@ -17,6 +17,7 @@ import com.apploads.footwin.R;
 import com.apploads.footwin.helpers.CustomDialogClass;
 import com.apploads.footwin.helpers.StaticData;
 import com.apploads.footwin.model.UserResponse;
+import com.apploads.footwin.profile.TermsAndConditionsActivity;
 import com.apploads.footwin.services.ApiManager;
 import com.apploads.footwin.signup.SignupStepOne;
 import com.apploads.footwin.helpers.utils.AppUtils;
@@ -46,7 +47,7 @@ import org.json.JSONObject;
 import java.util.Arrays;
 
 public class LoginActivity extends BaseActivity {
-    TextView txtRecover, txtCreateAccount;
+    TextView txtRecover, txtCreateAccount, txtTerms, txtPrivacy;
     EditText txtEmail, txtPassword;
     ImageView imgFB, imgGoogle;
     Button btnLogin;
@@ -79,6 +80,8 @@ public class LoginActivity extends BaseActivity {
         progressBar = _findViewById(R.id.spin_kit);
         imgGoogle = _findViewById(R.id.imgGoogle);
         btnLogin = _findViewById(R.id.btnLogin);
+        txtPrivacy = _findViewById(R.id.txtPrivacy);
+        txtTerms = _findViewById(R.id.txtTerms);
         txtEmail = _findViewById(R.id.txtEmail);
         imgFB = _findViewById(R.id.imgFB);
 
@@ -129,6 +132,26 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 onButtonFacebookPressed();
+            }
+        });
+
+        txtTerms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), TermsAndConditionsActivity.class);
+                intent.putExtra("type", "terms");
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
+            }
+        });
+
+        txtPrivacy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), TermsAndConditionsActivity.class);
+                intent.putExtra("type", "privacy");
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
             }
         });
     }

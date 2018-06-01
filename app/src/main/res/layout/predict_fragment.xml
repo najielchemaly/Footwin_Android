@@ -85,7 +85,7 @@
         android:padding="2dp"
         android:scaleType="centerCrop"
         android:src="@drawable/winning_coin"
-        app:layout_constraintEnd_toStartOf="@+id/txtCoinsTotal"
+        app:layout_constraintEnd_toStartOf="@+id/lblCoinsTotal"
         app:layout_constraintTop_toTopOf="@+id/imgCoins" />
 
     <TextView
