@@ -25,6 +25,7 @@ public class LeaderBoardAdapter extends BaseAdapter {
     private List<Leaderboard> root;
     private Context context;
     private LayoutInflater mInflater;
+    private int userPosition;
 
     public LeaderBoardAdapter(List<Leaderboard> root, Context context){
         this.root        = root;
@@ -63,6 +64,10 @@ public class LeaderBoardAdapter extends BaseAdapter {
         txtRank.setText(String.valueOf(position+2));
         txtCoins.setText(String.valueOf(leaderboard.getCoins()));
 
+        if(leaderboard.getFullname() == StaticData.user.getFullname()){
+            setUserPosition(position);
+        }
+
         if(leaderboard.getAvatar() != null && !leaderboard.getAvatar().isEmpty()) {
             Picasso.with(context)
                     .load(StaticData.config.getMediaUrl() + leaderboard.getAvatar())
@@ -77,4 +82,11 @@ public class LeaderBoardAdapter extends BaseAdapter {
         return convertView;
     }
 
+    public int getUserPosition() {
+        return userPosition;
+    }
+
+    public void setUserPosition(int userPosition) {
+        this.userPosition = userPosition;
+    }
 }

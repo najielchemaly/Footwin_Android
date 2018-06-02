@@ -85,6 +85,13 @@ public class LeaderboardFragment extends Fragment {
                 listLeaderboard.smoothScrollToPosition(leaderboards.size() - 1);
             }
         });
+
+        btnMe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listLeaderboard.smoothScrollToPosition(leaderBoardAdapter.getUserPosition());
+            }
+        });
     }
 
     private void getRanks() {

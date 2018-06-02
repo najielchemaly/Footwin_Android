@@ -12,4 +12,5 @@ public interface Constants {
     String WON_EXACT_SCORE = "3";
     String LOSE = "4";
 
+    String STARTER_PACK = "starter pack";
 }

@@ -16,7 +16,7 @@ import com.anjlab.android.iab.v3.TransactionDetails;
 import com.apploads.footwin.MainPageActivity;
 import com.apploads.footwin.R;
 import com.apploads.footwin.helpers.BaseActivity;
-import com.apploads.footwin.helpers.Constants;
+import static com.apploads.footwin.helpers.Constants.*;
 import com.apploads.footwin.helpers.StaticData;
 import com.apploads.footwin.helpers.utils.AppUtils;
 import com.apploads.footwin.model.BasicResponse;
@@ -58,7 +58,7 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
 
 
     private void initView(){
-        bp = new BillingProcessor(this, Constants.GOOGLE_LICENSE_KEY, this);
+        bp = new BillingProcessor(this, GOOGLE_LICENSE_KEY, this);
 
         circularProgressBar = _findViewById(R.id.progress_bar);
         btnGetCoins = _findViewById(R.id.btnGetCoins);
@@ -163,6 +163,16 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
     }
 
     public void purchaseProduct(Package p){
+        switch (p.getTitle()){
+            case STARTER_PACK:
+//                bp.purchase(this, "android.test.purchased", StaticData.user.getAccess_token());
+                break;
+            case "":
+//                bp.purchase(this, "android.test.purchased", StaticData.user.getAccess_token());
+                break;
+            default:
+                break;
+        }
         bp.purchase(this, "android.test.purchased", StaticData.user.getAccess_token());
     }
 
