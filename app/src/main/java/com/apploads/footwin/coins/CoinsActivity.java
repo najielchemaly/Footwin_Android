@@ -151,7 +151,9 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
     }
 
     private void loadRewardedVideoAd() {
-        mRewardedVideoAd.loadAd("ca-app-pub-3940256099942544/5224354917",
+//        mRewardedVideoAd.loadAd("ca-app-pub-3940256099942544/5224354917",
+//                new AdRequest.Builder().build());
+        mRewardedVideoAd.loadAd("ca-app-pub-8532510371470349/8896247436",
                 new AdRequest.Builder().build());
     }
 
