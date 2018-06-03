@@ -16,6 +16,7 @@ import com.apploads.footwin.MainPageActivity;
 import com.apploads.footwin.R;
 import com.apploads.footwin.helpers.CustomDialogClass;
 import com.apploads.footwin.helpers.StaticData;
+import com.apploads.footwin.loading.CountdownActivity;
 import com.apploads.footwin.model.UserResponse;
 import com.apploads.footwin.profile.TermsAndConditionsActivity;
 import com.apploads.footwin.services.ApiManager;
@@ -273,9 +274,15 @@ public class LoginActivity extends BaseActivity {
                         UserResponse userResponse = response.body();
                         StaticData.user = userResponse.getUser();
                         AppUtils.saveUser(LoginActivity.this, userResponse.getUser());
-                        Intent intent = new Intent(getApplicationContext(), MainPageActivity.class);
-                        startActivity(intent);
-                        finish();
+                        if(StaticData.config.getIsAppActive()){
+                            Intent intent = new Intent(getApplicationContext(), MainPageActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }else {
+                            Intent intent = new Intent(getApplicationContext(), CountdownActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
                         progressBar.setVisibility(View.GONE);
                     }else if(response.body().getStatus() == 0){
                         progressBar.setVisibility(View.GONE);
@@ -320,9 +327,16 @@ public class LoginActivity extends BaseActivity {
                         UserResponse userResponse = response.body();
                         StaticData.user = userResponse.getUser();
                         AppUtils.saveUser(LoginActivity.this, userResponse.getUser());
-                        Intent intent = new Intent(getApplicationContext(), MainPageActivity.class);
-                        startActivity(intent);
-                        finish();
+                        if(StaticData.config.getIsAppActive()){
+                            Intent intent = new Intent(getApplicationContext(), MainPageActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }else {
+                            Intent intent = new Intent(getApplicationContext(), CountdownActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+
                         progressBar.setVisibility(View.GONE);
                     } else if (response.body().getStatus() == 0) {
                         progressBar.setVisibility(View.GONE);

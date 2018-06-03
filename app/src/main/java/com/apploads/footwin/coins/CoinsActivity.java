@@ -43,6 +43,8 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
     RecyclerView listPackages;
     BillingProcessor bp;
     RewardedVideoAd mRewardedVideoAd;
+    String pack;
+    Package mPackage;
 
     @Override
     public int getContentViewId() {
@@ -151,8 +153,6 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
     }
 
     private void loadRewardedVideoAd() {
-//        mRewardedVideoAd.loadAd("ca-app-pub-3940256099942544/5224354917",
-//                new AdRequest.Builder().build());
         mRewardedVideoAd.loadAd("ca-app-pub-8532510371470349/8896247436",
                 new AdRequest.Builder().build());
     }
@@ -162,18 +162,36 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
         getPackages();
     }
 
-    public void purchaseProduct(Package p){
-        switch (p.getTitle()){
+    public void purchaseProduct(Package package_sent){
+        switch (package_sent.getTitle().toLowerCase()){
             case STARTER_PACK:
-//                bp.purchase(this, "android.test.purchased", StaticData.user.getAccess_token());
+                bp.purchase(this, "com.footwin.starterpack", StaticData.user.getAccess_token());
+                pack = "com.footwin.starterpack";
                 break;
-            case "":
-//                bp.purchase(this, "android.test.purchased", StaticData.user.getAccess_token());
+            case HALF_TIME_PACK:
+                bp.purchase(this, "com.footwin.halftimepack", StaticData.user.getAccess_token());
+                pack = "com.footwin.halftimepack";
+                break;
+            case HAT_TRICK_PACK:
+                bp.purchase(this, "com.footwin.hattrickpack", StaticData.user.getAccess_token());
+                pack = "com.footwin.hattrickpack";
+                break;
+            case SUPER_HAT_TRICK_PACK:
+                bp.purchase(this, "com.footwin.superhattrickpack", StaticData.user.getAccess_token());
+                pack = "com.footwin.superhattrickpack";
+                break;
+            case FOOTWIN_SPECIAL_PACK:
+                bp.purchase(this, "com.footwin.footwinspecialpack", StaticData.user.getAccess_token());
+                pack = "com.footwin.footwinspecialpack";
+                break;
+            case JOKER_PACK:
+                bp.purchase(this, "com.footwin.jokerpack", StaticData.user.getAccess_token());
+                pack = "com.footwin.jokerpack";
                 break;
             default:
                 break;
         }
-        bp.purchase(this, "android.test.purchased", StaticData.user.getAccess_token());
+        mPackage = package_sent;
     }
 
     private void initListeners(){
@@ -278,7 +296,23 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
     @Override
     public void onProductPurchased(@NonNull String productId, @Nullable TransactionDetails details) {
         Toast.makeText(this, "success: " + productId, Toast.LENGTH_SHORT).show();
-        bp.consumePurchase("android.test.purchased");
+        ApiManager.getService().purchaseCoins(mPackage.getId(),mPackage.getPrice()).enqueue(new Callback<Reward>() {
+            @Override
+            public void onResponse(Call<Reward> call, Response<Reward> response) {
+                Reward reward = response.body();
+                if(reward.getStatus() == 1){
+                    bp.consumePurchase(pack);
+                    StaticData.user.setCoins(reward.getCoins());
+                    AppUtils.saveUser(CoinsActivity.this, StaticData.user);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Reward> call, Throwable t) {
+
+            }
+        });
+
     }
 
     @Override

@@ -129,7 +129,7 @@ public class MatchesAdapter extends BaseAdapter {
 
                 @Override
                 public void onFinish() {
-
+                    notifyDataSetChanged();
                 }
             }.start();
 

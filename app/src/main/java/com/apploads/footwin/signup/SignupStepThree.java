@@ -32,6 +32,7 @@ import com.apploads.footwin.helpers.CustomDialogClass;
 import com.apploads.footwin.helpers.StaticData;
 import com.apploads.footwin.helpers.Utility;
 import com.apploads.footwin.helpers.utils.AppUtils;
+import com.apploads.footwin.loading.CountdownActivity;
 import com.apploads.footwin.login.LoginActivity;
 import com.apploads.footwin.login.RetrievePasswordActivity;
 import com.apploads.footwin.model.Article;
@@ -115,7 +116,6 @@ public class SignupStepThree extends BaseActivity {
 
         DoubleBounce doubleBounce = new DoubleBounce();
         progressBar.setIndeterminateDrawable(doubleBounce);
-        progressBar.setVisibility(View.GONE);
 
         Animation scaleDown = AnimationUtils.loadAnimation(SignupStepThree.this, R.anim.scale_up);
         imgAddImage.startAnimation(scaleDown);
@@ -136,7 +136,7 @@ public class SignupStepThree extends BaseActivity {
             @Override
             public void onClick(View view) {
                 if(isImageSet){
-                    progressBar.setVisibility(View.VISIBLE);
+                    viewLoading.setVisibility(View.VISIBLE);
                     registerUser();
                 }else {
                     CustomDialogClass dialogClass = new CustomDialogClass(SignupStepThree.this, new CustomDialogClass.AbstractCustomDialogListener() {
@@ -302,6 +302,7 @@ public class SignupStepThree extends BaseActivity {
     }
 
     private void registerUser(){
+        viewLoading.setVisibility(View.VISIBLE);
         ApiManager.getService(true).registerUser(user.getFullname() ,user.getUsername()
                 ,user.getEmail(),password, user.getPhoneCode()
                 ,user.getPhone(),user.getGender(),
@@ -309,14 +310,33 @@ public class SignupStepThree extends BaseActivity {
             @Override
             public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                 UserResponse userResponse = response.body();
-                StaticData.user = userResponse.getUser();
-                updateAvatar();
+                if(userResponse.getStatus() == 1){
+                    StaticData.user = userResponse.getUser();
+                    updateAvatar();
+                }else {
+                    CustomDialogClass dialogClass = new CustomDialogClass(SignupStepThree.this, new CustomDialogClass.AbstractCustomDialogListener() {
+                        @Override
+                        public void onConfirm(CustomDialogClass.DialogResponse response) {
+                            response.getDialog().dismiss();
+                            viewLoading.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onCancel(CustomDialogClass.DialogResponse dialogResponse) {
+                        }
+                    }, true);
+
+                    dialogClass.setTitle("Oops");
+                    dialogClass.setMessage(userResponse.getMessage());
+                    dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                    dialogClass.show();
+                }
             }
 
             @Override
             public void onFailure(Call<UserResponse> call, Throwable t) {
                 Toast.makeText(SignupStepThree.this, "Something went wrong! please try again later", Toast.LENGTH_SHORT).show();
-                progressBar.setVisibility(View.GONE);
+                viewLoading.setVisibility(View.GONE);
             }
         });
     }
@@ -325,7 +345,7 @@ public class SignupStepThree extends BaseActivity {
         RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), new File(imgPath));
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", imgPath, requestFile);
 
-        ApiManager.getService().updateAvatar(body).enqueue(new Callback<Object>() {
+        ApiManager.getService(true).updateAvatar(body).enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
                 try {
@@ -334,10 +354,17 @@ public class SignupStepThree extends BaseActivity {
                     User user = StaticData.user;
                     user.setAvatar(avatar);
                     AppUtils.saveUser(SignupStepThree.this, user);
-                    progressBar.setVisibility(View.GONE);
-                    Intent intent = new Intent(getApplicationContext(), MainPageActivity.class);
-                    startActivity(intent);
-                    finish();
+                    viewLoading.setVisibility(View.GONE);
+                    if(StaticData.config.getIsAppActive()){
+                        Intent intent = new Intent(getApplicationContext(), MainPageActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }else {
+                        Intent intent = new Intent(getApplicationContext(), CountdownActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+
                 } catch (Exception ex) {
                     Log.d("", ex.getLocalizedMessage());
                 }
@@ -346,7 +373,7 @@ public class SignupStepThree extends BaseActivity {
             @Override
             public void onFailure(Call<Object> call, Throwable t) {
                 Log.d("", t.getMessage());
-                progressBar.setVisibility(View.GONE);
+                viewLoading.setVisibility(View.GONE);
             }
         });
     }
