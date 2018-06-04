@@ -18,6 +18,10 @@ public class BasicResponse {
     @Expose
     private String coins;
 
+    @SerializedName("error_code")
+    @Expose
+    private String errorCode;
+
     public String getFields() {
         return fields;
     }
@@ -52,5 +56,13 @@ public class BasicResponse {
 
     public void setCoins(String coins) {
         this.coins = coins;
+    }
+
+    public String getErrorCode() {
+        return errorCode;
+    }
+
+    public void setErrorCode(String errorCode) {
+        this.errorCode = errorCode;
     }
 }

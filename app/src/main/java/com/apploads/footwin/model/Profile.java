@@ -19,6 +19,10 @@ public class Profile {
     @Expose
     private String message;
 
+    @SerializedName("current_date")
+    @Expose
+    private String currentDate;
+
     public List<Match> getMatches() {
         return matches;
     }
@@ -51,4 +55,11 @@ public class Profile {
         this.message = message;
     }
 
+    public String getCurrentDate() {
+        return currentDate;
+    }
+
+    public void setCurrentDate(String currentDate) {
+        this.currentDate = currentDate;
+    }
 }

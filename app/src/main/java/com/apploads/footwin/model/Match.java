@@ -254,4 +254,11 @@ public class Match {
         this.predictionAwayScore = predictionAwayScore;
     }
 
+    public String getIs_confirmed() {
+        return is_confirmed;
+    }
+
+    public void setIs_confirmed(String is_confirmed) {
+        this.is_confirmed = is_confirmed;
+    }
 }

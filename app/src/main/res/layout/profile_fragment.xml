@@ -121,7 +121,7 @@
             />
 
         <TextView
-            android:id="@+id/txtTerms"
+            android:id="@+id/txtPrivacyPolicy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
@@ -130,7 +130,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/app_margin"
             android:textSize="@dimen/medium_text2"
-            android:text="terms and conditions"
+            android:text="privacy policy"
             />
 
         <TextView
@@ -143,7 +143,7 @@
             />
 
         <TextView
-            android:id="@+id/txtPrivacyPolicy"
+            android:id="@+id/txtTerms"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
@@ -152,7 +152,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/app_margin"
             android:textSize="@dimen/medium_text2"
-            android:text="privacy policy"
+            android:text="terms and conditions"
             />
 
     </LinearLayout>

@@ -18,12 +18,18 @@ import com.apploads.footwin.MainPageActivity;
 import com.apploads.footwin.R;
 import com.apploads.footwin.helpers.StaticData;
 import com.apploads.footwin.helpers.utils.AppUtils;
+import com.apploads.footwin.model.Config;
 import com.apploads.footwin.notifications.NotificationsActivity;
 import com.apploads.footwin.predict.PredictFragment;
+import com.apploads.footwin.services.ApiManager;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.Calendar;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class MyFirebaseMessagingSerivce extends FirebaseMessagingService {
@@ -39,24 +45,49 @@ public class MyFirebaseMessagingSerivce extends FirebaseMessagingService {
         if(remoteMessage.getData() != null) {
             String total_winning_coins = remoteMessage.getData().get("total_winning_coins");
             StaticData.user.setWinningCoins(total_winning_coins);
-        }
 
-        int badge = AppUtils.getBadge(getApplicationContext());
-        AppUtils.updateBadge(getApplicationContext(), ++badge);
+            if(remoteMessage.getData().get("type").equals("update_active_matches")){
+                if(StaticData.context.getClass() == MainPageActivity.class){
+                    MainPageActivity myActivity = (MainPageActivity) StaticData.context;
+                    FragmentManager fm = myActivity.getSupportFragmentManager();
+                    Fragment fragment = fm.findFragmentById(R.id.frame_layout);
+                    if (fragment instanceof PredictFragment){
+                        ((PredictFragment) fragment).callMatchesService();
+                    }
+                    ApiManager.getService().getActiveRound().enqueue(new Callback<Config>() {
+                        @Override
+                        public void onResponse(Call<Config> call, Response<Config> response) {
+                            Config config = response.body();
+                            StaticData.config.setActiveRound(config.getActiveRound());
+                            StaticData.config.setActiveReward(config.getActiveReward());
+                        }
 
-        if(StaticData.context.getClass() == MainPageActivity.class){
-            MainPageActivity myActivity = (MainPageActivity) StaticData.context;
-            FragmentManager fm = myActivity.getSupportFragmentManager();
-            Fragment fragment = fm.findFragmentById(R.id.frame_layout);
-            if (fragment instanceof PredictFragment){
-                ((PredictFragment) fragment).updateBadge();
-                ((PredictFragment) fragment).updateWinningCoins();
+                        @Override
+                        public void onFailure(Call<Config> call, Throwable t) {
+
+                        }
+                    });
+                }
+            }else {
+                int badge = AppUtils.getBadge(getApplicationContext());
+                AppUtils.updateBadge(getApplicationContext(), ++badge);
+
+                if(StaticData.context.getClass() == MainPageActivity.class){
+                    MainPageActivity myActivity = (MainPageActivity) StaticData.context;
+                    FragmentManager fm = myActivity.getSupportFragmentManager();
+                    Fragment fragment = fm.findFragmentById(R.id.frame_layout);
+                    if (fragment instanceof PredictFragment){
+                        ((PredictFragment) fragment).updateBadge();
+                        ((PredictFragment) fragment).updateWinningCoins();
+                    }
+                }
+
+                if(StaticData.context.getClass() == NotificationsActivity.class){
+                    ((NotificationsActivity) StaticData.context).refreshList();
+                }
             }
         }
 
-        if(StaticData.context.getClass() == NotificationsActivity.class){
-            ((NotificationsActivity) StaticData.context).refreshList();
-        }
     }
 
     @Override

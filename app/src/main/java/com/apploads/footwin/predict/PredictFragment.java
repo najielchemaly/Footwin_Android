@@ -371,7 +371,7 @@ public class PredictFragment extends Fragment {
         callMatchesService(true);
     }
 
-    public void showAlert(final Match match, final String winningTeamID, final String winningTeamName, final String homeScore, final String awayScore){
+    public void showAlert(final Match match, final String winningTeamID, final String winningTeamName, final String homeScore, final String awayScore, final int position){
         CustomDialogClass dialogClass = new CustomDialogClass(getActivity(), new CustomDialogClass.AbstractCustomDialogListener() {
             @Override
             public void onConfirm(CustomDialogClass.DialogResponse response) {
@@ -381,7 +381,7 @@ public class PredictFragment extends Fragment {
                         , awayScore,"1", winningTeamName, match.getDate()).enqueue(new Callback<BasicResponse>() {
                     @Override
                     public void onResponse(Call<BasicResponse> call, Response<BasicResponse> response) {
-                        BasicResponse basicResponse = response.body();
+                       final BasicResponse basicResponse = response.body();
 
                         if(basicResponse.getStatus() == 1){
                             int predCount = AppUtils.getPredictionsCount(getActivity());
@@ -400,6 +400,12 @@ public class PredictFragment extends Fragment {
                                 @Override
                                 public void onConfirm(CustomDialogClass.DialogResponse response) {
                                     response.getDialog().dismiss();
+                                    if(basicResponse.getErrorCode().equals("404")){
+//                                        matches.remove(position);
+////                                        matchesAdapter.setRoot(matches);
+////                                        matchesAdapter.notifyDataSetChanged();
+                                        callMatchesService();
+                                    }
                                 }
 
                                 @Override
@@ -411,6 +417,8 @@ public class PredictFragment extends Fragment {
                             dialogClass.setMessage(basicResponse.getMessage());
                             dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
                             dialogClass.show();
+
+
                         }
                     }
 
@@ -437,7 +445,7 @@ public class PredictFragment extends Fragment {
         dialogClass.show();
     }
 
-    private void callMatchesService() {
+    public void callMatchesService() {
         callMatchesService(false);
     }
 
@@ -463,7 +471,7 @@ public class PredictFragment extends Fragment {
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    matchesAdapter = new MatchesAdapter(matches, getContext(), PredictFragment.this);
+                                    matchesAdapter = new MatchesAdapter(matches, getContext(), PredictFragment.this,profile.getCurrentDate());
                                     listMatches.setAdapter(matchesAdapter);
                                     progressBar.setVisibility(View.GONE);
                                 }
