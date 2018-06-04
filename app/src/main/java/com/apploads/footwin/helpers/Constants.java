@@ -12,4 +12,10 @@ public interface Constants {
     String WON_EXACT_SCORE = "3";
     String LOSE = "4";
 
+    String STARTER_PACK = "starter pack";
+    String HALF_TIME_PACK = "half time pack";
+    String HAT_TRICK_PACK = "hat trick pack";
+    String JOKER_PACK = "joker pack";
+    String FOOTWIN_SPECIAL_PACK = "footwin special pack";
+    String SUPER_HAT_TRICK_PACK = "super hat trick pack";
 }

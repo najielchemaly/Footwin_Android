@@ -73,16 +73,18 @@ public class LoadingActivity extends BaseActivity {
      * http://config.foot-win.com
      */
     private void callConfigService(){
-        ApiManager.getService(true).getConfig("http://config.foot-win.com/").enqueue(new Callback<Config>() {
+        ApiManager.getService(true).getConfig("http://test.config.foot-win.com/").enqueue(new Callback<Config>() {
             @Override
             public void onResponse(Call<Config> call, Response<Config> response) {
                 config = response.body();
-                if(config.getIsAppActive()){
-                    ApiManager.setApiUrl(config.getBaseUrl());
-                    IntentToLoginWithDuration(2000);
-                }else {
-                    IntentToTimerWithDuration(2000);
-                }
+                ApiManager.setApiUrl(config.getBaseUrl());
+                IntentToLoginWithDuration(2000);
+//                if(config.getIsAppActive()){
+//                    ApiManager.setApiUrl(config.getBaseUrl());
+//                    IntentToLoginWithDuration(2000);
+//                }else {
+//                    IntentToTimerWithDuration(2000);
+//                }
             }
 
             @Override
@@ -112,21 +114,21 @@ public class LoadingActivity extends BaseActivity {
         }, delay);
     }
 
-    /**
-     * This function is for navigating to the next page with a delay
-     * @param delay time before navigating to login page
-     */
-    private void IntentToTimerWithDuration(long delay){
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(getApplicationContext(), CountdownActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        }, delay);
-    }
+//    /**
+//     * This function is for navigating to the next page with a delay
+//     * @param delay time before navigating to login page
+//     */
+//    private void IntentToTimerWithDuration(long delay){
+//        final Handler handler = new Handler();
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                Intent intent = new Intent(getApplicationContext(), CountdownActivity.class);
+//                startActivity(intent);
+//                finish();
+//            }
+//        }, delay);
+//    }
 
     /**
      * checks if the user is already logged in from the User object stored in the shared preferences
@@ -152,10 +154,16 @@ public class LoadingActivity extends BaseActivity {
                     UserResponse userResponse = response.body();
                     AppUtils.saveUser(LoadingActivity.this, userResponse.getUser());
                     StaticData.user = userResponse.getUser();
-                    Intent intent = new Intent(getApplicationContext(), MainPageActivity.class);
-                    startActivity(intent);
-                    finish();
-                }else {
+                    if(StaticData.config.getIsAppActive()){
+                        Intent intent = new Intent(getApplicationContext(), MainPageActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Intent intent = new Intent(getApplicationContext(), CountdownActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                } else {
                     CustomDialogClass dialogClass = new CustomDialogClass(LoadingActivity.this, new CustomDialogClass.AbstractCustomDialogListener() {
                         @Override
                         public void onConfirm(CustomDialogClass.DialogResponse response) {

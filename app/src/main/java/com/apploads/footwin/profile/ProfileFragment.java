@@ -28,7 +28,7 @@ import retrofit2.Response;
 public class ProfileFragment extends Fragment {
 
     private View parentView;
-    TextView txtMyPredictions, txtEditMyProfile, txtChangePassword, txtTerms, txtName;
+    TextView txtMyPredictions, txtEditMyProfile, txtChangePassword, txtTerms, txtName, txtPrivacyPolicy;
     LinearLayout viewLogout;
     ImageButton btnCamera;
     CircleImageView imgProfile;
@@ -45,6 +45,7 @@ public class ProfileFragment extends Fragment {
         txtMyPredictions = parentView.findViewById(R.id.txtMyPredictions);
         txtChangePassword = parentView.findViewById(R.id.txtChangePassword);
         txtEditMyProfile = parentView.findViewById(R.id.txtEditMyProfile);
+        txtPrivacyPolicy = parentView.findViewById(R.id.txtPrivacyPolicy);
         txtName = parentView.findViewById(R.id.txtName);
         txtTerms = parentView.findViewById(R.id.txtTerms);
         imgProfile = parentView.findViewById(R.id.imgProfile);
@@ -91,6 +92,16 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), TermsAndConditionsActivity.class);
+                intent.putExtra("type", "terms");
+                startActivity(intent);
+            }
+        });
+
+        txtPrivacyPolicy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), TermsAndConditionsActivity.class);
+                intent.putExtra("type", "privacy");
                 startActivity(intent);
             }
         });

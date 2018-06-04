@@ -136,10 +136,7 @@ public interface ServiceInterface {
     Call<Reward> getReward(@Field("reward_id") String reward_id, @Field("reward_amount") String reward_amount);
 
     @FormUrlEncoded
-    @Headers({
-            "Content-Type: application/json"
-    })
     @POST("purchaseCoins/")
-    Call<Object> purchaseCoins(@Field("package_id") String package_id, @Field("package_amount") String package_amount);
+    Call<Reward> purchaseCoins(@Field("package_id") String package_id, @Field("package_amount") String package_amount);
 
 }
