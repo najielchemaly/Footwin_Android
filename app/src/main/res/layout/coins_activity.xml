@@ -124,6 +124,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/relativeLayout3">
 
                 <TextView
+                    android:id="@+id/txtCollect"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="collect"
@@ -143,7 +144,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="to advance to the next round"
+                    android:text="to hit the first place in the leaderboard"
                     android:textAllCaps="true"
                     android:textColor="@color/darkText"
                     android:textSize="@dimen/medium_text2"
