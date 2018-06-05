@@ -58,7 +58,7 @@ public class MyPredictionsActivity extends BaseActivity {
                         viewNoData.setVisibility(View.GONE);
                     }else {
                         if(noDataView == null) {
-                            noDataView = new NoDataView(MyPredictionsActivity.this, "NOTHING TO SHOW YET!\\nSTART WINNING PREDICTIONS, HIT THE FIRST PLACE IN THE LEADERBOARD AND WIN A SPECIAL TRIP TO YOUR FAVORITE TEAM'S COUNTRY!");
+                            noDataView = new NoDataView(MyPredictionsActivity.this, "You do not have any predictions yet!");
                             FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                             viewNoData.addView(noDataView, lp);
                         }

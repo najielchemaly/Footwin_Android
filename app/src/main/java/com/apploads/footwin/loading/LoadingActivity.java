@@ -3,6 +3,7 @@ package com.apploads.footwin.loading;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.apploads.footwin.BuildConfig;
 import com.apploads.footwin.MainPageActivity;
 import com.apploads.footwin.firebase.FirebaseIdService;
 import com.apploads.footwin.helpers.BaseActivity;
@@ -24,6 +26,7 @@ import com.apploads.footwin.model.Config;
 import com.apploads.footwin.model.User;
 import com.apploads.footwin.model.UserResponse;
 import com.apploads.footwin.services.ApiManager;
+import com.apploads.footwin.signup.SignupStepThree;
 import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
@@ -33,6 +36,7 @@ import com.google.gson.Gson;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
 import static com.apploads.footwin.helpers.StaticData.config;
 import static com.apploads.footwin.helpers.Constants.ADDMOB_APP_ID;
 
@@ -45,7 +49,7 @@ public class LoadingActivity extends BaseActivity {
     }
 
     @Override
-    public void doOnCreate(){
+    public void doOnCreate() {
         initView();
         initAds();
     }
@@ -53,7 +57,7 @@ public class LoadingActivity extends BaseActivity {
     /**
      * initialize view
      */
-    private void initView(){
+    private void initView() {
         imgBall = _findViewById(R.id.imgBall);
         rotateBall();
         callConfigService();
@@ -62,7 +66,7 @@ public class LoadingActivity extends BaseActivity {
     /**
      * This function is for rotating the ball at an infinite count
      */
-    private void rotateBall(){
+    private void rotateBall() {
         Animation rotation = AnimationUtils.loadAnimation(this, R.anim.rotate);
         rotation.setRepeatCount(Animation.INFINITE);
         imgBall.startAnimation(rotation);
@@ -72,19 +76,46 @@ public class LoadingActivity extends BaseActivity {
      * Api request for getting the config and saving them in the config Object
      * http://config.foot-win.com
      */
-    private void callConfigService(){
+    private void callConfigService() {
         ApiManager.getService(true).getConfig("http://test.config.foot-win.com/").enqueue(new Callback<Config>() {
             @Override
             public void onResponse(Call<Config> call, Response<Config> response) {
                 config = response.body();
                 ApiManager.setApiUrl(config.getBaseUrl());
-                IntentToLoginWithDuration(2000);
+
+                int currentVersion = Integer.parseInt(BuildConfig.VERSION_NAME.replace(".", ""));
+                int recVersion = Integer.parseInt(config.getVersion().replace(".", ""));
+
+                if (currentVersion < recVersion) {
+                    CustomDialogClass dialogClass = new CustomDialogClass(LoadingActivity.this, new CustomDialogClass.AbstractCustomDialogListener() {
+                        @Override
+                        public void onConfirm(CustomDialogClass.DialogResponse response) {
+                            final String appPackageName = getPackageName(); // getPackageName() from Context or Activity object
+                            try {
+                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                            } catch (android.content.ActivityNotFoundException anfe) {
+                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                            }
+                        }
+
+                        @Override
+                        public void onCancel(CustomDialogClass.DialogResponse dialogResponse) {
+                        }
+                    }, true, "UPDATE", "UPDATE");
+
+                    dialogClass.setTitle("Oops");
+                    dialogClass.setMessage("Your current version is out of date, please update the app");
+                    dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                    dialogClass.show();
+                }else {
+                    IntentToLoginWithDuration(2000);
 //                if(config.getIsAppActive()){
 //                    ApiManager.setApiUrl(config.getBaseUrl());
 //                    IntentToLoginWithDuration(2000);
 //                }else {
 //                    IntentToTimerWithDuration(2000);
 //                }
+                }
             }
 
             @Override
@@ -96,16 +127,17 @@ public class LoadingActivity extends BaseActivity {
 
     /**
      * This function is for navigating to the next page with a delay
+     *
      * @param delay time before navigating to login page
      */
-    private void IntentToLoginWithDuration(long delay){
+    private void IntentToLoginWithDuration(long delay) {
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(isAutoLogin()){
+                if (isAutoLogin()) {
                     callLoginService();
-                }else {
+                } else {
                     Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                     startActivity(intent);
                     finish();
@@ -132,29 +164,30 @@ public class LoadingActivity extends BaseActivity {
 
     /**
      * checks if the user is already logged in from the User object stored in the shared preferences
+     *
      * @return
      */
-    private boolean isAutoLogin(){
-        if(getUser(LoadingActivity.this) == null){
+    private boolean isAutoLogin() {
+        if (getUser(LoadingActivity.this) == null) {
             return false;
-        }else {
+        } else {
             return true;
         }
     }
 
-    private void initAds(){
+    private void initAds() {
         MobileAds.initialize(this, ADDMOB_APP_ID);
     }
 
-    private void callLoginService(){
+    private void callLoginService() {
         ApiManager.getService(true).loginToken(getUser(LoadingActivity.this).getAccess_token()).enqueue(new Callback<UserResponse>() {
             @Override
             public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
-                if(response.isSuccessful() && response.body() != null){
+                if (response.isSuccessful() && response.body() != null) {
                     UserResponse userResponse = response.body();
                     AppUtils.saveUser(LoadingActivity.this, userResponse.getUser());
                     StaticData.user = userResponse.getUser();
-                    if(StaticData.config.getIsAppActive()){
+                    if (StaticData.config.getIsAppActive()) {
                         Intent intent = new Intent(getApplicationContext(), MainPageActivity.class);
                         startActivity(intent);
                         finish();

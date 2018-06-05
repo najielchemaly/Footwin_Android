@@ -139,4 +139,7 @@ public interface ServiceInterface {
     @POST("purchaseCoins/")
     Call<Reward> purchaseCoins(@Field("package_id") String package_id, @Field("package_amount") String package_amount);
 
+    @POST("getActiveRound/")
+    Call<Config> getActiveRound();
+
 }

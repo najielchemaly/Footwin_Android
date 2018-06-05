@@ -52,6 +52,9 @@ public class Config {
     @SerializedName("message")
     @Expose
     private String message;
+    @SerializedName("version_android")
+    @Expose
+    private String version;
 
     public List<Country> getCountries() {
         return countries;
@@ -187,5 +190,13 @@ public class Config {
 
     public void setIsIAPReady(Boolean IAPReady) {
         isIAPReady = IAPReady;
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+
     }
 }

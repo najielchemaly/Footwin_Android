@@ -122,7 +122,7 @@ public class ProfileFragment extends Fragment {
                     }
                 }, false);
 
-                customDialogClass.setTitle("Title");
+                customDialogClass.setTitle("FOOTWIN");
                 customDialogClass.setMessage("Are you sure you want to logout?");
                 customDialogClass.show();
             }

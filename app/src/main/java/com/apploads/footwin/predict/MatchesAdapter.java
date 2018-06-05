@@ -40,10 +40,12 @@ public class MatchesAdapter extends BaseAdapter {
     private Date endDate;
     private long startTime, milliseconds, diff;
     private CountDownTimer mCountDownTimer;
+    private String currentDate;
 
-    public MatchesAdapter(List<Match> root, Context context, PredictFragment predictFragment){
+    public MatchesAdapter(List<Match> root, Context context, PredictFragment predictFragment, String currentDate){
         this.root = root;
         this.context = context;
+        this.currentDate = currentDate;
         this.predictFragment = predictFragment;
 
         if(context != null){
@@ -77,7 +79,7 @@ public class MatchesAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         final Match match = (Match) getItem(position);
         final Holder holder = new Holder();
 
@@ -96,20 +98,18 @@ public class MatchesAdapter extends BaseAdapter {
 //            final Animation scale_down_init = AnimationUtils.loadAnimation(context, R.anim.scale_down_init);
 //            final Animation scale_down_normal = AnimationUtils.loadAnimation(context, R.anim.scale_down_normal);
 
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             formatter.setLenient(false);
 
             String endTime = match.getDate();
 
             try {
-                endDate = formatter.parse(endTime);
+                endDate = formatter.parse(endTime+":00");
                 milliseconds = endDate.getTime();
-
+                startTime = formatter.parse(currentDate).getTime();
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-
-            startTime = System.currentTimeMillis();
 
             diff = milliseconds - startTime;
 
@@ -119,17 +119,31 @@ public class MatchesAdapter extends BaseAdapter {
                     startTime=startTime-1;
                     Long serverUptimeSeconds = (millisUntilFinished - startTime) / 1000;
 
-                    String daysLeft = String.format("%d", serverUptimeSeconds / 86400);
-                    String hoursLeft = String.format("%d", (serverUptimeSeconds % 86400) / 3600);
-                    String minutesLeft = String.format("%d", ((serverUptimeSeconds % 86400) % 3600) / 60);
-                    String secondsLeft = String.format("%d", ((serverUptimeSeconds % 86400) % 3600) % 60);
+                    if(serverUptimeSeconds >= 0){
+                        String daysLeft = String.format("%d", serverUptimeSeconds / 86400);
+                        String hoursLeft = String.format("%d", (serverUptimeSeconds % 86400) / 3600);
+                        String minutesLeft = String.format("%d", ((serverUptimeSeconds % 86400) % 3600) / 60);
+                        String secondsLeft = String.format("%d", ((serverUptimeSeconds % 86400) % 3600) % 60);
+                        holder.txtDate.setText(daysLeft+ " Days " + hoursLeft+ " Hours " + minutesLeft + " Mins " + secondsLeft+" Sec");
 
-                    holder.txtDate.setText(daysLeft+ " Days " + hoursLeft+ " Hours " + minutesLeft + " Mins " + secondsLeft+" Sec");
+                        if(daysLeft.equals("0")){
+                            holder.txtDate.setText(hoursLeft+ " Hours " + minutesLeft + " Mins " + secondsLeft+" Sec");
+                        }
+                        if(hoursLeft.equals("0")){
+                            holder.txtDate.setText( minutesLeft + " Mins " + secondsLeft+" Sec");
+                        }
+                        if(minutesLeft.equals("0")){
+                            holder.txtDate.setText(secondsLeft+" Sec");
+                        }
+                        holder.txtDate.setTextColor(context.getResources().getColor(R.color.white));
+                    }else {
+                        holder.txtDate.setText("LIVE NOW!");
+                        holder.txtDate.setTextColor(context.getResources().getColor(R.color.green));
+                    }
                 }
 
                 @Override
                 public void onFinish() {
-                    notifyDataSetChanged();
                 }
             }.start();
 
@@ -171,9 +185,9 @@ public class MatchesAdapter extends BaseAdapter {
                     String homeScore = match.getHomeScore();
                     String awayScore = match.getAwayScore();
                     if(!match.isAwayToWin() && !match.isHomeToWin()){
-                        predictFragment.showAlert(match,"0","", homeScore, awayScore);
+                        predictFragment.showAlert(match,"0","", homeScore, awayScore, position);
                     }else {
-                        predictFragment.showAlert(match, winningTeamID, winningTeamName, homeScore, awayScore);
+                        predictFragment.showAlert(match, winningTeamID, winningTeamName, homeScore, awayScore, position);
                     }
                 }
             });
