@@ -46,7 +46,8 @@ public class MyFirebaseMessagingSerivce extends FirebaseMessagingService {
             String total_winning_coins = remoteMessage.getData().get("total_winning_coins");
             StaticData.user.setWinningCoins(total_winning_coins);
 
-            if(remoteMessage.getData().get("type").equals("update_active_matches")){
+            if(remoteMessage.getData().get("type") != null &&
+                    remoteMessage.getData().get("type").equals("update_active_matches")){
                 if(StaticData.context.getClass() == MainPageActivity.class){
                     MainPageActivity myActivity = (MainPageActivity) StaticData.context;
                     FragmentManager fm = myActivity.getSupportFragmentManager();

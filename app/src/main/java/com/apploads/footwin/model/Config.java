@@ -19,6 +19,9 @@ public class Config {
     @SerializedName("active_reward")
     @Expose
     private ActiveReward activeReward;
+    @SerializedName("winning_user")
+    @Expose
+    private User winningUser;
     @SerializedName("base_url")
     @Expose
     private String baseUrl;
@@ -37,6 +40,9 @@ public class Config {
     @SerializedName("is_app_active")
     @Expose
     private Boolean isAppActive;
+    @SerializedName("is_iapready")
+    @Expose
+    private Boolean isIAPReady;
     @SerializedName("tutorial_text")
     @Expose
     private String tutorialText;
@@ -170,11 +176,28 @@ public class Config {
         isAppActive = appActive;
     }
 
+    public User getWinningUser() {
+        return winningUser;
+    }
+
+    public void setWinningUser(User winningUser) {
+        this.winningUser = winningUser;
+    }
+
+    public Boolean getIsIAPReady() {
+        return isIAPReady;
+    }
+
+    public void setIsIAPReady(Boolean IAPReady) {
+        isIAPReady = IAPReady;
+    }
+
     public String getVersion() {
         return version;
     }
 
     public void setVersion(String version) {
         this.version = version;
+
     }
 }

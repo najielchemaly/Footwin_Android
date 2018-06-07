@@ -38,10 +38,10 @@ import retrofit2.Response;
 public class CoinsActivity extends BaseActivity implements BillingProcessor.IBillingHandler{
     CircularProgressBar circularProgressBar;
     Button btnClose, btnGetCoins, btnClosePackages, btnWatchVideo;
-    TextView txtCoinsTotal, txtWinningCoinsTotal, txtNextRoundCoins;
+    TextView txtCoinsTotal, txtWinningCoinsTotal, txtNextRoundCoins, txtCollect;
     RelativeLayout viewBlackOpacity;
     RecyclerView listPackages;
-    BillingProcessor bp;
+    BillingProcessor billingProcessor;
     RewardedVideoAd mRewardedVideoAd;
     String pack;
     Package mPackage;
@@ -60,7 +60,7 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
 
 
     private void initView(){
-        bp = new BillingProcessor(this, GOOGLE_LICENSE_KEY, this);
+        billingProcessor = new BillingProcessor(this, GOOGLE_LICENSE_KEY, this);
 
         circularProgressBar = _findViewById(R.id.progress_bar);
         btnGetCoins = _findViewById(R.id.btnGetCoins);
@@ -72,6 +72,7 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
         viewBlackOpacity = _findViewById(R.id.viewBlackOpacity);
         btnClosePackages = _findViewById(R.id.btnClosePackages);
         btnWatchVideo = _findViewById(R.id.btnWatchVideo);
+        txtCollect = _findViewById(R.id.txtCollect);
 
         viewBlackOpacity.setVisibility(View.GONE);
         viewBlackOpacity.setAlpha(0f);
@@ -79,14 +80,22 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
 
         txtCoinsTotal.setText(StaticData.user.getCoins());
         txtWinningCoinsTotal.setText(StaticData.user.getWinningCoins());
-        txtNextRoundCoins.setText(StaticData.config.getActiveRound().getMinimumAmount());
+//        txtNextRoundCoins.setText(StaticData.config.getActiveRound().getMinimumAmount());
+        txtNextRoundCoins.setText(StaticData.config.getWinningUser().getWinningCoins());
         AppUtils.startCountAnimation(txtWinningCoinsTotal,0, Integer.parseInt(StaticData.user.getWinningCoins()),1500);
 
         circularProgressBar.setAnimateProgress(true);
         circularProgressBar.setProgressAnimationDuration(1500);
-        circularProgressBar.setMaximum(Float.parseFloat(StaticData.config.getActiveRound().getMinimumAmount()));
+        circularProgressBar.setMaximum(Float.parseFloat(StaticData.config.getWinningUser().getWinningCoins()));
         circularProgressBar.setProgress(Float.parseFloat(StaticData.user.getWinningCoins()));
         circularProgressBar.animate();
+
+        if(txtNextRoundCoins.getText().toString() == null ||
+                txtNextRoundCoins.getText().toString().isEmpty() ||
+                txtNextRoundCoins.getText().toString().equals("0")) {
+            txtCollect.setText("KEEP WINNING COINS");
+            txtNextRoundCoins.setVisibility(View.GONE);
+        }
 
         mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this);
         mRewardedVideoAd.setRewardedVideoAdListener(new RewardedVideoAdListener() {
@@ -150,11 +159,17 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
 
             }
         });
+
+        if(!StaticData.config.getIsIAPReady()) {
+            btnWatchVideo.setVisibility(View.GONE);
+        }
     }
 
     private void loadRewardedVideoAd() {
-        mRewardedVideoAd.loadAd("ca-app-pub-8532510371470349/8896247436",
-                new AdRequest.Builder().build());
+        if(mRewardedVideoAd != null) {
+            mRewardedVideoAd.loadAd("ca-app-pub-8532510371470349/8896247436",
+                    new AdRequest.Builder().build());
+        }
     }
 
     private void initCarousel() {
@@ -165,27 +180,27 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
     public void purchaseProduct(Package package_sent){
         switch (package_sent.getTitle().toLowerCase()){
             case STARTER_PACK:
-                bp.purchase(this, "com.footwin.starterpack", StaticData.user.getAccess_token());
+                billingProcessor.purchase(this, "com.footwin.starterpack", StaticData.user.getAccess_token());
                 pack = "com.footwin.starterpack";
                 break;
             case HALF_TIME_PACK:
-                bp.purchase(this, "com.footwin.halftimepack", StaticData.user.getAccess_token());
+                billingProcessor.purchase(this, "com.footwin.halftimepack", StaticData.user.getAccess_token());
                 pack = "com.footwin.halftimepack";
                 break;
             case HAT_TRICK_PACK:
-                bp.purchase(this, "com.footwin.hattrickpack", StaticData.user.getAccess_token());
+                billingProcessor.purchase(this, "com.footwin.hattrickpack", StaticData.user.getAccess_token());
                 pack = "com.footwin.hattrickpack";
                 break;
             case SUPER_HAT_TRICK_PACK:
-                bp.purchase(this, "com.footwin.superhattrickpack", StaticData.user.getAccess_token());
+                billingProcessor.purchase(this, "com.footwin.superhattrickpack", StaticData.user.getAccess_token());
                 pack = "com.footwin.superhattrickpack";
                 break;
             case FOOTWIN_SPECIAL_PACK:
-                bp.purchase(this, "com.footwin.footwinspecialpack", StaticData.user.getAccess_token());
+                billingProcessor.purchase(this, "com.footwin.footwinspecialpack", StaticData.user.getAccess_token());
                 pack = "com.footwin.footwinspecialpack";
                 break;
             case JOKER_PACK:
-                bp.purchase(this, "com.footwin.jokerpack", StaticData.user.getAccess_token());
+                billingProcessor.purchase(this, "com.footwin.jokerpack", StaticData.user.getAccess_token());
                 pack = "com.footwin.jokerpack";
                 break;
             default:
@@ -264,16 +279,20 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
 
     @Override
     public void onDestroy() {
-        if (bp != null) {
-            bp.release();
+        if (billingProcessor != null) {
+            billingProcessor.release();
         }
-        mRewardedVideoAd.destroy(this);
+        if(mRewardedVideoAd != null) {
+            mRewardedVideoAd.destroy(this);
+        }
         super.onDestroy();
     }
 
     @Override
     protected void onResume() {
-        mRewardedVideoAd.resume(this);
+        if(mRewardedVideoAd != null) {
+            mRewardedVideoAd.resume(this);
+        }
         super.onResume();
         txtCoinsTotal.setText(StaticData.user.getCoins());
         StaticData.context = CoinsActivity.this;
@@ -281,14 +300,16 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
 
     @Override
     public void onPause() {
-        mRewardedVideoAd.pause(this);
+        if(mRewardedVideoAd != null) {
+            mRewardedVideoAd.pause(this);
+        }
         super.onPause();
     }
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (!bp.handleActivityResult(requestCode, resultCode, data)) {
+        if (!billingProcessor.handleActivityResult(requestCode, resultCode, data)) {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
@@ -301,7 +322,7 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
             public void onResponse(Call<Reward> call, Response<Reward> response) {
                 Reward reward = response.body();
                 if(reward.getStatus() == 1){
-                    bp.consumePurchase(pack);
+                    billingProcessor.consumePurchase(pack);
                     StaticData.user.setCoins(reward.getCoins());
                     AppUtils.saveUser(CoinsActivity.this, StaticData.user);
                 }

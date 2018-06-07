@@ -10,14 +10,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="45dp"
-        android:background="@drawable/coins_background"
-        >
+        android:background="@drawable/coins_background">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:gravity="center"
             >
+
             <LinearLayout
                 android:id="@+id/linearLayout3"
                 android:layout_width="wrap_content"
@@ -124,6 +125,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/relativeLayout3">
 
                 <TextView
+                    android:id="@+id/txtCollect"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="collect"
@@ -143,7 +145,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="to advance to the next round"
+                    android:text="to hit the first place in the leaderboard"
                     android:textAllCaps="true"
                     android:textColor="@color/darkText"
                     android:textSize="@dimen/medium_text2"
@@ -152,10 +154,10 @@
             </LinearLayout>
 
             <ImageView
-                android:layout_width="120dp"
+                android:layout_width="match_parent"
                 android:layout_height="120dp"
                 android:scaleType="centerCrop"
-                android:padding="30dp"
+                android:padding="100dp"
                 android:src="@drawable/multiple_coins" />
 
             <TextView
@@ -170,7 +172,7 @@
                 android:textAllCaps="true"
                 android:textColor="@color/white"
                 android:layout_marginTop="-10dp"
-                android:textSize="@dimen/medium_text"
+                android:textSize="@dimen/medium_text2"
                 android:textStyle="bold" />
 
             <Button
@@ -199,9 +201,7 @@
                 android:text="Watch video"
                 android:textAllCaps="true"
                 android:textColor="@color/white"
-                app:layout_constraintBottom_toTopOf="@+id/btnClose"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                />
 
         </LinearLayout>
 
