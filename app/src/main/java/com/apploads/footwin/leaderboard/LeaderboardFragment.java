@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.apploads.footwin.R;
 import com.apploads.footwin.helpers.StaticData;
+import com.apploads.footwin.helpers.utils.AppUtils;
 import com.apploads.footwin.model.Leaderboard;
 import com.apploads.footwin.model.LeaderboardResponse;
 import com.apploads.footwin.services.ApiManager;
@@ -21,6 +22,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -89,7 +91,12 @@ public class LeaderboardFragment extends Fragment {
         btnMe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listLeaderboard.smoothScrollToPosition(leaderBoardAdapter.getUserPosition());
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                    Leaderboard myLeaderboard = leaderboards.stream().
+                            filter(l -> l.getUserId().equals(StaticData.user.getId()))
+                            .collect(Collectors.toList()).get(0);
+                    listLeaderboard.smoothScrollToPosition(leaderboards.indexOf(myLeaderboard));
+                }
             }
         });
     }

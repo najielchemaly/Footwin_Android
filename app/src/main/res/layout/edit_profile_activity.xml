@@ -184,5 +184,24 @@
         android:textAllCaps="true"
         />
 
+    <RelativeLayout
+        android:id="@+id/viewLoading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/blackOpacityNew"
+        android:clickable="true"
+        android:visibility="gone"
+        >
+        <com.github.ybq.android.spinkit.SpinKitView
+            android:id="@+id/spin_kit"
+            style="@style/SpinKitView.Large.Circle"
+            app:SpinKit_Color="@color/appBlue"
+            android:visibility="visible"
+            android:layout_centerInParent="true"
+            android:layout_width="70dp"
+            android:layout_height="70dp" />
+
+    </RelativeLayout>
+
 
 </RelativeLayout>

@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +26,7 @@ import com.apploads.footwin.model.PackageResponse;
 import com.apploads.footwin.model.Reward;
 import com.apploads.footwin.services.ApiManager;
 import com.budiyev.android.circularprogressbar.CircularProgressBar;
+import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.reward.RewardItem;
@@ -43,6 +45,8 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
     RecyclerView listPackages;
     BillingProcessor billingProcessor;
     RewardedVideoAd mRewardedVideoAd;
+    RelativeLayout viewLoading;
+    ProgressBar progressBar;
     String pack;
     Package mPackage;
 
@@ -72,7 +76,13 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
         viewBlackOpacity = _findViewById(R.id.viewBlackOpacity);
         btnClosePackages = _findViewById(R.id.btnClosePackages);
         btnWatchVideo = _findViewById(R.id.btnWatchVideo);
+        viewLoading = _findViewById(R.id.viewLoading);
+        progressBar = _findViewById(R.id.spin_kit);
         txtCollect = _findViewById(R.id.txtCollect);
+
+        DoubleBounce doubleBounce = new DoubleBounce();
+        progressBar.setIndeterminateDrawable(doubleBounce);
+        viewLoading.setVisibility(View.GONE);
 
         viewBlackOpacity.setVisibility(View.GONE);
         viewBlackOpacity.setAlpha(0f);
@@ -103,7 +113,7 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
             public void onRewardedVideoAdLoaded() {
                 if(mRewardedVideoAd.isLoaded()){
                     mRewardedVideoAd.show();
-                    circularProgressBar.setVisibility(View.GONE);
+                    viewLoading.setVisibility(View.GONE);
                 }
             }
 
@@ -124,7 +134,7 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
 
             @Override
             public void onRewarded(RewardItem rewardItem) {
-                circularProgressBar.setVisibility(View.VISIBLE);
+                viewLoading.setVisibility(View.VISIBLE);
                 ApiManager.getService().getReward(StaticData.config.getActiveReward().getId(),
                         StaticData.config.getActiveReward().getAmount()).enqueue(new Callback<Reward>() {
                     @Override
@@ -134,12 +144,12 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
                             StaticData.user.setCoins(reward.getCoins());
                             AppUtils.saveUser(CoinsActivity.this, StaticData.user);
                         }
-                        circularProgressBar.setVisibility(View.GONE);
+                        viewLoading.setVisibility(View.GONE);
                     }
 
                     @Override
                     public void onFailure(Call<Reward> call, Throwable t) {
-                        circularProgressBar.setVisibility(View.GONE);
+                        viewLoading.setVisibility(View.GONE);
                     }
                 });
             }
@@ -234,7 +244,7 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
         btnWatchVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                circularProgressBar.setVisibility(View.VISIBLE);
+                viewLoading.setVisibility(View.VISIBLE);
                 loadRewardedVideoAd();
             }
         });

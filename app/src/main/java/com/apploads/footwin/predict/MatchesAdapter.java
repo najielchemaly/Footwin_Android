@@ -126,15 +126,15 @@ public class MatchesAdapter extends BaseAdapter {
                         String secondsLeft = String.format("%d", ((serverUptimeSeconds % 86400) % 3600) % 60);
                         holder.txtDate.setText(daysLeft+ " Days " + hoursLeft+ " Hours " + minutesLeft + " Mins " + secondsLeft+" Sec");
 
-                        if(daysLeft.equals("0")){
-                            holder.txtDate.setText(hoursLeft+ " Hours " + minutesLeft + " Mins " + secondsLeft+" Sec");
-                        }
-                        if(hoursLeft.equals("0")){
-                            holder.txtDate.setText( minutesLeft + " Mins " + secondsLeft+" Sec");
-                        }
-                        if(minutesLeft.equals("0")){
-                            holder.txtDate.setText(secondsLeft+" Sec");
-                        }
+//                        if(daysLeft.equals("0")){
+//                            holder.txtDate.setText(hoursLeft+ " Hours " + minutesLeft + " Mins " + secondsLeft+" Sec");
+//                        }
+//                        if(hoursLeft.equals("0")){
+//                            holder.txtDate.setText( minutesLeft + " Mins " + secondsLeft+" Sec");
+//                        }
+//                        if(minutesLeft.equals("0")){
+//                            holder.txtDate.setText(secondsLeft+" Sec");
+//                        }
                         holder.txtDate.setTextColor(context.getResources().getColor(R.color.white));
                     }else {
                         holder.txtDate.setText("LIVE NOW!");
