@@ -190,6 +190,7 @@ public class Config {
 
     public void setIsIAPReady(Boolean IAPReady) {
         isIAPReady = IAPReady;
+    }
 
     public String getVersion() {
         return version;

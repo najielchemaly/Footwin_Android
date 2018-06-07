@@ -166,8 +166,10 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
     }
 
     private void loadRewardedVideoAd() {
-        mRewardedVideoAd.loadAd("ca-app-pub-8532510371470349/8896247436",
-                new AdRequest.Builder().build());
+        if(mRewardedVideoAd != null) {
+            mRewardedVideoAd.loadAd("ca-app-pub-8532510371470349/8896247436",
+                    new AdRequest.Builder().build());
+        }
     }
 
     private void initCarousel() {
@@ -280,13 +282,17 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
         if (billingProcessor != null) {
             billingProcessor.release();
         }
-        mRewardedVideoAd.destroy(this);
+        if(mRewardedVideoAd != null) {
+            mRewardedVideoAd.destroy(this);
+        }
         super.onDestroy();
     }
 
     @Override
     protected void onResume() {
-        mRewardedVideoAd.resume(this);
+        if(mRewardedVideoAd != null) {
+            mRewardedVideoAd.resume(this);
+        }
         super.onResume();
         txtCoinsTotal.setText(StaticData.user.getCoins());
         StaticData.context = CoinsActivity.this;
@@ -294,7 +300,9 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
 
     @Override
     public void onPause() {
-        mRewardedVideoAd.pause(this);
+        if(mRewardedVideoAd != null) {
+            mRewardedVideoAd.pause(this);
+        }
         super.onPause();
     }
 
