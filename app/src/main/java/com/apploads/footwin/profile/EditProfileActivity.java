@@ -65,7 +65,6 @@ public class EditProfileActivity extends BaseActivity {
     TextView txtCountry, txtPhoneCode, txtBack;
     ImageButton btnCamera;
     ImageView imgProfile;
-    boolean isImageSet;
     RelativeLayout viewLoading;
     ProgressBar progressBar;
 
@@ -74,6 +73,7 @@ public class EditProfileActivity extends BaseActivity {
     private InputStream inputStreamImg;
     private String imgPath = null;
     private final int PICK_IMAGE_CAMERA = 1, PICK_IMAGE_GALLERY = 2, REQUEST_READ_EXTERNAL_STORAGE = 3;
+    private boolean didChangeAvatar = false;
 
     @Override
     public int getContentViewId() {
@@ -259,8 +259,7 @@ public class EditProfileActivity extends BaseActivity {
 
                 imgPath = destination.getAbsolutePath();
                 imgProfile.setImageBitmap(bitmap);
-                isImageSet = true;
-
+                didChangeAvatar = true;
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -275,7 +274,7 @@ public class EditProfileActivity extends BaseActivity {
                     imgPath = getRealPathFromURI(selectedImage);
                     destination = new File(imgPath.toString());
                     imgProfile.setImageBitmap(bitmap);
-                    isImageSet = true;
+                    didChangeAvatar = true;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -296,6 +295,8 @@ public class EditProfileActivity extends BaseActivity {
 
     private void editUserService(){
         viewLoading.setVisibility(View.VISIBLE);
+        btnSave.setEnabled(false);
+        btnSave.setAlpha(0.5f);
         ApiManager.getService().editUser(txtFullname.getText().toString(),
                 txtEmail.getText().toString(), txtCountry.getText().toString(),
                 txtPhoneCode.getText().toString(),txtMobile.getText().toString(),
@@ -304,13 +305,13 @@ public class EditProfileActivity extends BaseActivity {
             public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                 UserResponse userResponse = response.body();
                 if(userResponse.getStatus() == 1){
-                    updateAvatar();
                     StaticData.user = userResponse.getUser();
                     AppUtils.saveUser(EditProfileActivity.this, userResponse.getUser());
                     CustomDialogClass dialogClass = new CustomDialogClass(EditProfileActivity.this, new CustomDialogClass.AbstractCustomDialogListener() {
                         @Override
                         public void onConfirm(CustomDialogClass.DialogResponse response) {
                             response.getDialog().dismiss();
+                            finish();
                         }
 
                         @Override
@@ -318,10 +319,14 @@ public class EditProfileActivity extends BaseActivity {
                         }
                     }, true);
 
-                    dialogClass.setTitle("Success");
-                    dialogClass.setMessage("Your user was successfully updated");
+                    dialogClass.setTitle("FOOTWIN");
+                    dialogClass.setMessage(userResponse.getMessage());
                     dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
                     dialogClass.show();
+
+                    if(didChangeAvatar) {
+                        updateAvatar();
+                    }
                 }else {
                     CustomDialogClass dialogClass = new CustomDialogClass(EditProfileActivity.this, new CustomDialogClass.AbstractCustomDialogListener() {
                         @Override
@@ -344,7 +349,9 @@ public class EditProfileActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<UserResponse> call, Throwable t) {
-
+                viewLoading.setVisibility(View.GONE);
+                btnSave.setEnabled(true);
+                btnSave.setAlpha(1f);
             }
         });
     }
@@ -363,16 +370,9 @@ public class EditProfileActivity extends BaseActivity {
                     user.setAvatar(avatar);
                     AppUtils.saveUser(EditProfileActivity.this, user);
                     viewLoading.setVisibility(View.GONE);
-                    if(StaticData.config.getIsAppActive()){
-                        Intent intent = new Intent(getApplicationContext(), MainPageActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }else {
-                        Intent intent = new Intent(getApplicationContext(), CountdownActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-
+                    btnSave.setEnabled(true);
+                    btnSave.setAlpha(1f);
+//                    finish();
                 } catch (Exception ex) {
                     Log.d("", ex.getLocalizedMessage());
                 }

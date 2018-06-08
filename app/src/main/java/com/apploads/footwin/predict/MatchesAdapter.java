@@ -185,9 +185,11 @@ public class MatchesAdapter extends BaseAdapter {
                     String homeScore = match.getHomeScore();
                     String awayScore = match.getAwayScore();
                     if(!match.isAwayToWin() && !match.isHomeToWin()){
-                        predictFragment.showAlert(match,"0","", homeScore, awayScore, position);
+                        predictFragment.showAlert(match,"0","",
+                                homeScore.isEmpty() ? "-1" : homeScore, awayScore.isEmpty() ? "-1" : awayScore, position);
                     }else {
-                        predictFragment.showAlert(match, winningTeamID, winningTeamName, homeScore, awayScore, position);
+                        predictFragment.showAlert(match, winningTeamID, winningTeamName,
+                                homeScore.isEmpty() ? "-1" : homeScore, awayScore.isEmpty() ? "-1" : awayScore, position);
                     }
                 }
             });

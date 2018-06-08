@@ -78,25 +78,25 @@ public interface ServiceInterface {
             , @Field("username") String username, @Field("fullname") String fullname, @Field("email") String email
             , @Field("gender") String gender);
 
-    @Headers({
-            "Content-Type: application/json"
-    })
+//    @Headers({
+//            "Content-Type: application/json"
+//    })
     @FormUrlEncoded
     @POST("editUser/")
     Call<UserResponse> editUser(@Field("fullname") String fullname, @Field("email") String email
             , @Field("country") String country, @Field("phone_code") String phone_code, @Field("phone") String phone
             , @Field("gender") String gender);
 
-    @Headers({
-            "Content-Type: application/json"
-    })
+//    @Headers({
+//            "Content-Type: application/json"
+//    })
     @FormUrlEncoded
     @POST("forgotPassword/")
     Call<BasicResponse> forgotPassword(@Field("email") String email);
 
-    @Headers({
-            "Content-Type: application/json"
-    })
+//    @Headers({
+//            "Content-Type: application/json"
+//    })
     @FormUrlEncoded
     @POST("changePassword/")
     Call<BasicResponse> changePassowrd(@Field("oldPassword") String oldPassword, @Field("newPassword") String newPassword);
@@ -125,9 +125,9 @@ public interface ServiceInterface {
     @POST("updateFirebaseToken/")
     Call<Object> updateFirebaseToken(@Field("firebase_token") String firebase_token);
 
-    @Headers({
-            "Content-Type: application/json"
-    })
+//    @Headers({
+//            "Content-Type: application/json"
+//    })
     @POST("updateNotification/")
     Call<Object> updateNotification(@Field("id") String id); // TODO change the response object
 

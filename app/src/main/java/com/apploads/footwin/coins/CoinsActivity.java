@@ -62,7 +62,6 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
         initListeners();
     }
 
-
     private void initView(){
         billingProcessor = new BillingProcessor(this, GOOGLE_LICENSE_KEY, this);
 
