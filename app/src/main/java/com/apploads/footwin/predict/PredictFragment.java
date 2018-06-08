@@ -121,7 +121,7 @@ public class PredictFragment extends Fragment {
         pullToRefresh = parentView.findViewById(R.id.pullToRefresh);
 
         mInterstitialAd = new InterstitialAd(getActivity());
-        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        mInterstitialAd.setAdUnitId("ca-app-pub-8532510371470349/4251669653");
         mInterstitialAd.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
@@ -417,8 +417,6 @@ public class PredictFragment extends Fragment {
                             dialogClass.setMessage(basicResponse.getMessage());
                             dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
                             dialogClass.show();
-
-
                         }
                     }
 

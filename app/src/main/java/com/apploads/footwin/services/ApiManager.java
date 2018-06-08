@@ -16,7 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public final class ApiManager {
 
-    private static String API_URL = "http://test.api.foot-win.com/";
+    private static String API_URL = "http://api.foot-win.com/";
 
     private static Retrofit retrofit = null;
     private static boolean disbaleHeader;
