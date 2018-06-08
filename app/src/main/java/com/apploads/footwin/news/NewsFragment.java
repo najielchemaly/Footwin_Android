@@ -73,7 +73,10 @@ public class NewsFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     private void callService(){
-        ApiManager.getService().getNews(StaticData.config.getNewsUrl() + StaticData.user.getFavoriteTeam()).enqueue(new Callback<News>() {
+        String serviceName = StaticData.user.getFavoriteTeam() == null ? StaticData.config.getNewsUrl() :
+                StaticData.config.getNewsUrl() + StaticData.user.getFavoriteTeam();
+
+        ApiManager.getService().getNews(serviceName).enqueue(new Callback<News>() {
             @Override
             public void onResponse(Call<News> call, Response<News> response) {
                 if(response.isSuccessful()){

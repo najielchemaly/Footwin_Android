@@ -150,6 +150,7 @@
                     android:layout_marginLeft="5dp"
                     android:textAllCaps="true"
                     android:text=""
+                    android:textStyle="bold"
                     android:gravity="center"
                     android:textColor="@color/white"
                     android:textSize="@dimen/xlarge_text" />

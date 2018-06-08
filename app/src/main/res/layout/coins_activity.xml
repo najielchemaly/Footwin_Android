@@ -157,7 +157,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
                 android:scaleType="centerCrop"
-                android:padding="100dp"
+                android:padding="85dp"
+                android:layout_marginRight="@dimen/app_margin"
+                android:adjustViewBounds="true"
                 android:src="@drawable/multiple_coins" />
 
             <TextView
@@ -171,7 +173,6 @@
                 android:text="Almost out of coins ? \n We can help you with that"
                 android:textAllCaps="true"
                 android:textColor="@color/white"
-                android:layout_marginTop="-10dp"
                 android:textSize="@dimen/medium_text2"
                 android:textStyle="bold" />
 
@@ -182,6 +183,7 @@
                 android:layout_marginBottom="10dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="@dimen/app_margin"
                 android:background="@color/white"
                 android:text="get coins now"
                 android:textAllCaps="true"
@@ -250,5 +252,24 @@
            />
 
   </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/viewLoading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/blackOpacityNew"
+        android:clickable="true"
+        android:visibility="gone"
+        >
+        <com.github.ybq.android.spinkit.SpinKitView
+            android:id="@+id/spin_kit"
+            style="@style/SpinKitView.Large.Circle"
+            app:SpinKit_Color="@color/appBlue"
+            android:visibility="visible"
+            android:layout_centerInParent="true"
+            android:layout_width="70dp"
+            android:layout_height="70dp" />
+
+    </RelativeLayout>
 
 </RelativeLayout>
