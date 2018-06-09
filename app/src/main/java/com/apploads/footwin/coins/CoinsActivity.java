@@ -18,6 +18,8 @@ import com.apploads.footwin.MainPageActivity;
 import com.apploads.footwin.R;
 import com.apploads.footwin.helpers.BaseActivity;
 import static com.apploads.footwin.helpers.Constants.*;
+
+import com.apploads.footwin.helpers.CustomDialogClass;
 import com.apploads.footwin.helpers.StaticData;
 import com.apploads.footwin.helpers.utils.AppUtils;
 import com.apploads.footwin.model.BasicResponse;
@@ -141,7 +143,24 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
                         Reward reward = response.body();
                         if(reward.getStatus() == 1){
                             StaticData.user.setCoins(reward.getCoins());
+                            txtCoinsTotal.setText(StaticData.user.getCoins());
                             AppUtils.saveUser(CoinsActivity.this, StaticData.user);
+
+                            CustomDialogClass dialogClass = new CustomDialogClass(CoinsActivity.this, new CustomDialogClass.AbstractCustomDialogListener() {
+                                @Override
+                                public void onConfirm(CustomDialogClass.DialogResponse response) {
+                                    response.getDialog().dismiss();
+                                }
+
+                                @Override
+                                public void onCancel(CustomDialogClass.DialogResponse dialogResponse) {
+                                }
+                            }, true);
+
+                            dialogClass.setTitle("FOOTWIN");
+                            dialogClass.setMessage(reward.getMessage());
+                            dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                            dialogClass.show();
                         }
                         viewLoading.setVisibility(View.GONE);
                     }

@@ -235,7 +235,7 @@ public class LoginActivity extends BaseActivity {
             }, true);
 
             dialogClass.setTitle("FOOTWIN");
-            dialogClass.setMessage("YOU MUST ENTER A VALID EMAIL");
+            dialogClass.setMessage("You must enter a valid email!");
             dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
             dialogClass.show();
             return false;
@@ -255,7 +255,7 @@ public class LoginActivity extends BaseActivity {
             }, true);
 
             dialogClass.setTitle("FOOTWIN");
-            dialogClass.setMessage("PASSWORD CANNOT BE EMPTY!");
+            dialogClass.setMessage("Password cannot be empty!");
             dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
             dialogClass.show();
             return false;
@@ -300,7 +300,7 @@ public class LoginActivity extends BaseActivity {
                         }, true);
 
                         dialogClass.setTitle("Oops");
-                        dialogClass.setMessage("Incorrect Username or password");
+                        dialogClass.setMessage("Incorrect username or password");
                         dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
                         dialogClass.show();
                     }

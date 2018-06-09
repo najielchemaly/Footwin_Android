@@ -1,5 +1,6 @@
 package com.apploads.footwin.predict;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -300,7 +302,8 @@ public class PredictFragment extends Fragment {
                     }
                 }
 
-                if(StringUtils.isValid(txtAwayScore.getText()) || StringUtils.isValid(txtHomeScore)){
+                if(StringUtils.isValid(txtAwayScore.getText().toString()) &&
+                        StringUtils.isValid(txtHomeScore.getText().toString())){
                     matches.get(selectedMatchIndex).setHomeScore(txtHomeScore.getText().toString());
                     matches.get(selectedMatchIndex).setAwayScore(txtAwayScore.getText().toString());
                 } else {
@@ -310,6 +313,13 @@ public class PredictFragment extends Fragment {
 
                 matchesAdapter.setRoot(matches);
                 matchesAdapter.notifyDataSetChanged();
+
+                try {
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                } catch (Exception ex) {
+                    Log.e("", ex.getLocalizedMessage());
+                }
             }
         });
 
@@ -435,9 +445,9 @@ public class PredictFragment extends Fragment {
 
         dialogClass.setTitle("FOOTWIN");
         if(!StringUtils.isValid(winningTeamName)){
-            dialogClass.setMessage("ARE YOU SURE YOU WANT TO CONFIRM YOUR DRAW PREDICTION? ONCE CONFIRMED YOU CANNOT EDIT IT!!");
+            dialogClass.setMessage("Are you sure you want to confirm your DRAW prerdiction?\nOnce confirmed you cannot edit!!");
         }else {
-            dialogClass.setMessage("ARE YOU SURE YOU WANT TO PREDICT " + winningTeamName + " AS THE WINNING TEAM? ONCE CONFIRMED YOU CANNOT EDIT IT!!");
+            dialogClass.setMessage("Are you sure you want to predict " + winningTeamName.toLowerCase() + " as the winning team?\nOnce confirmed you cannot edit!!");
         }
         dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialogClass.show();

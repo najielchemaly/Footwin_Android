@@ -90,6 +90,7 @@ public class TeamsAdapter extends BaseAdapter {
                 selectedLayout = holder.imgHighlight;
                 selectedLayout = selectView(team,holder);
                 StaticData.favTeam = team;
+//                StaticData.user.setFavoriteTeam(team.getId());
             }
         });
 

@@ -32,6 +32,8 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
+//import com.crashlytics.android.Crashlytics;
+//import io.fabric.sdk.android.Fabric;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -58,6 +60,8 @@ public class LoadingActivity extends BaseActivity {
      * initialize view
      */
     private void initView() {
+//        Fabric.with(this, new Crashlytics());
+
         imgBall = _findViewById(R.id.imgBall);
         rotateBall();
         callConfigService();

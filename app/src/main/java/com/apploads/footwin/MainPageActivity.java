@@ -1,5 +1,6 @@
 package com.apploads.footwin;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
@@ -28,6 +29,7 @@ import com.apploads.footwin.news.NewsFragment;
 import com.apploads.footwin.predict.PredictFragment;
 import com.apploads.footwin.profile.ProfileFragment;
 import com.apploads.footwin.services.ApiManager;
+import com.apploads.footwin.signup.SignupStepOne;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -110,9 +112,9 @@ public class MainPageActivity extends BaseActivity {
         transaction.replace(R.id.frame_layout, PredictFragment.newInstance());
         transaction.commit();
 
-        String tutorialText = "Hello ".toUpperCase() +
+        String tutorialText = "Hello " +
                 StaticData.user.getUsername() + ", " +
-                StaticData.config.getTutorialText().toUpperCase();
+                StaticData.config.getTutorialText();
         txtTutorialText.setText(tutorialText);
 
         btnStart.setOnClickListener(new View.OnClickListener() {
@@ -249,6 +251,14 @@ public class MainPageActivity extends BaseActivity {
     }
 
     public void checkTutorial(String teamName, String teamFlag) {
+        if(StaticData.user.getFacebookId() != null &&
+                !StaticData.user.getFacebookId().toString().isEmpty() &&
+                (StaticData.user.getFavoriteTeam() == null ||
+                        StaticData.user.getFavoriteTeam().toString().isEmpty())) {
+            Intent intent = new Intent(this, SignupStepOne.class);
+            startActivity(intent);
+        }
+
         if(AppUtils.isFirstLaunch(MainPageActivity.this)){
             viewTutorial.setVisibility(View.GONE);
             bottomNavigationView.setVisibility(View.VISIBLE);
