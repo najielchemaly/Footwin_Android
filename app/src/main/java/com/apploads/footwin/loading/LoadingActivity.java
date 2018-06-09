@@ -3,8 +3,12 @@ package com.apploads.footwin.loading;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.net.Uri;
 import android.os.Handler;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -34,6 +38,9 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 //import com.crashlytics.android.Crashlytics;
 //import io.fabric.sdk.android.Fabric;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -65,6 +72,21 @@ public class LoadingActivity extends BaseActivity {
         imgBall = _findViewById(R.id.imgBall);
         rotateBall();
         callConfigService();
+
+//        try {
+//            PackageInfo info = getPackageManager().getPackageInfo(
+//                    "com.apploads.footwin",
+//                    PackageManager.GET_SIGNATURES);
+//            for (Signature signature : info.signatures) {
+//                MessageDigest md = MessageDigest.getInstance("SHA");
+//                md.update(signature.toByteArray());
+//                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+//            }
+//        } catch (PackageManager.NameNotFoundException e) {
+//
+//        } catch (NoSuchAlgorithmException e) {
+//
+//        }
     }
 
     /**
