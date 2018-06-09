@@ -71,7 +71,7 @@ public class RetrievePasswordActivity extends BaseActivity {
                     }, true);
 
                     dialogClass.setTitle("FOOTWIN");
-                    dialogClass.setMessage("YOU MUST ENTER A VALID EMAIL");
+                    dialogClass.setMessage("You must enter a valid email!");
                     dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
                     dialogClass.show();
                 }

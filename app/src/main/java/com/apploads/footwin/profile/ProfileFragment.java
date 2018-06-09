@@ -53,6 +53,12 @@ public class ProfileFragment extends Fragment {
 
         txtName.setText(StaticData.user.getFullname());
 
+        if(StaticData.user.getFacebookId() != null &&
+                !StaticData.user.getFacebookId().toString().isEmpty()) {
+            txtChangePassword.setEnabled(false);
+            txtChangePassword.setAlpha(0.5f);
+        }
+
         if(StaticData.user.getAvatar() != null && !StaticData.user.getAvatar().isEmpty()) {
             Picasso.with(getActivity())
                     .load(StaticData.config.getMediaUrl() + StaticData.user.getAvatar())

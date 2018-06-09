@@ -115,7 +115,7 @@
             android:imeOptions="actionNext"
             android:inputType=""
             android:padding="@dimen/app_margin"
-            android:text="Country"
+            android:hint="COUNTRY"
             android:textAllCaps="true"
             android:textColor="@color/white"
             android:textColorHint="@color/white"
@@ -140,8 +140,7 @@
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
                 android:textSize="@dimen/medium_text"
-
-                />
+                android:hint="CODE"/>
 
             <EditText
                 android:id="@+id/txtMobile"

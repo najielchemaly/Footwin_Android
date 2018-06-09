@@ -160,7 +160,8 @@
                 android:padding="85dp"
                 android:layout_marginRight="@dimen/app_margin"
                 android:adjustViewBounds="true"
-                android:src="@drawable/multiple_coins" />
+                android:src="@drawable/multiple_coins"
+                android:layout_marginTop="100px"/>
 
             <TextView
                 android:id="@+id/textView2"
@@ -174,7 +175,8 @@
                 android:textAllCaps="true"
                 android:textColor="@color/white"
                 android:textSize="@dimen/medium_text2"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_marginTop="@dimen/app_margin"/>
 
             <Button
                 android:id="@+id/btnGetCoins"

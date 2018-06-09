@@ -89,7 +89,7 @@
             android:padding="@dimen/app_margin"
             android:textColor="@color/white"
             android:textSize="@dimen/large_text"
-            android:text="Country"
+            android:hint="COUNTRY"
             android:textAllCaps="true"
             android:textColorHint="@color/white"
             android:imeOptions="actionNext"
@@ -114,9 +114,8 @@
                 android:textAllCaps="true"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
-                android:textSize="@dimen/medium_text"
-
-                />
+                android:textSize="@dimen/medium_text2"
+                android:hint="CODE" />
 
             <EditText
                 android:id="@+id/txtMobile"
