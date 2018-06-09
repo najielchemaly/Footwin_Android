@@ -48,21 +48,11 @@
 
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/imgVS"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:src="@drawable/vs"
-                android:layout_marginTop="30dp"
-                android:layout_centerHorizontal="true"
-                android:layout_alignTop="@+id/viewHomeTeam"
-                />
-
             <LinearLayout
                 android:id="@+id/viewConfirm"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:clickable="true"
+                android:clickable="false"
                 android:alpha="0"
                 android:orientation="vertical"
                 android:background="@drawable/circle_shape_white"
@@ -93,6 +83,16 @@
                     />
 
             </LinearLayout>
+
+            <ImageView
+                android:id="@+id/imgVS"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:src="@drawable/vs"
+                android:layout_marginTop="30dp"
+                android:layout_centerHorizontal="true"
+                android:layout_alignTop="@+id/viewHomeTeam"
+                />
 
             <Button
                 android:id="@+id/btnDraw"

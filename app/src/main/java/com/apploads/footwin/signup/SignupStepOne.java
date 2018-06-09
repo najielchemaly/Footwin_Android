@@ -90,11 +90,11 @@ public class SignupStepOne extends BaseActivity {
                             !StaticData.user.getFacebookId().toString().isEmpty() &&
                             (StaticData.user.getFavoriteTeam() == null ||
                             StaticData.user.getFavoriteTeam().toString().isEmpty())) {
-                        ApiManager.getService().updateFavoriteTeam(StaticData.user.getFavoriteTeam()).enqueue(new Callback<UserResponse>() {
+                        ApiManager.getService().updateFavoriteTeam(StaticData.favTeam.getId()).enqueue(new Callback<UserResponse>() {
                             @Override
                             public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                                 UserResponse userResponse = response.body();
-                                if(userResponse.getStatus() == 1){
+                                if(userResponse != null && userResponse.getStatus() == 1){
                                     CustomDialogClass dialogClass = new CustomDialogClass(SignupStepOne.this, new CustomDialogClass.AbstractCustomDialogListener() {
                                         @Override
                                         public void onConfirm(CustomDialogClass.DialogResponse response) {
