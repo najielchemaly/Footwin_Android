@@ -102,7 +102,14 @@ public class EditProfileActivity extends BaseActivity {
 
         viewLoading.setVisibility(View.GONE);
 
-        spinnerGender.setItems("Male", "FEMALE");
+        spinnerGender.setItems("MALE", "FEMALE");
+        if(StaticData.user.getGender() != null) {
+            if (StaticData.user.getGender().toLowerCase().equals("male")) {
+                spinnerGender.setSelectedIndex(0);
+            } else {
+                spinnerGender.setSelectedIndex(1);
+            }
+        }
 
         txtFullname.setText(StaticData.user.getFullname());
         txtCountry.setText(StaticData.user.getCountry());
@@ -119,7 +126,8 @@ public class EditProfileActivity extends BaseActivity {
                     .into(imgProfile);
         } else {
             imgProfile.setImageResource(R.drawable.avatar_male);
-            if(StaticData.user.getGender() == "female") {
+            if(StaticData.user.getGender() != null &&
+                    StaticData.user.getGender().toLowerCase() == "female") {
                 imgProfile.setImageResource(R.drawable.avatar_female);
             }
         }
@@ -237,18 +245,32 @@ public class EditProfileActivity extends BaseActivity {
         inputStreamImg = null;
         if (requestCode == PICK_IMAGE_CAMERA) {
             try {
-                Uri selectedImage = data.getData();
                 bitmap = (Bitmap) data.getExtras().get("data");
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 50, bytes);
 
                 String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
                 destination = new File(Environment.getExternalStorageDirectory() + "/" +
-                        getString(R.string.app_name), "IMG_" + timeStamp + ".jpg");
+                        getString(R.string.app_name));
+                File myFile = new File( destination.getAbsolutePath() ,"IMG_" + timeStamp + ".jpg");
                 FileOutputStream fo;
                 try {
-                    destination.createNewFile();
-                    fo = new FileOutputStream(destination);
+//                    Uri uri = Uri.parse(getRealPathFromURI(data.getData()));
+//                    if (!uri.toString().contains("file")) {
+//                        destination = new File(uri.toString());
+//                    } else {
+//                        destination = new File(uri.toString().substring(7));
+//                    }
+                    if(!destination.exists()){
+                        destination.mkdirs();
+                        myFile.createNewFile();
+
+                    }
+                    else{
+                        myFile.createNewFile();
+                    }
+//                    destination.createNewFile();
+                    fo = new FileOutputStream(myFile);
                     fo.write(bytes.toByteArray());
                     fo.close();
                 } catch (FileNotFoundException e) {
@@ -257,7 +279,7 @@ public class EditProfileActivity extends BaseActivity {
                     e.printStackTrace();
                 }
 
-                imgPath = destination.getAbsolutePath();
+                imgPath = myFile.getAbsolutePath();
                 imgProfile.setImageBitmap(bitmap);
                 didChangeAvatar = true;
             } catch (Exception e) {
@@ -307,24 +329,9 @@ public class EditProfileActivity extends BaseActivity {
                 if(userResponse.getStatus() == 1){
                     StaticData.user = userResponse.getUser();
                     AppUtils.saveUser(EditProfileActivity.this, userResponse.getUser());
-                    CustomDialogClass dialogClass = new CustomDialogClass(EditProfileActivity.this, new CustomDialogClass.AbstractCustomDialogListener() {
-                        @Override
-                        public void onConfirm(CustomDialogClass.DialogResponse response) {
-                            response.getDialog().dismiss();
-                            finish();
-                        }
-
-                        @Override
-                        public void onCancel(CustomDialogClass.DialogResponse dialogResponse) {
-                        }
-                    }, true);
-
-                    dialogClass.setTitle("FOOTWIN");
-                    dialogClass.setMessage(userResponse.getMessage());
-                    dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-                    dialogClass.show();
-
-                    if(didChangeAvatar) {
+                    if(!didChangeAvatar) {
+                        showSuccessDialog();
+                    } else {
                         updateAvatar();
                     }
                 }else {
@@ -344,6 +351,9 @@ public class EditProfileActivity extends BaseActivity {
                     dialogClass.setMessage(userResponse.getMessage());
                     dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
                     dialogClass.show();
+
+                    btnSave.setEnabled(true);
+                    btnSave.setAlpha(1f);
                 }
             }
 
@@ -356,11 +366,33 @@ public class EditProfileActivity extends BaseActivity {
         });
     }
 
+    private void showSuccessDialog() {
+        CustomDialogClass dialogClass = new CustomDialogClass(EditProfileActivity.this, new CustomDialogClass.AbstractCustomDialogListener() {
+            @Override
+            public void onConfirm(CustomDialogClass.DialogResponse response) {
+                response.getDialog().dismiss();
+                finish();
+            }
+
+            @Override
+            public void onCancel(CustomDialogClass.DialogResponse dialogResponse) {
+            }
+        }, true);
+
+        dialogClass.setTitle("FOOTWIN");
+        dialogClass.setMessage("Your profile is updated successfully");
+        dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialogClass.show();
+
+        btnSave.setEnabled(true);
+        btnSave.setAlpha(1f);
+    }
+
     private void updateAvatar() {
         RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), new File(imgPath));
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", imgPath, requestFile);
 
-        ApiManager.getService(true).updateAvatar(body).enqueue(new Callback<Object>() {
+        ApiManager.getService(false).updateAvatar(body).enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
                 try {
@@ -372,7 +404,8 @@ public class EditProfileActivity extends BaseActivity {
                     viewLoading.setVisibility(View.GONE);
                     btnSave.setEnabled(true);
                     btnSave.setAlpha(1f);
-//                    finish();
+
+                    showSuccessDialog();
                 } catch (Exception ex) {
                     Log.d("", ex.getLocalizedMessage());
                 }
@@ -382,6 +415,8 @@ public class EditProfileActivity extends BaseActivity {
             public void onFailure(Call<Object> call, Throwable t) {
                 Log.d("", t.getMessage());
                 viewLoading.setVisibility(View.GONE);
+                btnSave.setEnabled(true);
+                btnSave.setAlpha(1f);
             }
         });
     }

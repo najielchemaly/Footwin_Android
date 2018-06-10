@@ -179,7 +179,7 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
 
             @Override
             public void onRewardedVideoAdFailedToLoad(int i) {
-                Toast.makeText(CoinsActivity.this, "error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CoinsActivity.this, "An error has occured", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -189,7 +189,7 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
         });
 
         if(!StaticData.config.getIsIAPReady()) {
-            btnWatchVideo.setVisibility(View.GONE);
+            btnGetCoins.setVisibility(View.GONE);
         }
     }
 
@@ -282,7 +282,7 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
 
             @Override
             public void onFailure(Call<PackageResponse> call, Throwable t) {
-                Toast.makeText(CoinsActivity.this, "error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CoinsActivity.this, "An error has occured", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -344,7 +344,7 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
 
     @Override
     public void onProductPurchased(@NonNull String productId, @Nullable TransactionDetails details) {
-        Toast.makeText(this, "success: " + productId, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "success: " + productId, Toast.LENGTH_SHORT).show();
         ApiManager.getService().purchaseCoins(mPackage.getId(),mPackage.getPrice()).enqueue(new Callback<Reward>() {
             @Override
             public void onResponse(Call<Reward> call, Response<Reward> response) {
@@ -374,7 +374,7 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
         if(errorCode == 1){
             // Closed the dialogue without urchasing
         }else {
-            Toast.makeText(this, "error: " + errorCode, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "error: " + errorCode, Toast.LENGTH_SHORT).show();
         }
     }
 

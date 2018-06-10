@@ -180,16 +180,18 @@ public class MatchesAdapter extends BaseAdapter {
             holder.viewConfirm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    String winningTeamName =  match.isHomeToWin() ? match.getHomeName() : match.getAwayName();
-                    String winningTeamID =  match.isHomeToWin() ? match.getHomeId() : match.getAwayId();
-                    String homeScore = match.getHomeScore();
-                    String awayScore = match.getAwayScore();
-                    if(!match.isAwayToWin() && !match.isHomeToWin()){
-                        predictFragment.showAlert(match,"0","",
-                                homeScore.isEmpty() ? "-1" : homeScore, awayScore.isEmpty() ? "-1" : awayScore, position);
-                    }else {
-                        predictFragment.showAlert(match, winningTeamID, winningTeamName,
-                                homeScore.isEmpty() ? "-1" : homeScore, awayScore.isEmpty() ? "-1" : awayScore, position);
+                    if(view.getAlpha() > 0) {
+                        String winningTeamName = match.isDraw() ? "" : match.isHomeToWin() ? match.getHomeName() : match.getAwayName();
+                        String winningTeamID = match.isDraw() ? "0" : match.isHomeToWin() ? match.getHomeId() : match.getAwayId();
+                        String homeScore = match.getHomeScore();
+                        String awayScore = match.getAwayScore();
+                        if (!match.isAwayToWin() && !match.isHomeToWin()) {
+                            predictFragment.showAlert(match, "0", "",
+                                    homeScore.isEmpty() ? "-1" : homeScore, awayScore.isEmpty() ? "-1" : awayScore, position);
+                        } else {
+                            predictFragment.showAlert(match, winningTeamID, winningTeamName,
+                                    homeScore.isEmpty() ? "-1" : homeScore, awayScore.isEmpty() ? "-1" : awayScore, position);
+                        }
                     }
                 }
             });
@@ -315,6 +317,7 @@ public class MatchesAdapter extends BaseAdapter {
 
                 holder.viewConfirm.animate().alpha(1f).setDuration(300);
                 holder.viewConfirm.setClickable(true);
+                holder.viewConfirm.setEnabled(true);
                 holder.txtConfirm.setTextColor(context.getResources().getColor(R.color.white));
                 holder.btnDraw.setBackgroundResource(R.color.appBlue);
                 holder.viewConfirm.setBackgroundResource(R.drawable.circle_shape_green);
@@ -343,7 +346,7 @@ public class MatchesAdapter extends BaseAdapter {
             holder.txtAwayTeam.animate().alpha(0.5f).setDuration(300);
             holder.viewConfirm.animate().alpha(1f).setDuration(300);
             holder.viewConfirm.setClickable(true);
-
+            holder.viewConfirm.setEnabled(true);
             holder.btnDraw.setBackgroundResource(R.drawable.retangle_white_border);
             match.setHomeToWin(true);
             match.setAwayToWin(false);
@@ -366,6 +369,7 @@ public class MatchesAdapter extends BaseAdapter {
             holder.txtHomeTeam.animate().alpha(0.5f).setDuration(300);
             holder.viewConfirm.animate().alpha(1f).setDuration(300);
             holder.viewConfirm.setClickable(true);
+            holder.viewConfirm.setEnabled(true);
             holder.btnDraw.setBackgroundResource(R.drawable.retangle_white_border);
 
             match.setAwayToWin(true);
@@ -388,6 +392,7 @@ public class MatchesAdapter extends BaseAdapter {
                 scaleImage(holder.imgAwayTeam, 0.8f);
             }
             holder.viewConfirm.setClickable(true);
+            holder.viewConfirm.setEnabled(true);
             holder.btnDraw.setBackgroundResource(R.color.appBlue);
             match.setAwayToWin(false);
             match.setHomeToWin(false);
@@ -404,6 +409,7 @@ public class MatchesAdapter extends BaseAdapter {
             holder.txtAwayTeam.animate().alpha(1f).setDuration(300);
             holder.viewConfirm.animate().alpha(0f).setDuration(300);
             holder.viewConfirm.setClickable(false);
+            holder.viewConfirm.setEnabled(false);
             scaleImage(holder.imgAwayTeam, 1f);
 
             match.setHomeToWin(false);
@@ -426,7 +432,7 @@ public class MatchesAdapter extends BaseAdapter {
             holder.txtAwayTeam.animate().alpha(0.5f).setDuration(300);
             holder.viewConfirm.animate().alpha(1f).setDuration(300);
             holder.viewConfirm.setClickable(true);
-
+            holder.viewConfirm.setEnabled(true);
             holder.btnDraw.setBackgroundResource(R.drawable.retangle_white_border);
             match.setHomeToWin(true);
             match.setAwayToWin(false);
@@ -444,6 +450,7 @@ public class MatchesAdapter extends BaseAdapter {
             scaleImage(holder.imgHomeTeam, 1f);
             holder.viewConfirm.animate().alpha(0f).setDuration(300);
             holder.viewConfirm.setClickable(false);
+            holder.viewConfirm.setEnabled(false);
             holder.btnDraw.setBackgroundResource(R.drawable.retangle_white_border);
 
             match.setAwayToWin(false);
@@ -466,6 +473,7 @@ public class MatchesAdapter extends BaseAdapter {
             holder.txtHomeTeam.animate().alpha(0.5f).setDuration(300);
             holder.viewConfirm.animate().alpha(1f).setDuration(300);
             holder.viewConfirm.setClickable(true);
+            holder.viewConfirm.setEnabled(true);
             holder.btnDraw.setBackgroundResource(R.drawable.retangle_white_border);
 
             match.setAwayToWin(true);
@@ -487,6 +495,7 @@ public class MatchesAdapter extends BaseAdapter {
             scaleImage(holder.imgAwayTeam, 1f);
             holder.viewConfirm.animate().alpha(0f).setDuration(300);
             holder.viewConfirm.setClickable(false);
+            holder.viewConfirm.setEnabled(false);
             holder.btnDraw.setBackgroundResource(R.drawable.retangle_white_border);
             match.setHomeToWin(false);
             match.setAwayToWin(false);
@@ -508,6 +517,7 @@ public class MatchesAdapter extends BaseAdapter {
                 scaleImage(holder.imgAwayTeam, 0.8f);
             }
             holder.viewConfirm.setClickable(true);
+            holder.viewConfirm.setEnabled(true);
             holder.btnDraw.setBackgroundResource(R.color.appBlue);
             match.setAwayToWin(false);
             match.setHomeToWin(false);

@@ -3,6 +3,7 @@ package com.apploads.footwin.profile;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,24 +52,13 @@ public class ProfileFragment extends Fragment {
         imgProfile = parentView.findViewById(R.id.imgProfile);
         viewLogout = parentView.findViewById(R.id.viewLogout);
 
-        txtName.setText(StaticData.user.getFullname());
-
         if(StaticData.user.getFacebookId() != null &&
                 !StaticData.user.getFacebookId().toString().isEmpty()) {
             txtChangePassword.setEnabled(false);
             txtChangePassword.setAlpha(0.5f);
         }
 
-        if(StaticData.user.getAvatar() != null && !StaticData.user.getAvatar().isEmpty()) {
-            Picasso.with(getActivity())
-                    .load(StaticData.config.getMediaUrl() + StaticData.user.getAvatar())
-                    .into(imgProfile);
-        } else {
-            imgProfile.setImageResource(R.drawable.avatar_male);
-            if(StaticData.user.getGender() == "female") {
-                imgProfile.setImageResource(R.drawable.avatar_female);
-            }
-        }
+//        setUserInfo();
 
         txtMyPredictions.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,6 +124,32 @@ public class ProfileFragment extends Fragment {
             }
         });
         return parentView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        setUserInfo();
+    }
+
+    private void setUserInfo() {
+        try {
+            txtName.setText(StaticData.user.getFullname());
+            if (StaticData.user.getAvatar() != null && !StaticData.user.getAvatar().isEmpty()) {
+                Picasso.with(getActivity())
+                        .load(StaticData.config.getMediaUrl() + StaticData.user.getAvatar())
+                        .into(imgProfile);
+            } else {
+                imgProfile.setImageResource(R.drawable.avatar_male);
+                if (StaticData.user.getGender() != null &&
+                        StaticData.user.getGender().toLowerCase() == "female") {
+                    imgProfile.setImageResource(R.drawable.avatar_female);
+                }
+            }
+        } catch (Exception ex) {
+            Log.e("", ex.getLocalizedMessage());
+        }
     }
 
     private void callLogoutService(){

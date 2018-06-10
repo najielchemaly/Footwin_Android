@@ -19,7 +19,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".loading.LoadingActivity">
+        <activity android:name=".loading.LoadingActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -43,23 +46,38 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".MainPageActivity" />
-        <activity android:name=".login.LoginActivity" />
-        <activity android:name=".login.RetrievePasswordActivity" />
-        <activity android:name=".notifications.NotificationsActivity" />
-        <activity android:name=".coins.CoinsActivity" />
-        <activity android:name=".signup.SignupStepOne" />
-        <activity android:name=".signup.SignupStepTwo" />
-        <activity android:name=".signup.SignupStepThree" />
-        <activity android:name=".news.NewsDetailsActivity" />
-        <activity android:name=".profile.MyPredictionsActivity" />
-        <activity android:name=".profile.ChangePasswordActivity" />
-        <activity android:name=".profile.EditProfileActivity" />
-        <activity android:name=".profile.TermsAndConditionsActivity" />
-        <activity android:name=".loading.CountdownActivity" />
+        <activity android:name=".MainPageActivity" android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"/>
+        <activity android:name=".login.LoginActivity" android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"/>
+        <activity android:name=".login.RetrievePasswordActivity" android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"/>
+        <activity android:name=".notifications.NotificationsActivity" android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"/>
+        <activity android:name=".coins.CoinsActivity" android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"/>
+        <activity android:name=".signup.SignupStepOne" android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"/>
+        <activity android:name=".signup.SignupStepTwo" android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"/>
+        <activity android:name=".signup.SignupStepThree" android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"/>
+        <activity android:name=".news.NewsDetailsActivity" android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"/>
+        <activity android:name=".profile.MyPredictionsActivity" android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"/>
+        <activity android:name=".profile.ChangePasswordActivity" android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"/>
+        <activity android:name=".profile.EditProfileActivity" android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"/>
+        <activity android:name=".profile.TermsAndConditionsActivity" android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"/>
+        <activity android:name=".loading.CountdownActivity" android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"/>
         <activity
             android:name=".ViewRulesActivity"
-            android:theme="@style/Theme.Transparent" />
+            android:theme="@style/Theme.Transparent" android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"/>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
