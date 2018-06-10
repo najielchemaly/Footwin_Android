@@ -2,6 +2,7 @@ package com.apploads.footwin.predict;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -94,100 +95,111 @@ public class PredictFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        AppUtils.startCountAnimation(txtCoinsTotal,0, Integer.parseInt(StaticData.user.getCoins()),1500);
-        AppUtils.startCountAnimation(txtWinningCoinsTotal,0, Integer.parseInt(StaticData.user.getWinningCoins()),1500);
+
+        if (StaticData.user.getCoins() != null) {
+            AppUtils.startCountAnimation(txtCoinsTotal, 0, Integer.parseInt(StaticData.user.getCoins()), 1500);
+        }
+        if (StaticData.user.getWinningCoins() != null) {
+            AppUtils.startCountAnimation(txtWinningCoinsTotal,0, Integer.parseInt(StaticData.user.getWinningCoins()),1500);
+        }
+
         updateBadge();
     }
 
     private void initView() {
-        listMatches = parentView.findViewById(R.id.listMatches);
-        btnRules = parentView.findViewById(R.id.btnRules);
-        imgCoins = parentView.findViewById(R.id.imgCoins);
-        txtRound = parentView.findViewById(R.id.txtRound);
-        txtWinningCoinsTotal = parentView.findViewById(R.id.txtWinningCoinsTotal);
-        txtCoinsTotal = parentView.findViewById(R.id.txtCoinsTotal);
-        txtNotificationTag = parentView.findViewById(R.id.txtNotificationTag);
-        imgProfile = parentView.findViewById(R.id.imgProfile);
-        progressBar = parentView.findViewById(R.id.spin_kit);
-        viewExactScore = parentView.findViewById(R.id.viewExactScore);
-        viewExactScoreParent = parentView.findViewById(R.id.viewExactScoreParent);
-        viewNotificationTag = parentView.findViewById(R.id.viewNotificationTag);
-        btnCancel = parentView.findViewById(R.id.btnCancel);
-        btnConfirm = parentView.findViewById(R.id.btnConfirm);
-        txtAwayScore = parentView.findViewById(R.id.txtAwayScore);
-        txtHomeScore = parentView.findViewById(R.id.txtHomeScore);
-        txtHomeTeam = parentView.findViewById(R.id.txtHomeTeam);
-        txtAwayTeam = parentView.findViewById(R.id.txtAwayTeam);
-        imgHomeTeam = parentView.findViewById(R.id.imgHomeTeam);
-        imgAwayTeam = parentView.findViewById(R.id.imgAwayTeam);
-        pullToRefresh = parentView.findViewById(R.id.pullToRefresh);
+        try {
+            listMatches = parentView.findViewById(R.id.listMatches);
+            btnRules = parentView.findViewById(R.id.btnRules);
+            imgCoins = parentView.findViewById(R.id.imgCoins);
+            txtRound = parentView.findViewById(R.id.txtRound);
+            txtWinningCoinsTotal = parentView.findViewById(R.id.txtWinningCoinsTotal);
+            txtCoinsTotal = parentView.findViewById(R.id.txtCoinsTotal);
+            txtNotificationTag = parentView.findViewById(R.id.txtNotificationTag);
+            imgProfile = parentView.findViewById(R.id.imgProfile);
+            progressBar = parentView.findViewById(R.id.spin_kit);
+            viewExactScore = parentView.findViewById(R.id.viewExactScore);
+            viewExactScoreParent = parentView.findViewById(R.id.viewExactScoreParent);
+            viewNotificationTag = parentView.findViewById(R.id.viewNotificationTag);
+            btnCancel = parentView.findViewById(R.id.btnCancel);
+            btnConfirm = parentView.findViewById(R.id.btnConfirm);
+            txtAwayScore = parentView.findViewById(R.id.txtAwayScore);
+            txtHomeScore = parentView.findViewById(R.id.txtHomeScore);
+            txtHomeTeam = parentView.findViewById(R.id.txtHomeTeam);
+            txtAwayTeam = parentView.findViewById(R.id.txtAwayTeam);
+            imgHomeTeam = parentView.findViewById(R.id.imgHomeTeam);
+            imgAwayTeam = parentView.findViewById(R.id.imgAwayTeam);
+            pullToRefresh = parentView.findViewById(R.id.pullToRefresh);
 
-        mInterstitialAd = new InterstitialAd(getActivity());
-        mInterstitialAd.setAdUnitId("ca-app-pub-8532510371470349/4251669653");
-        mInterstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                // Code to be executed when an ad finishes loading.
-                if(mInterstitialAd.isLoaded()){
-                    mInterstitialAd.show();
+            mInterstitialAd = new InterstitialAd(getActivity());
+            mInterstitialAd.setAdUnitId("ca-app-pub-8532510371470349/4251669653");
+            mInterstitialAd.setAdListener(new AdListener() {
+                @Override
+                public void onAdLoaded() {
+                    // Code to be executed when an ad finishes loading.
+                    if (mInterstitialAd.isLoaded()) {
+                        mInterstitialAd.show();
+                    }
+                }
+
+                @Override
+                public void onAdFailedToLoad(int errorCode) {
+                    // Code to be executed when an ad request fails.
+                    Toast.makeText(mainPageActivity, "error : " + errorCode, Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onAdOpened() {
+                    // Code to be executed when the ad is displayed.
+//               Toast.makeText(mainPageActivity, "opened", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onAdLeftApplication() {
+                    // Code to be executed when the user has left the app.
+                }
+
+                @Override
+                public void onAdClosed() {
+                    // Code to be executed when when the interstitial ad is closed.
+                }
+            });
+
+            DoubleBounce doubleBounce = new DoubleBounce();
+            progressBar.setIndeterminateDrawable(doubleBounce);
+
+            viewExactScoreParent.setVisibility(View.GONE);
+
+            if (StaticData.user.getAvatar() != null && !StaticData.user.getAvatar().isEmpty()) {
+                Picasso.with(getActivity())
+                        .load(StaticData.config.getMediaUrl() + StaticData.user.getAvatar())
+                        .into(imgProfile);
+            } else {
+                imgProfile.setImageResource(R.drawable.avatar_male);
+                if(StaticData.user.getGender() != null &&
+                        StaticData.user.getGender().toLowerCase() == "female") {
+                    imgProfile.setImageResource(R.drawable.avatar_female);
                 }
             }
 
-            @Override
-            public void onAdFailedToLoad(int errorCode) {
-                // Code to be executed when an ad request fails.
-                 Toast.makeText(mainPageActivity, "error : "+ errorCode, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onAdOpened() {
-                // Code to be executed when the ad is displayed.
-               Toast.makeText(mainPageActivity, "opened", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onAdLeftApplication() {
-                // Code to be executed when the user has left the app.
-            }
-
-            @Override
-            public void onAdClosed() {
-                // Code to be executed when when the interstitial ad is closed.
-            }
-        });
-
-        DoubleBounce doubleBounce = new DoubleBounce();
-        progressBar.setIndeterminateDrawable(doubleBounce);
-
-        viewExactScoreParent.setVisibility(View.GONE);
-
-        if(StaticData.user.getAvatar() != null && !StaticData.user.getAvatar().isEmpty()) {
-            Picasso.with(getActivity())
-                    .load(StaticData.config.getMediaUrl() + StaticData.user.getAvatar())
-                    .into(imgProfile);
-        } else {
-            imgProfile.setImageResource(R.drawable.avatar_male);
-            if(StaticData.user.getGender() == "female") {
-                imgProfile.setImageResource(R.drawable.avatar_female);
-            }
-        }
-
-        txtRound.setText(StaticData.config.getActiveRound().getTitle());
+            txtRound.setText(StaticData.config.getActiveRound().getTitle());
 
 //        AppUtils.startCountAnimation(txtCoinsTotal,0, Integer.parseInt(StaticData.user.getCoins()),1500);
 //        AppUtils.startCountAnimation(txtWinningCoinsTotal,0, Integer.parseInt(StaticData.user.getWinningCoins()),1500);
 
-        bottom_to_top = AnimationUtils.loadAnimation(getContext(), R.anim.bottom_to_top_wt);
-        top_to_bottom = AnimationUtils.loadAnimation(getContext(), R.anim.top_to_bottom_wt);
+            bottom_to_top = AnimationUtils.loadAnimation(getContext(), R.anim.bottom_to_top_wt);
+            top_to_bottom = AnimationUtils.loadAnimation(getContext(), R.anim.top_to_bottom_wt);
 
-        if(txtNotificationTag.getText().toString().isEmpty()) {
-            viewNotificationTag.setVisibility(View.INVISIBLE);
-        }
+            if (txtNotificationTag.getText().toString().isEmpty()) {
+                viewNotificationTag.setVisibility(View.INVISIBLE);
+            }
 
-        if(getActivity().getClass().equals(MainPageActivity.class)) {
-            mainPageActivity = (MainPageActivity)getActivity();
+            if (getActivity().getClass().equals(MainPageActivity.class)) {
+                mainPageActivity = (MainPageActivity) getActivity();
+            }
+            callMatchesService();
+        } catch (Exception ex) {
+            Log.e("", ex.getLocalizedMessage());
         }
-        callMatchesService();
     }
 
     public void updateBadge(){
@@ -227,8 +239,8 @@ public class PredictFragment extends Fragment {
         txtHomeTeam.setText(match.getHomeName());
         txtAwayTeam.setText(match.getAwayName());
 
-        txtHomeScore.setText(match.getHomeScore());
-        txtAwayScore.setText(match.getAwayScore());
+        txtHomeScore.setText(match.getHomeScore() == "-1" ? "" : match.getHomeScore());
+        txtAwayScore.setText(match.getAwayScore() == "-1" ? "" : match.getAwayScore());
 
         Picasso.with(getActivity())
                 .load(StaticData.config.getMediaUrl()+match.getHomeFlag())
@@ -432,7 +444,7 @@ public class PredictFragment extends Fragment {
 
                     @Override
                     public void onFailure(Call<BasicResponse> call, Throwable t) {
-                        Toast.makeText(getActivity(), "error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "An error has occured", Toast.LENGTH_SHORT).show();
                     }
                 });
             }

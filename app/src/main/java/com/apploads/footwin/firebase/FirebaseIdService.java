@@ -24,8 +24,10 @@ public class FirebaseIdService extends FirebaseInstanceIdService {
         Log.d(TAG, "Refreshed token: " + refreshedToken);
 
         // TODO: Implement this method to send any registration to your app's servers.
-        if(StringUtils.isValid(StaticData.user.getId())){
-            sendRegistrationToServer(refreshedToken);
+        if(StaticData.user != null) {
+            if (StringUtils.isValid(StaticData.user.getId())) {
+                sendRegistrationToServer(refreshedToken);
+            }
         }
     }
 

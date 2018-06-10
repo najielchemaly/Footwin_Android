@@ -40,7 +40,7 @@ public class Config {
     @SerializedName("is_app_active")
     @Expose
     private Boolean isAppActive;
-    @SerializedName("is_iapready")
+    @SerializedName("is_iapready_droid")
     @Expose
     private Boolean isIAPReady;
     @SerializedName("tutorial_text")

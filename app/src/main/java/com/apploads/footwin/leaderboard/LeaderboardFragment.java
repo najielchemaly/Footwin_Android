@@ -126,7 +126,8 @@ public class LeaderboardFragment extends Fragment {
                                     .into(imgRank1);
                         } else {
                             imgRank1.setImageResource(R.drawable.avatar_male);
-                            if(StaticData.user.getGender() == "female") {
+                            if(StaticData.user.getGender() != null &&
+                                    StaticData.user.getGender().toLowerCase() == "female") {
                                 imgRank1.setImageResource(R.drawable.avatar_female);
                             }
                         }

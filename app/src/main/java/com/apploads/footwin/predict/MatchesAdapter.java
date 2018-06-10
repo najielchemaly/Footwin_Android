@@ -181,8 +181,8 @@ public class MatchesAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View view) {
                     if(view.getAlpha() > 0) {
-                        String winningTeamName = match.isHomeToWin() ? match.getHomeName() : match.getAwayName();
-                        String winningTeamID = match.isHomeToWin() ? match.getHomeId() : match.getAwayId();
+                        String winningTeamName = match.isDraw() ? "" : match.isHomeToWin() ? match.getHomeName() : match.getAwayName();
+                        String winningTeamID = match.isDraw() ? "0" : match.isHomeToWin() ? match.getHomeId() : match.getAwayId();
                         String homeScore = match.getHomeScore();
                         String awayScore = match.getAwayScore();
                         if (!match.isAwayToWin() && !match.isHomeToWin()) {

@@ -30,6 +30,7 @@ import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.Login;
+import com.facebook.login.LoginBehavior;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -163,6 +164,10 @@ public class LoginActivity extends BaseActivity {
         LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList(
                 "public_profile", "email", "user_birthday", "user_friends"));
 
+        LoginManager.getInstance().setLoginBehavior(LoginBehavior.NATIVE_WITH_FALLBACK);
+        LoginManager.getInstance().setLoginBehavior(LoginBehavior.NATIVE_ONLY);
+        LoginManager.getInstance().setLoginBehavior(LoginBehavior.WEB_ONLY);
+
         LoginManager.getInstance().registerCallback(callbackManager,
                 new FacebookCallback<LoginResult>() {
                     @Override
@@ -196,24 +201,23 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onCancel() {
                         progressBar.setVisibility(View.GONE);
-                        Toast.makeText(LoginActivity.this, "error", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(LoginActivity.this, "An error has occured", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onError(FacebookException exception) {
                         // App code
-                        Toast.makeText(LoginActivity.this, "error" + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "An error has occured", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if(callbackManager != null) {
             callbackManager.onActivityResult(requestCode, resultCode, data);
         }
-
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
     /**

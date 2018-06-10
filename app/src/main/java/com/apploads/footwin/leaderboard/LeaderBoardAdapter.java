@@ -74,7 +74,8 @@ public class LeaderBoardAdapter extends BaseAdapter {
                     .into(imgProfile);
         } else {
             imgProfile.setImageResource(R.drawable.avatar_male);
-            if(StaticData.user.getGender() == "female") {
+            if(StaticData.user.getGender() != null &&
+                    StaticData.user.getGender().toLowerCase() == "female") {
                 imgProfile.setImageResource(R.drawable.avatar_female);
             }
         }

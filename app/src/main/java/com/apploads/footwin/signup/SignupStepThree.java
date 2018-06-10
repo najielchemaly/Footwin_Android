@@ -345,7 +345,7 @@ public class SignupStepThree extends BaseActivity {
         RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), new File(imgPath));
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", imgPath, requestFile);
 
-        ApiManager.getService(true).updateAvatar(body).enqueue(new Callback<Object>() {
+        ApiManager.getService(false).updateAvatar(body).enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
                 try {
