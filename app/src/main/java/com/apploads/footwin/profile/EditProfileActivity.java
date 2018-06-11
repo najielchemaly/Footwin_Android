@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -51,6 +52,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import es.dmoral.toasty.Toasty;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -156,6 +158,7 @@ public class EditProfileActivity extends BaseActivity {
                 if(validateView()){
                     editUserService();
                 }
+
             }
         });
 
@@ -205,7 +208,8 @@ public class EditProfileActivity extends BaseActivity {
                 } else {
                     if (ActivityCompat.shouldShowRequestPermissionRationale(EditProfileActivity.this,
                             Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                        Toast.makeText(EditProfileActivity.this, "Read External Storage Permission error", Toast.LENGTH_SHORT);
+                        showToastyMessage(EditProfileActivity.this,"Read External Storage Permission error");
+
                     } else {
                         ActivityCompat.requestPermissions(EditProfileActivity.this,
                                 new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_READ_EXTERNAL_STORAGE);
@@ -214,14 +218,14 @@ public class EditProfileActivity extends BaseActivity {
             } else {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(EditProfileActivity.this,
                         Manifest.permission.CAMERA)) {
-                    Toast.makeText(EditProfileActivity.this, "Camera Permission error", Toast.LENGTH_SHORT);
+                    showToastyMessage(EditProfileActivity.this,"Camera Permission error");
                 } else {
                     ActivityCompat.requestPermissions(EditProfileActivity.this,
                             new String[]{Manifest.permission.CAMERA}, PICK_IMAGE_CAMERA);
                 }
             }
         } catch (Exception e) {
-            Toast.makeText(EditProfileActivity.this, "Camera Permission error", Toast.LENGTH_SHORT);
+            showToastyMessage(EditProfileActivity.this,"Camera Permission error");
             e.printStackTrace();
         }
     }

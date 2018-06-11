@@ -1,6 +1,7 @@
 package com.apploads.footwin;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
@@ -42,6 +43,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -286,8 +288,7 @@ public class MainPageActivity extends BaseActivity {
             }
 
             doubleBackToExitPressedOnce = true;
-            Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
-
+            showToastyMessage(this,"Please click BACK again to exit");
             new Handler().postDelayed(new Runnable() {
 
                 @Override

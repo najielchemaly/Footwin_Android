@@ -1,5 +1,6 @@
 package com.apploads.footwin.profile;
 
+import android.graphics.Color;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,6 +15,7 @@ import com.apploads.footwin.model.UserResponse;
 import com.apploads.footwin.services.ApiManager;
 import com.apploads.footwin.signup.SignupStepTwo;
 
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -97,16 +99,18 @@ public class ChangePasswordActivity extends BaseActivity {
             public void onResponse(Call<BasicResponse> call, Response<BasicResponse> response) {
                 BasicResponse basicResponse = response.body();
                 if(basicResponse.getStatus() == 1){
-                    Toast.makeText(ChangePasswordActivity.this, basicResponse.getMessage(), Toast.LENGTH_SHORT).show();
+//
+                    showToastyMessage(ChangePasswordActivity.this,basicResponse.getMessage());
                     finish();
                 }else {
-                    Toast.makeText(ChangePasswordActivity.this, "Something went wrong please try again", Toast.LENGTH_SHORT).show();
+                    showToastyMessage(ChangePasswordActivity.this,"Something went wrong please try again");
                 }
             }
 
             @Override
             public void onFailure(Call<BasicResponse> call, Throwable t) {
-                Toast.makeText(ChangePasswordActivity.this, "Something went wrong please try again", Toast.LENGTH_SHORT).show();
+                showToastyMessage(ChangePasswordActivity.this,"Something went wrong please try again");
+//
             }
         });
     }

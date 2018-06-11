@@ -215,7 +215,7 @@ public class SignupStepThree extends BaseActivity {
                 } else {
                     if (ActivityCompat.shouldShowRequestPermissionRationale(SignupStepThree.this,
                             Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                        Toast.makeText(SignupStepThree.this, "Read External Storage Permission error", Toast.LENGTH_SHORT);
+                        showToastyMessage(SignupStepThree.this,"Read External Storage Permission error");
                     } else {
                         ActivityCompat.requestPermissions(SignupStepThree.this,
                                 new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_READ_EXTERNAL_STORAGE);
@@ -224,14 +224,16 @@ public class SignupStepThree extends BaseActivity {
             } else {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(SignupStepThree.this,
                         Manifest.permission.CAMERA)) {
-                    Toast.makeText(SignupStepThree.this, "Camera Permission error", Toast.LENGTH_SHORT);
+                    showToastyMessage(SignupStepThree.this,"Camera Permission error");
+
                 } else {
                     ActivityCompat.requestPermissions(SignupStepThree.this,
                             new String[]{Manifest.permission.CAMERA}, PICK_IMAGE_CAMERA);
                 }
             }
         } catch (Exception e) {
-            Toast.makeText(SignupStepThree.this, "Camera Permission error", Toast.LENGTH_SHORT);
+            showToastyMessage(SignupStepThree.this,"Camera Permission error");
+
             e.printStackTrace();
         }
     }
@@ -335,7 +337,7 @@ public class SignupStepThree extends BaseActivity {
 
             @Override
             public void onFailure(Call<UserResponse> call, Throwable t) {
-                Toast.makeText(SignupStepThree.this, "Something went wrong! please try again later", Toast.LENGTH_SHORT).show();
+                showToastyMessage(SignupStepThree.this,"Something went wrong! please try again later");
                 viewLoading.setVisibility(View.GONE);
             }
         });

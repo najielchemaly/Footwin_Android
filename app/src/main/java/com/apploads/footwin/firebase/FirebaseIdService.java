@@ -43,12 +43,12 @@ public class FirebaseIdService extends FirebaseInstanceIdService {
         ApiManager.getService().updateFirebaseToken(token).enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
-                Toast.makeText(FirebaseIdService.this, "asdasd", Toast.LENGTH_SHORT).show();
+
             }
 
             @Override
             public void onFailure(Call<Object> call, Throwable t) {
-                Toast.makeText(FirebaseIdService.this, "asdasd", Toast.LENGTH_SHORT).show();
+
             }
         });
     }
