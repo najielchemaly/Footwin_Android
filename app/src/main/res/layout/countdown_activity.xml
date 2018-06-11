@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <RelativeLayout
+        android:id="@+id/viewCountdown"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/txtTimer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:gravity="center"
+            android:layout_marginRight="40dp"
+            android:layout_marginLeft="40dp"
+            android:text=""
+            android:textColor="@color/appBlue"
+            android:textSize="@dimen/xlarge_text"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:scaleType="centerCrop"
+            android:padding="10dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/logo_white" />
+
+        <TextView
+            android:id="@+id/txtSubscribe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="40dp"
+            android:gravity=""
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:text="subscribe to our news and get notified when we are live!"
+            android:textAllCaps="true"
+            android:textColor="@color/appBlue"
+            android:textSize="@dimen/medium_text2"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

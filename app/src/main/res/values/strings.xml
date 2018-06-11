@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Footwin</string>
+    <string name="facebook_app_id">1461553117306764</string>
+    <string name="fb_login_protocol_scheme">fb1461553117306764</string>
 </resources>

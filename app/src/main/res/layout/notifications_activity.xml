@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/appBlue">
+
+    <TextView
+        android:id="@+id/lblNotifications"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/app_margin"
+        android:layout_marginTop="@dimen/app_margin"
+        android:text="notifications"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="@dimen/xlarge_text"
+        android:textStyle="bold" />
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/pullToRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/lblNotifications"
+        android:layout_above="@id/btnClose"
+        android:layout_marginTop="@dimen/app_margin">
+
+        <ListView
+            android:id="@+id/listNotifications"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:dividerHeight="0dp"
+            android:divider="@null"
+            android:layout_marginBottom="50dp" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <Button
+        android:id="@+id/btnClose"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/darkBlue"
+        android:text="close"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="@dimen/medium_text" />
+
+    <com.github.ybq.android.spinkit.SpinKitView
+        android:id="@+id/spin_kit"
+        style="@style/SpinKitView.Large.Circle"
+        app:SpinKit_Color="@color/white"
+        android:layout_centerInParent="true"
+        android:layout_width="70dp"
+        android:layout_height="70dp" />
+
+    <RelativeLayout
+        android:id="@+id/viewNoData"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/lblNotifications"
+        android:layout_marginTop="@dimen/app_margin"
+        android:layout_marginBottom="50dp"
+        android:layout_marginLeft="@dimen/app_margin"
+        android:layout_marginRight="@dimen/app_margin"
+        android:visibility="gone" />
+
+</RelativeLayout>

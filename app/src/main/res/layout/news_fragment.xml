@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/background_blue">
+
+    <TextView
+        android:id="@+id/txtTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="latest news"
+        android:layout_marginTop="@dimen/app_margin"
+        android:layout_marginLeft="@dimen/app_margin"
+        android:textStyle="bold"
+        android:textSize="@dimen/xlarge_text"
+        android:textColor="@color/white"
+        android:textAllCaps="true"
+        />
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refresh"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/txtTitle">
+
+        <ListView
+            android:id="@+id/listNews"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@null"
+            android:dividerHeight="0dp"
+            />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <com.github.ybq.android.spinkit.SpinKitView
+        android:id="@+id/spin_kit"
+        style="@style/SpinKitView.Large.Circle"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        app:SpinKit_Color="@color/white"
+        android:layout_centerInParent="true"/>
+
+    <RelativeLayout
+        android:id="@+id/viewNoData"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/txtTitle"
+        android:layout_marginTop="@dimen/app_margin"
+        android:visibility="gone"
+        />
+    
+</RelativeLayout>

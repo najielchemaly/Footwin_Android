@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "872319970048",
+    "firebase_url": "https://footwin-5c499.firebaseio.com",
+    "project_id": "footwin-5c499",
+    "storage_bucket": "footwin-5c499.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:872319970048:android:131cb8e398c505db",
+        "android_client_info": {
+          "package_name": "com.apploads.footwin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "872319970048-7k9fm37cte9afc22q99hbeli9q7c8mur.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.apploads.footwin",
+            "certificate_hash": "8ea91a39ced55d92453e557e800b40842d5f51ef"
+          }
+        },
+        {
+          "client_id": "872319970048-as3sf9qadt25pk383nd9q3b09lqil286.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDL58Tjq_cAzYx86CNTnJzrSVTrU5H6lAw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "872319970048-as3sf9qadt25pk383nd9q3b09lqil286.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "872319970048-otqfpp4hhsau1l3fhdpau1dcm09sp6ge.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.we-devapp.footwin",
+                "app_store_id": "1373217518"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
