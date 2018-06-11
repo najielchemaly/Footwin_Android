@@ -13,6 +13,7 @@ import com.apploads.footwin.R;
 import com.apploads.footwin.helpers.CustomDialogClass;
 import com.apploads.footwin.helpers.StaticData;
 import com.apploads.footwin.helpers.utils.AppUtils;
+import com.apploads.footwin.login.RetrievePasswordActivity;
 import com.apploads.footwin.model.User;
 import com.apploads.footwin.model.UserResponse;
 import com.apploads.footwin.services.ApiManager;
@@ -84,7 +85,7 @@ public class SignupStepOne extends BaseActivity {
             @Override
             public void onClick(View view) {
                 if(StaticData.favTeam == null){
-                    Toast.makeText(SignupStepOne.this, "please select a team before proceeding", Toast.LENGTH_SHORT).show();
+                    showToastyMessage(SignupStepOne.this, "Please select a team before proceeding");
                 } else {
                     if(StaticData.user.getFacebookId() != null &&
                             !StaticData.user.getFacebookId().toString().isEmpty() &&

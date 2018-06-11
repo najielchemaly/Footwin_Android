@@ -1,6 +1,7 @@
 package com.apploads.footwin.coins;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,6 +27,7 @@ import com.apploads.footwin.model.BasicResponse;
 import com.apploads.footwin.model.Package;
 import com.apploads.footwin.model.PackageResponse;
 import com.apploads.footwin.model.Reward;
+import com.apploads.footwin.profile.MyPredictionsActivity;
 import com.apploads.footwin.services.ApiManager;
 import com.budiyev.android.circularprogressbar.CircularProgressBar;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
@@ -35,6 +37,7 @@ import com.google.android.gms.ads.reward.RewardItem;
 import com.google.android.gms.ads.reward.RewardedVideoAd;
 import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -179,7 +182,7 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
 
             @Override
             public void onRewardedVideoAdFailedToLoad(int i) {
-                Toast.makeText(CoinsActivity.this, "An error has occured", Toast.LENGTH_SHORT).show();
+                Toasty.custom(CoinsActivity.this,"An error has occured",getDrawable(R.drawable.ball), Color.parseColor("#071a7b"),Toast.LENGTH_SHORT,true,true).show();
             }
 
             @Override
@@ -282,7 +285,7 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
 
             @Override
             public void onFailure(Call<PackageResponse> call, Throwable t) {
-                Toast.makeText(CoinsActivity.this, "An error has occured", Toast.LENGTH_SHORT).show();
+                Toasty.custom(CoinsActivity.this,"An error has occured",getDrawable(R.drawable.ball), Color.parseColor("#071a7b"),Toast.LENGTH_SHORT,true,true).show();
             }
         });
     }
@@ -346,7 +349,7 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
 
     @Override
     public void onProductPurchased(@NonNull String productId, @Nullable TransactionDetails details) {
-//        Toast.makeText(this, "success: " + productId, Toast.LENGTH_SHORT).show();
+//
         ApiManager.getService().purchaseCoins(mPackage.getId(),mPackage.getPrice()).enqueue(new Callback<Reward>() {
             @Override
             public void onResponse(Call<Reward> call, Response<Reward> response) {
@@ -376,7 +379,7 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
         if(errorCode == 1){
             // Closed the dialogue without urchasing
         }else {
-//            Toast.makeText(this, "error: " + errorCode, Toast.LENGTH_SHORT).show();
+//
         }
     }
 

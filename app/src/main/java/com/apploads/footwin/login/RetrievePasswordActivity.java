@@ -85,16 +85,17 @@ public class RetrievePasswordActivity extends BaseActivity {
             public void onResponse(Call<BasicResponse> call, Response<BasicResponse> response) {
                 BasicResponse basicResponse = response.body();
                 if(basicResponse.getStatus() == 1){
-                    Toast.makeText(RetrievePasswordActivity.this, basicResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                    showToastyMessage(RetrievePasswordActivity.this, basicResponse.getMessage());
+
                     finish();
                 }else {
-                    Toast.makeText(RetrievePasswordActivity.this, "Something went wrong please try again", Toast.LENGTH_SHORT).show();
+                    showToastyMessage(RetrievePasswordActivity.this, "Something went wrong please try again");
                 }
             }
 
             @Override
             public void onFailure(Call<BasicResponse> call, Throwable t) {
-                Toast.makeText(RetrievePasswordActivity.this, "Something went wrong please try again", Toast.LENGTH_SHORT).show();
+                showToastyMessage(RetrievePasswordActivity.this, "Something went wrong please try again");
             }
         });
     }

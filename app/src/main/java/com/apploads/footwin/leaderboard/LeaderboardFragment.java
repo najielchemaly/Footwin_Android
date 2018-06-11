@@ -1,5 +1,6 @@
 package com.apploads.footwin.leaderboard;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import com.apploads.footwin.helpers.utils.AppUtils;
 import com.apploads.footwin.model.Leaderboard;
 import com.apploads.footwin.model.LeaderboardResponse;
 import com.apploads.footwin.services.ApiManager;
+import com.apploads.footwin.signup.SignupStepOne;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.squareup.picasso.Picasso;
 
@@ -25,6 +27,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -137,7 +140,7 @@ public class LeaderboardFragment extends Fragment {
 
             @Override
             public void onFailure(Call<LeaderboardResponse> call, Throwable t) {
-                Toast.makeText(getActivity(), "Error fetching leaderboard", Toast.LENGTH_SHORT).show();
+                Toasty.custom(getActivity(),"Error fetching leaderboard",getActivity().getDrawable(R.drawable.ball), Color.parseColor("#071a7b"), Toast.LENGTH_SHORT,true,true).show();
                 progressBar.setVisibility(View.GONE);
             }
         });

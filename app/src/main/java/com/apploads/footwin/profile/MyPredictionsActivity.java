@@ -1,5 +1,6 @@
 package com.apploads.footwin.profile;
 
+import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -20,6 +21,7 @@ import com.github.ybq.android.spinkit.style.DoubleBounce;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -68,7 +70,7 @@ public class MyPredictionsActivity extends BaseActivity {
                 }else {
                     //TODO SHOW NO PREDICTION SCREEN
                     viewNoData.setVisibility(View.GONE);
-                    Toast.makeText(MyPredictionsActivity.this, "Check your internet connection and try again later", Toast.LENGTH_SHORT).show();
+                    Toasty.custom(MyPredictionsActivity.this,"Check your internet connection and try again later",getDrawable(R.drawable.ball), Color.parseColor("#071a7b"),Toast.LENGTH_SHORT,true,true).show();
                 }
                 progressBar.setVisibility(View.GONE);
             }

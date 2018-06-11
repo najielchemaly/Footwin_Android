@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.apploads.footwin.coins.CoinsActivity;
 import com.apploads.footwin.helpers.BaseActivity;
 import com.apploads.footwin.MainPageActivity;
 import com.apploads.footwin.R;
@@ -36,6 +37,7 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
 
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -201,13 +203,13 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onCancel() {
                         progressBar.setVisibility(View.GONE);
-//                        Toast.makeText(LoginActivity.this, "An error has occured", Toast.LENGTH_SHORT).show();
+
                     }
 
                     @Override
                     public void onError(FacebookException exception) {
                         // App code
-                        Toast.makeText(LoginActivity.this, "An error has occured", Toast.LENGTH_SHORT).show();
+                        showToastyMessage(LoginActivity.this,"An error has occured");
                     }
                 });
     }
@@ -310,13 +312,14 @@ public class LoginActivity extends BaseActivity {
                     }
                 }else {
                     progressBar.setVisibility(View.GONE);
-                    Toast.makeText(LoginActivity.this, "Check your internet connection and try again later", Toast.LENGTH_SHORT).show();
+                    showToastyMessage(LoginActivity.this,"Check your internet connection and try again later");
                 }
             }
 
             @Override
             public void onFailure(Call<UserResponse> call, Throwable t) {
-                Toast.makeText(LoginActivity.this, "Check your internet connection", Toast.LENGTH_SHORT).show();
+                Toasty.error(LoginActivity.this,"Check your internet connection and try again later",Toast.LENGTH_SHORT,false).show();
+//                showToastyMessage(LoginActivity.this,"Check your internet connection and try again later");
                 progressBar.setVisibility(View.GONE);
             }
         });
@@ -364,13 +367,13 @@ public class LoginActivity extends BaseActivity {
                     }
                 } else {
                     progressBar.setVisibility(View.GONE);
-                    Toast.makeText(LoginActivity.this, "Check your internet connection and try again later", Toast.LENGTH_SHORT).show();
+                    showToastyMessage(LoginActivity.this,"Check your internet connection");
                 }
             }
 
             @Override
             public void onFailure(Call<UserResponse> call, Throwable t) {
-                Toast.makeText(LoginActivity.this, "Check your internet connection", Toast.LENGTH_SHORT).show();
+                showToastyMessage(LoginActivity.this,"Check your internet connection");
                 progressBar.setVisibility(View.GONE);
             }
         });

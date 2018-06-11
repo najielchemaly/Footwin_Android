@@ -2,6 +2,7 @@ package com.apploads.footwin.predict;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -48,6 +49,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import es.dmoral.toasty.Toasty;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -143,14 +145,12 @@ public class PredictFragment extends Fragment {
 
                 @Override
                 public void onAdFailedToLoad(int errorCode) {
-                    // Code to be executed when an ad request fails.
-                    Toast.makeText(mainPageActivity, "error : " + errorCode, Toast.LENGTH_SHORT).show();
+                    Toasty.error(mainPageActivity,"error : " + errorCode,1000,true).show();
                 }
 
                 @Override
                 public void onAdOpened() {
                     // Code to be executed when the ad is displayed.
-//               Toast.makeText(mainPageActivity, "opened", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
@@ -444,7 +444,7 @@ public class PredictFragment extends Fragment {
 
                     @Override
                     public void onFailure(Call<BasicResponse> call, Throwable t) {
-                        Toast.makeText(getActivity(), "An error has occured", Toast.LENGTH_SHORT).show();
+                        Toasty.error(getActivity(),"An error has occured",Toast.LENGTH_LONG,true).show();
                     }
                 });
             }

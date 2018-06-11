@@ -1,5 +1,7 @@
 package com.apploads.footwin.helpers;
 
+import android.app.Activity;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,6 +9,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
+
+import com.apploads.footwin.R;
+import com.apploads.footwin.profile.EditProfileActivity;
+
+import es.dmoral.toasty.Toasty;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -63,5 +71,9 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     protected <T> T _findViewById(int viewId) {
         return (T) findViewById(viewId);
+    }
+
+    public void showToastyMessage(Activity activity,String message){
+        Toasty.custom(activity,message,getDrawable(R.drawable.ball), Color.parseColor("#071a7b"), Toast.LENGTH_SHORT,true,true).show();
     }
 }
