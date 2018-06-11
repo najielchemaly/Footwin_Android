@@ -155,6 +155,22 @@ public class EditProfileActivity extends BaseActivity {
             public void onClick(View view) {
                 if(validateView()){
                     editUserService();
+                } else {
+                    CustomDialogClass dialogClass = new CustomDialogClass(EditProfileActivity.this, new CustomDialogClass.AbstractCustomDialogListener() {
+                        @Override
+                        public void onConfirm(CustomDialogClass.DialogResponse response) {
+                            response.getDialog().dismiss();
+                        }
+
+                        @Override
+                        public void onCancel(CustomDialogClass.DialogResponse dialogResponse) {
+                        }
+                    }, true);
+
+                    dialogClass.setTitle("FOOTWIN");
+                    dialogClass.setMessage("Please fill all the empty fields!");
+                    dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                    dialogClass.show();
                 }
             }
         });
@@ -247,7 +263,7 @@ public class EditProfileActivity extends BaseActivity {
             try {
                 bitmap = (Bitmap) data.getExtras().get("data");
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, bytes);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 75, bytes);
 
                 String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
                 destination = new File(Environment.getExternalStorageDirectory() + "/" +
@@ -340,6 +356,9 @@ public class EditProfileActivity extends BaseActivity {
                         public void onConfirm(CustomDialogClass.DialogResponse response) {
                             response.getDialog().dismiss();
                             viewLoading.setVisibility(View.GONE);
+
+                            btnSave.setEnabled(true);
+                            btnSave.setAlpha(1f);
                         }
 
                         @Override
@@ -351,9 +370,6 @@ public class EditProfileActivity extends BaseActivity {
                     dialogClass.setMessage(userResponse.getMessage());
                     dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
                     dialogClass.show();
-
-                    btnSave.setEnabled(true);
-                    btnSave.setAlpha(1f);
                 }
             }
 
@@ -372,6 +388,9 @@ public class EditProfileActivity extends BaseActivity {
             public void onConfirm(CustomDialogClass.DialogResponse response) {
                 response.getDialog().dismiss();
                 finish();
+
+                btnSave.setEnabled(true);
+                btnSave.setAlpha(1f);
             }
 
             @Override
@@ -383,9 +402,6 @@ public class EditProfileActivity extends BaseActivity {
         dialogClass.setMessage("Your profile is updated successfully");
         dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialogClass.show();
-
-        btnSave.setEnabled(true);
-        btnSave.setAlpha(1f);
     }
 
     private void updateAvatar() {
@@ -415,6 +431,7 @@ public class EditProfileActivity extends BaseActivity {
             public void onFailure(Call<Object> call, Throwable t) {
                 Log.d("", t.getMessage());
                 viewLoading.setVisibility(View.GONE);
+
                 btnSave.setEnabled(true);
                 btnSave.setAlpha(1f);
             }

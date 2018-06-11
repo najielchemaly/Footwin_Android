@@ -295,6 +295,7 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
 
             btnClose.setVisibility(View.GONE);
             btnGetCoins.setVisibility(View.GONE);
+            btnWatchVideo.setVisibility(View.GONE);
         }else {
             listPackages.setVisibility(View.GONE);
             viewBlackOpacity.setVisibility(View.GONE);
@@ -302,6 +303,7 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
 
             btnClose.setVisibility(View.VISIBLE);
             btnGetCoins.setVisibility(View.VISIBLE);
+            btnWatchVideo.setVisibility(View.VISIBLE);
         }
     }
 
