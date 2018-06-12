@@ -1,6 +1,7 @@
 package com.apploads.footwin.profile;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +22,10 @@ import com.apploads.footwin.helpers.StaticData;
 import com.apploads.footwin.model.Match;
 import com.apploads.footwin.model.Prediction;
 import com.apploads.footwin.predict.PredictFragment;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
+
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -173,12 +177,12 @@ public class MatchesResultAdapter extends BaseAdapter {
                 holder.txtScoreAway.setText(prediction.getAwayScore());
             }
 
-            Picasso.with(context)
-                    .load(StaticData.config.getMediaUrl()+prediction.getHomeFlag())
+            Glide.with(context)
+                    .load(Uri.parse(StaticData.config.getMediaUrl()+prediction.getHomeFlag())).apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
                     .into(holder.imgHomeTeam);
 
-            Picasso.with(context)
-                    .load(StaticData.config.getMediaUrl()+prediction.getAwayFlag())
+            Glide.with(context)
+                    .load(Uri.parse(StaticData.config.getMediaUrl()+prediction.getAwayFlag())).apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
                     .into(holder.imgAwayTeam);
 
             final Animation scale_up = AnimationUtils.loadAnimation(context, R.anim.scale_up);

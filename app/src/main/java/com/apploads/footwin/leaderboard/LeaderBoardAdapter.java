@@ -2,6 +2,7 @@ package com.apploads.footwin.leaderboard;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,9 @@ import com.apploads.footwin.helpers.StaticData;
 import com.apploads.footwin.model.Leaderboard;
 import com.apploads.footwin.model.News;
 import com.apploads.footwin.news.NewsDetailsActivity;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+//import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -69,9 +72,19 @@ public class LeaderBoardAdapter extends BaseAdapter {
         }
 
         if(leaderboard.getAvatar() != null && !leaderboard.getAvatar().isEmpty()) {
-            Picasso.with(context)
-                    .load(StaticData.config.getMediaUrl() + leaderboard.getAvatar())
-                    .into(imgProfile);
+
+
+            Glide
+                    .with(context)
+                    .load(Uri.parse(StaticData.config.getMediaUrl() + leaderboard.getAvatar()))
+                    .apply(new RequestOptions()
+                            .placeholder(R.drawable.avatar_male)
+                            .fitCenter())
+                            .into(imgProfile);
+
+//            Picasso.with(context)
+//                    .load(StaticData.config.getMediaUrl() + leaderboard.getAvatar())
+//                    .into(imgProfile);
         } else {
             imgProfile.setImageResource(R.drawable.avatar_male);
             if(StaticData.user.getGender() != null &&

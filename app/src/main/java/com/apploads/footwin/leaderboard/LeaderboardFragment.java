@@ -1,6 +1,7 @@
 package com.apploads.footwin.leaderboard;
 
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -19,8 +20,11 @@ import com.apploads.footwin.model.Leaderboard;
 import com.apploads.footwin.model.LeaderboardResponse;
 import com.apploads.footwin.services.ApiManager;
 import com.apploads.footwin.signup.SignupStepOne;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
-import com.squareup.picasso.Picasso;
+//import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -124,8 +128,8 @@ public class LeaderboardFragment extends Fragment {
                         txtCoinsRank1.setText(firstPlaceUser.getCoins());
 
                         if(firstPlaceUser.getAvatar() != null && !firstPlaceUser.getAvatar().isEmpty()) {
-                            Picasso.with(getActivity())
-                                    .load(StaticData.config.getMediaUrl() + firstPlaceUser.getAvatar())
+                            Glide.with(getActivity())
+                                    .load(Uri.parse( StaticData.config.getMediaUrl() + firstPlaceUser.getAvatar())).apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
                                     .into(imgRank1);
                         } else {
                             imgRank1.setImageResource(R.drawable.avatar_male);

@@ -98,7 +98,9 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="9fb9e01a0df1c04ac41e939a44cb65a1e178a3e6" />
         <!--<meta-data-->
             <!--android:name="io.fabric.ApiKey"-->
             <!--android:value="9fb9e01a0df1c04ac41e939a44cb65a1e178a3e6" />-->

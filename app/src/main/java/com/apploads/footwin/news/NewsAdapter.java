@@ -2,6 +2,7 @@ package com.apploads.footwin.news;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +13,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.apploads.footwin.R;
+import com.apploads.footwin.helpers.StaticData;
 import com.apploads.footwin.model.Article;
 import com.apploads.footwin.model.News;
 import com.apploads.footwin.model.Notification;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+//import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -63,8 +67,14 @@ public class NewsAdapter extends BaseAdapter {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM yy");
         txtDate.setText(simpleDateFormat.format(article.getPublishedAt()));
 
-        Picasso.with(context)
-                .load(article.getUrlToImage())
+
+
+        Glide
+                .with(context)
+                .load(Uri.parse(article.getUrlToImage()))
+//                .apply(new RequestOptions()
+//                        .placeholder(R.mipmap.ic_launcher)
+//                        .fitCenter())
                 .into(imgNews);
 
         imgNews.setOnClickListener(new View.OnClickListener() {

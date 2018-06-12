@@ -42,7 +42,7 @@ import com.apploads.footwin.services.ApiManager;
 import com.budiyev.android.circularprogressbar.CircularProgressBar;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.google.gson.internal.LinkedTreeMap;
-import com.squareup.picasso.Picasso;
+
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

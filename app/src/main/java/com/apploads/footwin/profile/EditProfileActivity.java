@@ -35,10 +35,13 @@ import com.apploads.footwin.model.User;
 import com.apploads.footwin.model.UserResponse;
 import com.apploads.footwin.services.ApiManager;
 import com.apploads.footwin.signup.SignupStepThree;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.google.gson.internal.LinkedTreeMap;
 import com.jaredrummler.materialspinner.MaterialSpinner;
-import com.squareup.picasso.Picasso;
+
 import com.ybs.countrypicker.CountryPicker;
 import com.ybs.countrypicker.CountryPickerListener;
 
@@ -123,8 +126,12 @@ public class EditProfileActivity extends BaseActivity {
         progressBar.setIndeterminateDrawable(doubleBounce);
 
         if(StaticData.user.getAvatar() != null && !StaticData.user.getAvatar().isEmpty()) {
-            Picasso.with(this)
-                    .load(StaticData.config.getMediaUrl() + StaticData.user.getAvatar())
+
+            Glide.with(this)
+                    .load(Uri.parse(StaticData.config.getMediaUrl() + StaticData.user.getAvatar()))
+                    .apply(new RequestOptions()
+                    .centerCrop()
+                    .placeholder(R.drawable.avatar_male).diskCacheStrategy(DiskCacheStrategy.ALL))
                     .into(imgProfile);
         } else {
             imgProfile.setImageResource(R.drawable.avatar_male);

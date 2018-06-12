@@ -24,14 +24,17 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try {
+
             int contentViewId = getContentViewId();
             if (contentViewId != NULL_CONTENT_VIEW) {
                 setContentView(getContentViewId());
             }
             doOnCreate();
+
         } catch (Exception e) {
             Log.e("Crash", "Error in: " + e.getMessage());
         }
+//        throw new RuntimeException("This is a crash");
     }
 
     @Override
