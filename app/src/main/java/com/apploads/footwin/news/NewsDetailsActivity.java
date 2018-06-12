@@ -12,7 +12,8 @@ import com.apploads.footwin.R;
 import com.apploads.footwin.helpers.BaseActivity;
 import com.apploads.footwin.model.Article;
 import com.apploads.footwin.model.News;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
+//import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 
@@ -55,8 +56,12 @@ public class NewsDetailsActivity extends BaseActivity {
             txtDesc.setText(article.getDescription());
             newURL = article.getUrl();
 
-            Picasso.with(this)
-                    .load(article.getUrlToImage())
+            Glide
+                    .with(this)
+                    .load(Uri.parse(article.getUrlToImage()))
+//                .apply(new RequestOptions()
+//                        .placeholder(R.mipmap.ic_launcher)
+//                        .fitCenter())
                     .into(imgNews);
         }
     }

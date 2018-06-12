@@ -1,6 +1,7 @@
 package com.apploads.footwin.profile;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -18,8 +19,11 @@ import com.apploads.footwin.helpers.utils.AppUtils;
 import com.apploads.footwin.login.LoginActivity;
 import com.apploads.footwin.model.BasicResponse;
 import com.apploads.footwin.services.ApiManager;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.squareup.picasso.Picasso;
+
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -137,8 +141,12 @@ public class ProfileFragment extends Fragment {
         try {
             txtName.setText(StaticData.user.getFullname());
             if (StaticData.user.getAvatar() != null && !StaticData.user.getAvatar().isEmpty()) {
-                Picasso.with(getActivity())
-                        .load(StaticData.config.getMediaUrl() + StaticData.user.getAvatar())
+
+                Glide.with(this)
+                        .load(Uri.parse(StaticData.config.getMediaUrl() + StaticData.user.getAvatar()))
+                        .apply(new RequestOptions()
+                                .centerCrop()
+                                .placeholder(R.drawable.avatar_male).diskCacheStrategy(DiskCacheStrategy.ALL))
                         .into(imgProfile);
             } else {
                 imgProfile.setImageResource(R.drawable.avatar_male);

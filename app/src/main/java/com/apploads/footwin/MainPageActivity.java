@@ -3,6 +3,7 @@ package com.apploads.footwin;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.provider.Settings;
@@ -31,6 +32,9 @@ import com.apploads.footwin.predict.PredictFragment;
 import com.apploads.footwin.profile.ProfileFragment;
 import com.apploads.footwin.services.ApiManager;
 import com.apploads.footwin.signup.SignupStepOne;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -40,7 +44,7 @@ import com.google.android.gms.ads.reward.RewardedVideoAd;
 import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.squareup.picasso.Picasso;
+
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import es.dmoral.toasty.Toasty;
@@ -69,6 +73,7 @@ public class MainPageActivity extends BaseActivity {
 
     @Override
     public void doOnCreate() {
+
         FirebaseMessaging.getInstance().subscribeToTopic("/topics/footwinnews");
         bottomNavigationView = _findViewById(R.id.bottom_navigation);
         btnStart = _findViewById(R.id.btnStart);
@@ -90,8 +95,9 @@ public class MainPageActivity extends BaseActivity {
         imgHomeTeam = _findViewById(R.id.imgHomeTeam);
 
         if(StaticData.user.getAvatar() != null && !StaticData.user.getAvatar().isEmpty()) {
-            Picasso.with(MainPageActivity.this)
-                    .load(StaticData.config.getMediaUrl() + StaticData.user.getAvatar())
+            Glide.with(MainPageActivity.this)
+                    .load(Uri.parse(StaticData.config.getMediaUrl() + StaticData.user.getAvatar()))
+                    .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
                     .into(imgProfile);
         } else {
             imgProfile.setImageResource(R.drawable.avatar_male);
@@ -271,11 +277,14 @@ public class MainPageActivity extends BaseActivity {
 
             txtHomeTeam.setText(teamName);
 
-            Picasso.with(this)
-                    .load(StaticData.config.getMediaUrl()+teamFlag)
+            Glide.with(this)
+                    .load(Uri.parse(StaticData.config.getMediaUrl()+teamFlag))
+                    .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
                     .into(imgHomeTeam);
         }
     }
+
+
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override

@@ -25,7 +25,8 @@ import android.widget.Toast;
 import com.apploads.footwin.R;
 import com.apploads.footwin.helpers.StaticData;
 import com.apploads.footwin.model.Match;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
+
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -235,12 +236,17 @@ public class MatchesAdapter extends BaseAdapter {
         holder.txtHomeTeam.setText(match.getHomeName());
         holder.txtAwayTeam.setText(match.getAwayName());
 
-        Picasso.with(context)
-                .load(StaticData.config.getMediaUrl()+match.getHomeFlag())
-                .into(holder.imgHomeTeam);
 
-        Picasso.with(context)
-                .load(StaticData.config.getMediaUrl()+match.getAwayFlag())
+        Glide
+                .with(context)
+                .load(Uri.parse(StaticData.config.getMediaUrl()+match.getHomeFlag()))
+//                .apply(new RequestOptions()
+//                        .placeholder(R.mipmap.ic_launcher)
+//                        .fitCenter())
+                .into(holder.imgHomeTeam);
+        Glide
+                .with(context)
+                .load(Uri.parse(StaticData.config.getMediaUrl()+match.getAwayFlag()))
                 .into(holder.imgAwayTeam);
     }
 

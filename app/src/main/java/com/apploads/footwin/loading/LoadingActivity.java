@@ -36,8 +36,8 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
-//import com.crashlytics.android.Crashlytics;
-//import io.fabric.sdk.android.Fabric;
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -67,7 +67,7 @@ public class LoadingActivity extends BaseActivity {
      * initialize view
      */
     private void initView() {
-//        Fabric.with(this, new Crashlytics());
+        Fabric.with(this, new Crashlytics());
 
         imgBall = _findViewById(R.id.imgBall);
         rotateBall();

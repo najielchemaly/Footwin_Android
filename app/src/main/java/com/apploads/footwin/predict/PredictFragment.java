@@ -3,6 +3,7 @@ package com.apploads.footwin.predict;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -39,11 +40,14 @@ import com.apploads.footwin.model.Profile;
 import com.apploads.footwin.notifications.NotificationsActivity;
 import com.apploads.footwin.services.ApiManager;
 import com.apploads.footwin.signup.SignupStepThree;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
-import com.squareup.picasso.Picasso;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -170,9 +174,15 @@ public class PredictFragment extends Fragment {
             viewExactScoreParent.setVisibility(View.GONE);
 
             if (StaticData.user.getAvatar() != null && !StaticData.user.getAvatar().isEmpty()) {
-                Picasso.with(getActivity())
-                        .load(StaticData.config.getMediaUrl() + StaticData.user.getAvatar())
+                Glide.with(getActivity())
+                        .load(Uri.parse(StaticData.config.getMediaUrl() + StaticData.user.getAvatar()))
+                        .apply(new RequestOptions()
+                                .centerCrop()
+                                .placeholder(R.drawable.avatar_male)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL))
+
                         .into(imgProfile);
+
             } else {
                 imgProfile.setImageResource(R.drawable.avatar_male);
                 if(StaticData.user.getGender() != null &&
@@ -242,12 +252,14 @@ public class PredictFragment extends Fragment {
         txtHomeScore.setText(match.getHomeScore() == "-1" ? "" : match.getHomeScore());
         txtAwayScore.setText(match.getAwayScore() == "-1" ? "" : match.getAwayScore());
 
-        Picasso.with(getActivity())
-                .load(StaticData.config.getMediaUrl()+match.getHomeFlag())
+        Glide.with(getActivity())
+                .load(Uri.parse(StaticData.config.getMediaUrl()+match.getHomeFlag()))
+                .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
                 .into(imgHomeTeam);
 
-        Picasso.with(getActivity())
-                .load(StaticData.config.getMediaUrl()+match.getAwayFlag())
+        Glide.with(getActivity())
+                .load(Uri.parse(StaticData.config.getMediaUrl()+match.getAwayFlag()))
+                .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
                 .into(imgAwayTeam);
 
         if(mainPageActivity != null) {

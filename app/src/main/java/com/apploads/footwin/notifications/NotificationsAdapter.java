@@ -1,6 +1,7 @@
 package com.apploads.footwin.notifications;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,8 @@ import com.apploads.footwin.R;
 import com.apploads.footwin.helpers.StaticData;
 import com.apploads.footwin.model.Match;
 import com.apploads.footwin.model.Notification;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
+//import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -72,13 +74,18 @@ public class NotificationsAdapter extends BaseAdapter {
         txtHomeScore.setText(notification.getHomeScore());
         txtAwayScore.setText(notification.getAwayScore());
 
-        Picasso.with(context)
-                .load(StaticData.config.getMediaUrl()+notification.getHomeFlag())
+        Glide
+                .with(context)
+                .load(Uri.parse(StaticData.config.getMediaUrl()+notification.getHomeFlag()))
+//                .apply(new RequestOptions()
+//                        .placeholder(R.mipmap.ic_launcher)
+//                        .fitCenter())
                 .into(imgHomeTeam);
-
-        Picasso.with(context)
-                .load(StaticData.config.getMediaUrl()+notification.getAwayFlag())
+        Glide
+                .with(context)
+                .load(Uri.parse(StaticData.config.getMediaUrl()+notification.getAwayFlag()))
                 .into(imgAwayTeam);
+
 
         if(notification.getType().equals("message")){
             btnCoins.setVisibility(View.GONE);
