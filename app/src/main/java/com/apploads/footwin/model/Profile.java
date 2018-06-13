@@ -9,6 +9,9 @@ public class Profile {
     @SerializedName("matches")
     @Expose
     private List<Match> matches = null;
+    @SerializedName("schedule_matches")
+    @Expose
+    private List<Match> scheduleMatches = null;
     @SerializedName("round_detail")
     @Expose
     private RoundDetail roundDetail;
@@ -61,5 +64,13 @@ public class Profile {
 
     public void setCurrentDate(String currentDate) {
         this.currentDate = currentDate;
+    }
+
+    public List<Match> getScheduleMatches() {
+        return scheduleMatches;
+    }
+
+    public void setScheduleMatches(List<Match> scheduleMatches) {
+        this.scheduleMatches = scheduleMatches;
     }
 }
