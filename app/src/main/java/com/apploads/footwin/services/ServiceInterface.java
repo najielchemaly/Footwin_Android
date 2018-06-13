@@ -46,6 +46,9 @@ public interface ServiceInterface {
     @POST("getMatches/")
     Call<Profile> getMatches();
 
+    @POST("getScheduleMatches/")
+    Call<Profile> getScheduleMatches();
+
     @Headers({
             "Content-Type: application/json"
     })

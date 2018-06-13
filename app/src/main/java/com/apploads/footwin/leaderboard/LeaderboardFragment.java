@@ -1,8 +1,11 @@
 package com.apploads.footwin.leaderboard;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.apploads.footwin.MainPageActivity;
 import com.apploads.footwin.R;
 import com.apploads.footwin.helpers.StaticData;
 import com.apploads.footwin.helpers.utils.AppUtils;
@@ -64,6 +68,12 @@ public class LeaderboardFragment extends Fragment {
         return parentView;
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getRanks();
+    }
+
     private void initView() {
         listLeaderboard = parentView.findViewById(R.id.listLeaderboard);
         btnUp = parentView.findViewById(R.id.btnUp);
@@ -76,7 +86,6 @@ public class LeaderboardFragment extends Fragment {
         DoubleBounce doubleBounce = new DoubleBounce();
         progressBar.setIndeterminateDrawable(doubleBounce);
 
-        getRanks();
     }
 
 
@@ -114,39 +123,51 @@ public class LeaderboardFragment extends Fragment {
             public void onResponse(Call<LeaderboardResponse> call, Response<LeaderboardResponse> response) {
                 if(response.isSuccessful() && response.body().getStatus() == 1){
                     LeaderboardResponse leaderboardResponse = response.body();
-                    if(leaderboardResponse.getLeaderboard() != null){
-                        firstPlaceUser = leaderboardResponse.getLeaderboard().get(0);
-                        leaderboards = leaderboardResponse.getLeaderboard();
+                    initLeaderBoardResponse(leaderboardResponse);
 
-                        leaderboardResponse.getLeaderboard().remove(0);
-                        leaderBoardAdapter = new LeaderBoardAdapter(leaderboardResponse.getLeaderboard(), getContext());
-                        listLeaderboard.setAdapter(leaderBoardAdapter);
-
-
-                        progressBar.setVisibility(View.GONE);
-                        txtUserNameRank1.setText(firstPlaceUser.getFullname());
-                        txtCoinsRank1.setText(firstPlaceUser.getCoins());
-
-                        if(firstPlaceUser.getAvatar() != null && !firstPlaceUser.getAvatar().isEmpty()) {
-                            Glide.with(getActivity())
-                                    .load(Uri.parse( StaticData.config.getMediaUrl() + firstPlaceUser.getAvatar())).apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
-                                    .into(imgRank1);
-                        } else {
-                            imgRank1.setImageResource(R.drawable.avatar_male);
-                            if(StaticData.user.getGender() != null &&
-                                    StaticData.user.getGender().toLowerCase() == "female") {
-                                imgRank1.setImageResource(R.drawable.avatar_female);
-                            }
-                        }
-                    }
                 }
             }
 
             @Override
             public void onFailure(Call<LeaderboardResponse> call, Throwable t) {
-                Toasty.custom(getActivity(),"Error fetching leaderboard",getActivity().getDrawable(R.drawable.ball), Color.parseColor("#071a7b"), Toast.LENGTH_SHORT,true,true).show();
+                Toasty.custom(((MainPageActivity) getContext() ),"Error fetching leaderboard",getActivity().getDrawable(R.drawable.ball), Color.parseColor("#071a7b"), Toast.LENGTH_SHORT,true,true).show();
                 progressBar.setVisibility(View.GONE);
             }
         });
+    }
+
+    private void initLeaderBoardResponse(LeaderboardResponse leaderboardResponse) {
+        try {
+            if (leaderboardResponse.getLeaderboard() != null) {
+                firstPlaceUser = leaderboardResponse.getLeaderboard().get(0);
+                leaderboards = leaderboardResponse.getLeaderboard();
+
+                leaderboardResponse.getLeaderboard().remove(0);
+                leaderBoardAdapter = new LeaderBoardAdapter(leaderboardResponse.getLeaderboard(), getContext());
+                listLeaderboard.setAdapter(leaderBoardAdapter);
+
+
+                progressBar.setVisibility(View.GONE);
+                txtUserNameRank1.setText(firstPlaceUser.getFullname());
+                txtCoinsRank1.setText(firstPlaceUser.getCoins());
+
+                if (firstPlaceUser.getAvatar() != null && !firstPlaceUser.getAvatar().isEmpty()) {
+                    if(getActivity() != null)
+                    Glide.with(getActivity())
+                            .load(Uri.parse(StaticData.config.getMediaUrl() + firstPlaceUser.getAvatar()))
+                            .apply(new RequestOptions()
+                                    .diskCacheStrategy(DiskCacheStrategy.ALL))
+                            .into(imgRank1);
+                } else {
+                    imgRank1.setImageResource(R.drawable.avatar_male);
+                    if (StaticData.user.getGender() != null &&
+                            StaticData.user.getGender().toLowerCase() == "female") {
+                        imgRank1.setImageResource(R.drawable.avatar_female);
+                    }
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

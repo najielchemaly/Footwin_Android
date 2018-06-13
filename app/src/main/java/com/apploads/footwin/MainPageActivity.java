@@ -22,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.apploads.footwin.Schedule.ScheduleFragment;
 import com.apploads.footwin.firebase.FirebaseIdService;
 import com.apploads.footwin.helpers.BaseActivity;
 import com.apploads.footwin.helpers.StaticData;
@@ -186,9 +187,6 @@ public class MainPageActivity extends BaseActivity {
                                 if (!selectedFragmentstr.equals("predict")) {
                                     selectedFragmentstr = "predict";
                                     selectedFragment = PredictFragment.newInstance();
-                                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                                    transaction.replace(R.id.frame_layout, selectedFragment);
-                                    transaction.commit();
                                 }
                                 break;
 
@@ -196,9 +194,6 @@ public class MainPageActivity extends BaseActivity {
                                 if (!selectedFragmentstr.equals("news")) {
                                     selectedFragmentstr = "news";
                                     selectedFragment = NewsFragment.newInstance();
-                                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                                    transaction.replace(R.id.frame_layout, selectedFragment);
-                                    transaction.commit();
                                 }
                                 break;
 
@@ -206,9 +201,6 @@ public class MainPageActivity extends BaseActivity {
                                 if (!selectedFragmentstr.equals("leaderboard")) {
                                     selectedFragmentstr = "leaderboard";
                                     selectedFragment = LeaderboardFragment.newInstance();
-                                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                                    transaction.replace(R.id.frame_layout, selectedFragment);
-                                    transaction.commit();
                                 }
                                 break;
 
@@ -216,14 +208,20 @@ public class MainPageActivity extends BaseActivity {
                                 if (!selectedFragmentstr.equals("profile")) {
                                     selectedFragmentstr = "profile";
                                     selectedFragment = ProfileFragment.newInstance();
-                                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                                    transaction.replace(R.id.frame_layout, selectedFragment);
-                                    transaction.commit();
                                 }
                                 break;
 
-                        }
+////                            case R.id.action_schedule:
+////                                if (!selectedFragmentstr.equals("schedule")) {
+////                                    selectedFragmentstr = "schedule";
+////                                    selectedFragment = ScheduleFragment.newInstance();
+////                                }
+//                                break;
 
+                        }
+                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.frame_layout, selectedFragment);
+                        transaction.commit();
                         return true;
                     }
                 });

@@ -5,7 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeUnit;   
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -45,9 +45,9 @@ public final class ApiManager {
         });
 
         OkHttpClient client = httpClient
-                .readTimeout(300000, TimeUnit.MILLISECONDS)
-                .writeTimeout(300000, TimeUnit.MILLISECONDS)
-                .connectTimeout(300000, TimeUnit.MILLISECONDS)
+                .readTimeout(30000, TimeUnit.MILLISECONDS)
+                .writeTimeout(30000, TimeUnit.MILLISECONDS)
+                .connectTimeout(30000, TimeUnit.MILLISECONDS)
 
                 .build();
 
