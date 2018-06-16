@@ -93,8 +93,8 @@ public class SignupStepOne extends BaseActivity {
                         ApiManager.getService().updateFavoriteTeam(StaticData.favTeam.getId()).enqueue(new Callback<UserResponse>() {
                             @Override
                             public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
-                                UserResponse userResponse = response.body();
-                                if(userResponse != null && userResponse.getStatus() == 1){
+                                if(response.isSuccessful() && response.body().getStatus() == 1){
+                                    UserResponse userResponse = response.body();
                                     CustomDialogClass dialogClass = new CustomDialogClass(SignupStepOne.this, new CustomDialogClass.AbstractCustomDialogListener() {
                                         @Override
                                         public void onConfirm(CustomDialogClass.DialogResponse response) {

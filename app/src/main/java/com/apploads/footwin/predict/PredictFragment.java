@@ -52,7 +52,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class PredictFragment extends Fragment {
 
@@ -70,6 +69,7 @@ public class PredictFragment extends Fragment {
     SwipeRefreshLayout pullToRefresh;
     private InterstitialAd mInterstitialAd;;
     int badge;
+    CustomDialogClass dialogClass;
 
     List<Match> matches = new ArrayList<>();
     int selectedMatchIndex;
@@ -394,56 +394,60 @@ public class PredictFragment extends Fragment {
     }
 
     public void showAlert(final Match match, final String winningTeamID, final String winningTeamName, final String homeScore, final String awayScore, final int position){
-        CustomDialogClass dialogClass = new CustomDialogClass(getActivity(), new CustomDialogClass.AbstractCustomDialogListener() {
+            dialogClass = new CustomDialogClass(getActivity(), new CustomDialogClass.AbstractCustomDialogListener() {
             @Override
             public void onConfirm(CustomDialogClass.DialogResponse response) {
                 response.getDialog().dismiss();
-
+                dialogClass.yes.setEnabled(false);
                 ApiManager.getService().sendPredictions(StaticData.user.getId(), match.getId(), winningTeamID, homeScore
                         , awayScore,"1", winningTeamName, match.getDate()).enqueue(new Callback<BasicResponse>() {
                     @Override
                     public void onResponse(Call<BasicResponse> call, Response<BasicResponse> response) {
-                       final BasicResponse basicResponse = response.body();
+                        if(response.isSuccessful() && response.body().getStatus() == 1){
+                            dialogClass.yes.setEnabled(true);
+                            final BasicResponse basicResponse = response.body();
+                            if(basicResponse.getStatus() == 1){
+                                int predCount = AppUtils.getPredictionsCount(getActivity());
 
-                        if(basicResponse.getStatus() == 1){
-                            int predCount = AppUtils.getPredictionsCount(getActivity());
-
-                            if(predCount%5 == 0){
-                                mInterstitialAd.loadAd(new AdRequest.Builder().build());
-                            }
-                            AppUtils.updatePredictionsCount(getActivity(), predCount + 1);
-                            txtCoinsTotal.setText(basicResponse.getCoins());
-                            match.setIsConfirmed("1");
-                            StaticData.user.setCoins(basicResponse.getCoins());
-                            AppUtils.startCountAnimation(txtCoinsTotal,0,Integer.parseInt(basicResponse.getCoins()),1500);
-                            listMatches.setAdapter(matchesAdapter);
-                        }else if(basicResponse.getStatus() == 0){
-                            CustomDialogClass dialogClass = new CustomDialogClass(getActivity(), new CustomDialogClass.AbstractCustomDialogListener() {
-                                @Override
-                                public void onConfirm(CustomDialogClass.DialogResponse response) {
-                                    response.getDialog().dismiss();
-                                    if(basicResponse.getErrorCode().equals("404")){
+                                if(predCount%5 == 0){
+                                    mInterstitialAd.loadAd(new AdRequest.Builder().build());
+                                }
+                                AppUtils.updatePredictionsCount(getActivity(), predCount + 1);
+                                txtCoinsTotal.setText(basicResponse.getCoins());
+                                match.setIsConfirmed("1");
+                                StaticData.user.setCoins(basicResponse.getCoins());
+                                AppUtils.startCountAnimation(txtCoinsTotal,0,Integer.parseInt(basicResponse.getCoins()),1500);
+                                listMatches.setAdapter(matchesAdapter);
+                            }else if(basicResponse.getStatus() == 0){
+                                CustomDialogClass dialogClass = new CustomDialogClass(getActivity(), new CustomDialogClass.AbstractCustomDialogListener() {
+                                    @Override
+                                    public void onConfirm(CustomDialogClass.DialogResponse response) {
+                                        response.getDialog().dismiss();
+                                        if(basicResponse.getErrorCode().equals("404")){
 //                                        matches.remove(position);
 ////                                        matchesAdapter.setRoot(matches);
 ////                                        matchesAdapter.notifyDataSetChanged();
-                                        callMatchesService();
+                                            callMatchesService();
+                                        }
                                     }
-                                }
 
-                                @Override
-                                public void onCancel(CustomDialogClass.DialogResponse dialogResponse) {
-                                }
-                            }, true);
+                                    @Override
+                                    public void onCancel(CustomDialogClass.DialogResponse dialogResponse) {
+                                    }
+                                }, true);
 
-                            dialogClass.setTitle("FOOTWIN");
-                            dialogClass.setMessage(basicResponse.getMessage());
-                            dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-                            dialogClass.show();
+                                dialogClass.setTitle("FOOTWIN");
+                                dialogClass.setMessage(basicResponse.getMessage());
+                                dialogClass.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+                                dialogClass.show();
+                            }
                         }
+                        dialogClass.yes.setEnabled(true);
                     }
 
                     @Override
                     public void onFailure(Call<BasicResponse> call, Throwable t) {
+                        dialogClass.yes.setEnabled(true);
                         Toast.makeText(getActivity(), "An error has occured", Toast.LENGTH_SHORT).show();
                     }
                 });

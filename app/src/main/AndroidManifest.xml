@@ -76,7 +76,7 @@
             android:configChanges="orientation|keyboardHidden"/>
         <activity
             android:name=".ViewRulesActivity"
-            android:theme="@style/Theme.Transparent" android:screenOrientation="portrait"
+            android:theme="@style/Theme.Transparent"
             android:configChanges="orientation|keyboardHidden"/>
 
         <meta-data
