@@ -182,34 +182,36 @@ public class MainPageActivity extends BaseActivity {
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.action_home:
-                                if (!selectedFragmentstr.equals("predict")) {
-                                    selectedFragmentstr = "predict";
-                                    selectedFragment = PredictFragment.newInstance();
-                                }
-                                break;
+                        boolean shouldReturn = false;
+                        try {
+                            switch (item.getItemId()) {
+                                case R.id.action_home:
+                                    if (!selectedFragmentstr.equals("predict")) {
+                                        selectedFragmentstr = "predict";
+                                        selectedFragment = PredictFragment.newInstance();
+                                    }
+                                    break;
 
-                            case R.id.action_news:
-                                if (!selectedFragmentstr.equals("news")) {
-                                    selectedFragmentstr = "news";
-                                    selectedFragment = NewsFragment.newInstance();
-                                }
-                                break;
+                                case R.id.action_news:
+                                    if (!selectedFragmentstr.equals("news")) {
+                                        selectedFragmentstr = "news";
+                                        selectedFragment = NewsFragment.newInstance();
+                                    }
+                                    break;
 
-                            case R.id.action_leaderboard:
-                                if (!selectedFragmentstr.equals("leaderboard")) {
-                                    selectedFragmentstr = "leaderboard";
-                                    selectedFragment = LeaderboardFragment.newInstance();
-                                }
-                                break;
+                                case R.id.action_leaderboard:
+                                    if (!selectedFragmentstr.equals("leaderboard")) {
+                                        selectedFragmentstr = "leaderboard";
+                                        selectedFragment = LeaderboardFragment.newInstance();
+                                    }
+                                    break;
 
-                            case R.id.action_profile:
-                                if (!selectedFragmentstr.equals("profile")) {
-                                    selectedFragmentstr = "profile";
-                                    selectedFragment = ProfileFragment.newInstance();
-                                }
-                                break;
+                                case R.id.action_profile:
+                                    if (!selectedFragmentstr.equals("profile")) {
+                                        selectedFragmentstr = "profile";
+                                        selectedFragment = ProfileFragment.newInstance();
+                                    }
+                                    break;
 
 ////                            case R.id.action_schedule:
 ////                                if (!selectedFragmentstr.equals("schedule")) {
@@ -218,11 +220,21 @@ public class MainPageActivity extends BaseActivity {
 ////                                }
 //                                break;
 
+                            }
+                            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                            if (transaction != null) {
+                                transaction.replace(R.id.frame_layout, selectedFragment);
+                                transaction.commit();
+                                shouldReturn = true;
+                            } else {
+                                shouldReturn = false;
+                            }
+                        } catch (Exception ex) {
+                            Log.e("", ex.getLocalizedMessage());
+                            shouldReturn = false;
                         }
-                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                        transaction.replace(R.id.frame_layout, selectedFragment);
-                        transaction.commit();
-                        return true;
+
+                        return shouldReturn;
                     }
                 });
     }

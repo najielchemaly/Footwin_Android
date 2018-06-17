@@ -51,6 +51,8 @@ import com.google.android.gms.ads.InterstitialAd;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import es.dmoral.toasty.Toasty;
@@ -234,8 +236,12 @@ public class PredictFragment extends Fragment {
         }
     }
 
-    public void updateWinningCoins(){
-        txtWinningCoinsTotal.setText(StaticData.user.getWinningCoins());
+    public void updateWinningCoins() {
+        try {
+            mainPageActivity.runOnUiThread(() -> txtWinningCoinsTotal.setText(StaticData.user.getWinningCoins()));
+        } catch (Exception ex) {
+            Log.e("", ex.getLocalizedMessage());
+        }
     }
 
     public void showExactScore(Match match) {
@@ -271,74 +277,76 @@ public class PredictFragment extends Fragment {
         imgProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), NotificationsActivity.class);
-                startActivity(intent);
+                try {
+                    Intent intent = new Intent(getActivity(), NotificationsActivity.class);
+                    startActivity(intent);
+                } catch (Exception ex) {
+                    Log.e("", ex.getLocalizedMessage());
+                }
             }
         });
 
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewExactScore.startAnimation(top_to_bottom);
-                top_to_bottom.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
+                try {
+                    viewExactScore.startAnimation(top_to_bottom);
+                    top_to_bottom.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
 
-                    }
+                        }
 
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        viewExactScoreParent.setVisibility(View.GONE);
-                        if(mainPageActivity != null) {
-                            mainPageActivity.bottomNavigationView.setVisibility(View.VISIBLE);
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            viewExactScoreParent.setVisibility(View.GONE);
+                            if (mainPageActivity != null) {
+                                mainPageActivity.bottomNavigationView.setVisibility(View.VISIBLE);
+                            }
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
+
+                    btnRules.setAlpha(1f);
+                    btnRules.setClickable(true);
+
+                    int homeScoreInt = -1;
+                    int awayScoreInt = -1;
+                    if (!txtHomeScore.getText().toString().isEmpty() && !txtAwayScore.getText().toString().isEmpty()) {
+                        homeScoreInt = Integer.parseInt(txtHomeScore.getText().toString());
+                        awayScoreInt = Integer.parseInt(txtAwayScore.getText().toString());
+
+                        if (homeScoreInt > awayScoreInt && !matches.get(selectedMatchIndex).isHomeToWin()) {
+                            matches.get(selectedMatchIndex).setHomeToWin(true);
+                            matches.get(selectedMatchIndex).setAwayToWin(false);
+                            matches.get(selectedMatchIndex).setDraw(false);
+                        } else if (homeScoreInt < awayScoreInt && !matches.get(selectedMatchIndex).isAwayToWin()) {
+                            matches.get(selectedMatchIndex).setHomeToWin(false);
+                            matches.get(selectedMatchIndex).setAwayToWin(true);
+                            matches.get(selectedMatchIndex).setDraw(false);
+                        } else if (homeScoreInt == awayScoreInt && !matches.get(selectedMatchIndex).isDraw()) {
+                            matches.get(selectedMatchIndex).setHomeToWin(false);
+                            matches.get(selectedMatchIndex).setAwayToWin(false);
+                            matches.get(selectedMatchIndex).setDraw(true);
                         }
                     }
 
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
+                    if (StringUtils.isValid(txtAwayScore.getText().toString()) &&
+                            StringUtils.isValid(txtHomeScore.getText().toString())) {
+                        matches.get(selectedMatchIndex).setHomeScore(txtHomeScore.getText().toString());
+                        matches.get(selectedMatchIndex).setAwayScore(txtAwayScore.getText().toString());
+                    } else {
+                        matches.get(selectedMatchIndex).setHomeScore("-1");
+                        matches.get(selectedMatchIndex).setAwayScore("-1");
                     }
-                });
 
-                btnRules.setAlpha(1f);
-                btnRules.setClickable(true);
+                    matchesAdapter.setRoot(matches);
+                    matchesAdapter.notifyDataSetChanged();
 
-                int homeScoreInt = -1;
-                int awayScoreInt = -1;
-                if(!txtHomeScore.getText().toString().isEmpty() && !txtAwayScore.getText().toString().isEmpty()){
-                     homeScoreInt = Integer.parseInt(txtHomeScore.getText().toString());
-                     awayScoreInt = Integer.parseInt(txtAwayScore.getText().toString());
-
-                    if(homeScoreInt > awayScoreInt && !matches.get(selectedMatchIndex).isHomeToWin()){
-                        matches.get(selectedMatchIndex).setHomeToWin(true);
-                        matches.get(selectedMatchIndex).setAwayToWin(false);
-                        matches.get(selectedMatchIndex).setDraw(false);
-                    }
-                    else if(homeScoreInt < awayScoreInt && !matches.get(selectedMatchIndex).isAwayToWin()){
-                        matches.get(selectedMatchIndex).setHomeToWin(false);
-                        matches.get(selectedMatchIndex).setAwayToWin(true);
-                        matches.get(selectedMatchIndex).setDraw(false);
-                    }
-                    else if(homeScoreInt == awayScoreInt && !matches.get(selectedMatchIndex).isDraw()){
-                        matches.get(selectedMatchIndex).setHomeToWin(false);
-                        matches.get(selectedMatchIndex).setAwayToWin(false);
-                        matches.get(selectedMatchIndex).setDraw(true);
-                    }
-                }
-
-                if(StringUtils.isValid(txtAwayScore.getText().toString()) &&
-                        StringUtils.isValid(txtHomeScore.getText().toString())){
-                    matches.get(selectedMatchIndex).setHomeScore(txtHomeScore.getText().toString());
-                    matches.get(selectedMatchIndex).setAwayScore(txtAwayScore.getText().toString());
-                } else {
-                    matches.get(selectedMatchIndex).setHomeScore("-1");
-                    matches.get(selectedMatchIndex).setAwayScore("-1");
-                }
-
-                matchesAdapter.setRoot(matches);
-                matchesAdapter.notifyDataSetChanged();
-
-                try {
                     InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
                     imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
                 } catch (Exception ex) {
@@ -350,45 +358,57 @@ public class PredictFragment extends Fragment {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewExactScore.startAnimation(top_to_bottom);
-                top_to_bottom.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
+                try {
+                    viewExactScore.startAnimation(top_to_bottom);
+                    top_to_bottom.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
 
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        viewExactScoreParent.setVisibility(View.GONE);
-                        if(mainPageActivity != null) {
-                            mainPageActivity.bottomNavigationView.setVisibility(View.VISIBLE);
                         }
-                    }
 
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            viewExactScoreParent.setVisibility(View.GONE);
+                            if (mainPageActivity != null) {
+                                mainPageActivity.bottomNavigationView.setVisibility(View.VISIBLE);
+                            }
+                        }
 
-                    }
-                });
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
 
-                btnRules.setAlpha(1f);
-                btnRules.setClickable(true);
+                        }
+                    });
+
+                    btnRules.setAlpha(1f);
+                    btnRules.setClickable(true);
+                } catch (Exception ex) {
+                    Log.e("", ex.getLocalizedMessage());
+                }
             }
         });
 
         imgCoins.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), CoinsActivity.class);
-                startActivity(intent);
+                try {
+                    Intent intent = new Intent(getActivity(), CoinsActivity.class);
+                    startActivity(intent);
+                } catch (Exception ex) {
+                    Log.e("", ex.getLocalizedMessage());
+                }
             }
         });
 
         btnRules.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), ViewRulesActivity.class);
-                startActivity(intent);
+                try {
+                    Intent intent = new Intent(getActivity(), ViewRulesActivity.class);
+                    startActivity(intent);
+                } catch (Exception ex) {
+                    Log.e("", ex.getLocalizedMessage());
+                }
             }
         });
 
@@ -396,7 +416,11 @@ public class PredictFragment extends Fragment {
             @Override
             public void onRefresh() {
                 // TODO Auto-generated method stub
-                refreshContent();
+                try {
+                    refreshContent();
+                } catch (Exception ex) {
+                    Log.e("", ex.getLocalizedMessage());
+                }
             }
         });
     }

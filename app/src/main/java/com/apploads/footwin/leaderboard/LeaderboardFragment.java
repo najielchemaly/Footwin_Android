@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,25 +94,37 @@ public class LeaderboardFragment extends Fragment {
         btnUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listLeaderboard.smoothScrollToPosition(0);
+                try {
+                    listLeaderboard.smoothScrollToPosition(0);
+                } catch (Exception ex) {
+                    Log.e("", ex.getLocalizedMessage());
+                }
             }
         });
 
         btnDown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listLeaderboard.smoothScrollToPosition(leaderboards.size() - 1);
+                try {
+                    listLeaderboard.smoothScrollToPosition(leaderboards.size() - 1);
+                } catch (Exception ex) {
+                    Log.e("", ex.getLocalizedMessage());
+                }
             }
         });
 
         btnMe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                    Leaderboard myLeaderboard = leaderboards.stream().
-                            filter(l -> l.getUserId().equals(StaticData.user.getId()))
-                            .collect(Collectors.toList()).get(0);
-                    listLeaderboard.smoothScrollToPosition(leaderboards.indexOf(myLeaderboard));
+                try {
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                        Leaderboard myLeaderboard = leaderboards.stream().
+                                filter(l -> l.getUserId().equals(StaticData.user.getId()))
+                                .collect(Collectors.toList()).get(0);
+                        listLeaderboard.smoothScrollToPosition(leaderboards.indexOf(myLeaderboard));
+                    }
+                } catch (Exception ex) {
+                    Log.e("", ex.getLocalizedMessage());
                 }
             }
         });
