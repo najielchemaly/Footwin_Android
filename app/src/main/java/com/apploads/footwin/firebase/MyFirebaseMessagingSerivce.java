@@ -44,7 +44,9 @@ public class MyFirebaseMessagingSerivce extends FirebaseMessagingService {
 
         if(remoteMessage.getData() != null) {
             String total_winning_coins = remoteMessage.getData().get("total_winning_coins");
-            StaticData.user.setWinningCoins(total_winning_coins);
+            if(total_winning_coins != null && !total_winning_coins.isEmpty()) {
+                StaticData.user.setWinningCoins(total_winning_coins);
+            }
 
             if(remoteMessage.getData().get("type") != null &&
                     remoteMessage.getData().get("type").equals("update_active_matches")){
@@ -53,22 +55,23 @@ public class MyFirebaseMessagingSerivce extends FirebaseMessagingService {
                     FragmentManager fm = myActivity.getSupportFragmentManager();
                     Fragment fragment = fm.findFragmentById(R.id.frame_layout);
                     if (fragment instanceof PredictFragment){
-                        ((PredictFragment) fragment).callMatchesService();
+                        ((PredictFragment) fragment).callMatchesService(true);
                     }
-                    ApiManager.getService().getActiveRound().enqueue(new Callback<Config>() {
-                        @Override
-                        public void onResponse(Call<Config> call, Response<Config> response) {
-                            Config config = response.body();
-                            StaticData.config.setActiveRound(config.getActiveRound());
-                            StaticData.config.setActiveReward(config.getActiveReward());
-                        }
-
-                        @Override
-                        public void onFailure(Call<Config> call, Throwable t) {
-
-                        }
-                    });
                 }
+
+                ApiManager.getService().getActiveRound().enqueue(new Callback<Config>() {
+                    @Override
+                    public void onResponse(Call<Config> call, Response<Config> response) {
+                        Config config = response.body();
+                        StaticData.config.setActiveRound(config.getActiveRound());
+                        StaticData.config.setActiveReward(config.getActiveReward());
+                    }
+
+                    @Override
+                    public void onFailure(Call<Config> call, Throwable t) {
+
+                    }
+                });
             }else {
                 int badge = AppUtils.getBadge(getApplicationContext());
                 AppUtils.updateBadge(getApplicationContext(), ++badge);

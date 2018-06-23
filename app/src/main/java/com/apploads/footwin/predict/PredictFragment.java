@@ -104,14 +104,18 @@ public class PredictFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        if (StaticData.user.getCoins() != null) {
-            AppUtils.startCountAnimation(txtCoinsTotal, 0, Integer.parseInt(StaticData.user.getCoins()), 1500);
-        }
-        if (StaticData.user.getWinningCoins() != null) {
-            AppUtils.startCountAnimation(txtWinningCoinsTotal,0, Integer.parseInt(StaticData.user.getWinningCoins()),1500);
-        }
+        try {
+            if (StaticData.user.getCoins() != null) {
+                AppUtils.startCountAnimation(txtCoinsTotal, 0, Integer.parseInt(StaticData.user.getCoins()), 1500);
+            }
+            if (StaticData.user.getWinningCoins() != null) {
+                AppUtils.startCountAnimation(txtWinningCoinsTotal, 0, Integer.parseInt(StaticData.user.getWinningCoins()), 1500);
+            }
 
-        updateBadge();
+            updateBadge();
+        } catch (Exception ex) {
+            Log.e("", ex.getLocalizedMessage());
+        }
     }
 
     private void initView() {
@@ -193,8 +197,6 @@ public class PredictFragment extends Fragment {
                 }
             }
 
-            txtRound.setText(StaticData.config.getActiveRound().getTitle());
-
 //        AppUtils.startCountAnimation(txtCoinsTotal,0, Integer.parseInt(StaticData.user.getCoins()),1500);
 //        AppUtils.startCountAnimation(txtWinningCoinsTotal,0, Integer.parseInt(StaticData.user.getWinningCoins()),1500);
 
@@ -208,6 +210,7 @@ public class PredictFragment extends Fragment {
             if (getActivity().getClass().equals(MainPageActivity.class)) {
                 mainPageActivity = (MainPageActivity) getActivity();
             }
+
             callMatchesService();
         } catch (Exception ex) {
             Log.e("", ex.getLocalizedMessage());
@@ -445,7 +448,7 @@ public class PredictFragment extends Fragment {
                             if(basicResponse.getStatus() == 1){
                                 int predCount = AppUtils.getPredictionsCount(getActivity());
 
-                                if(predCount%5 == 0){
+                                if(predCount%3 == 0){
                                     mInterstitialAd.loadAd(new AdRequest.Builder().build());
                                 }
                                 AppUtils.updatePredictionsCount(getActivity(), predCount + 1);
@@ -509,7 +512,7 @@ public class PredictFragment extends Fragment {
         callMatchesService(false);
     }
 
-    private void callMatchesService(final Boolean isRefreshing) {
+    public void callMatchesService(final Boolean isRefreshing) {
         ApiManager.getService().getMatches().enqueue(new Callback<Profile>() {
             @Override
             public void onResponse(Call<Profile> call, final Response<Profile> response) {
@@ -537,6 +540,8 @@ public class PredictFragment extends Fragment {
                                 }
                             }, 2000);
                         }
+
+                        txtRound.setText(StaticData.config.getActiveRound().getTitle());
                     } else if(profile.getMessage() != null) {
                         AppUtils.showAlert(getContext(), profile.getMessage());
                     }

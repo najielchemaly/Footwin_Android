@@ -146,7 +146,7 @@ public class LoadingActivity extends BaseActivity {
 
             @Override
             public void onFailure(Call<Config> call, Throwable t) {
-                Log.e("e", t.getMessage());
+
             }
         });
     }
