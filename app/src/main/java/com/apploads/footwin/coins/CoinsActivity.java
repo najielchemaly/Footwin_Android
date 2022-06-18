@@ -350,7 +350,7 @@ public class CoinsActivity extends BaseActivity implements BillingProcessor.IBil
     @Override
     public void onProductPurchased(@NonNull String productId, @Nullable TransactionDetails details) {
 //
-        ApiManager.getService().purchaseCoins(mPackage.getId(),mPackage.getPrice()).enqueue(new Callback<Reward>() {
+        ApiManager.getService().purchaseCoins(mPackage.getId(), mPackage.getPrice()).enqueue(new Callback<Reward>() {
             @Override
             public void onResponse(Call<Reward> call, Response<Reward> response) {
                 Reward reward = response.body();
